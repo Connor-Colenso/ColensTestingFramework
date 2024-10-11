@@ -60,8 +60,10 @@ public class MyMod {
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-        loadAllJson();
+        jsons = loadAllJson();
     }
+
+    public static List<JsonObject> jsons;
 
     @Mod.EventHandler
     // register server commands in this event handler (Remove if not needed)
