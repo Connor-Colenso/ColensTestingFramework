@@ -10,10 +10,13 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,8 +46,8 @@ public class ClientTickHandler {
     public void onWorldTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.START && !hasRun1) {
 
-            JsonObject jo = NBTToJson.serialize(createTestNBT());
-            NBTTagCompound tagCompound = JsonToNBT.deserialize(jo);
+//            JsonObject jo = NBTToJson.serialize(createTestNBT());
+//            NBTTagCompound tagCompound = JsonToNBT.deserialize(jo);
 
             createStructure(MinecraftServer.getServer().getEntityWorld());
             hasRun1 = true;
@@ -55,8 +58,15 @@ public class ClientTickHandler {
         // Root NBTTagCompound
         NBTTagCompound rootCompound = new NBTTagCompound();
 
+        NBTTagList tagList = new NBTTagList();
+        tagList.appendTag(new NBTTagDouble(1.1));
+        tagList.appendTag(new NBTTagDouble(2.2));
+        tagList.appendTag(new NBTTagDouble(3.3));
+        tagList.appendTag(new NBTTagDouble(4.4));
+
         // Adding different types of NBT tags
         rootCompound.setString("stringKey", "Hello, NBT!");
+        rootCompound.setTag("listlist", tagList);
         rootCompound.setInteger("intKey", 42);
         rootCompound.setDouble("doubleKey", 123.456);
         rootCompound.setFloat("floatKey", 12.34f);
@@ -107,7 +117,7 @@ public class ClientTickHandler {
 
             // Initialize the TileEntity if the jsonElement is not null
             if (jsonElement != null && !jsonElement.isJsonNull()) {
-                this.tile = JsonToNBT.deserialize(jsonElement.getAsJsonObject("nbt"));
+                //this.tile = JsonToNBT.deserialize(jsonElement.getAsJsonObject("nbt"));
             } else {
                 this.tile = null; // No TileEntity if jsonElement is null
             }
