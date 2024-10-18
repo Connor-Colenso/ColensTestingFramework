@@ -16,7 +16,7 @@ import java.util.Base64;
 public class NBTConverter {
 
     // Encode NBTTagCompound to Base64 String
-    public static String encodeToString(NBTTagCompound tagCompound) throws IOException {
+    public static String encodeToString(NBTTagCompound tagCompound) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         DataOutput output = new DataOutputStream(byteArrayOutputStream);
 
@@ -31,7 +31,7 @@ public class NBTConverter {
     }
 
     // Decode Base64 String to NBTTagCompound
-    public static NBTTagCompound decodeFromString(String encodedString) throws IOException {
+    public static NBTTagCompound decodeFromString(String encodedString) {
         byte[] nbtData = Base64.getDecoder().decode(encodedString);
         DataInput input = new DataInputStream(new ByteArrayInputStream(nbtData));
 

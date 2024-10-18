@@ -45,61 +45,9 @@ public class ClientTickHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.START && !hasRun1) {
-
-//            JsonObject jo = NBTToJson.serialize(createTestNBT());
-//            NBTTagCompound tagCompound = JsonToNBT.deserialize(jo);
-
             createStructure(MinecraftServer.getServer().getEntityWorld());
             hasRun1 = true;
         }
-    }
-
-    public static NBTTagCompound createTestNBT() {
-        // Root NBTTagCompound
-        NBTTagCompound rootCompound = new NBTTagCompound();
-
-        NBTTagList tagList = new NBTTagList();
-        tagList.appendTag(new NBTTagDouble(1.1));
-        tagList.appendTag(new NBTTagDouble(2.2));
-        tagList.appendTag(new NBTTagDouble(3.3));
-        tagList.appendTag(new NBTTagDouble(4.4));
-
-        // Adding different types of NBT tags
-        rootCompound.setString("stringKey", "Hello, NBT!");
-        rootCompound.setTag("listlist", tagList);
-        rootCompound.setInteger("intKey", 42);
-        rootCompound.setDouble("doubleKey", 123.456);
-        rootCompound.setFloat("floatKey", 12.34f);
-        rootCompound.setByte("byteKey", (byte) 7);
-        rootCompound.setShort("shortKey", (short) 100);
-        rootCompound.setLong("longKey", 987654321L);
-
-        // Adding a byte array
-        byte[] byteArray = new byte[] {1, 2, 3, 4, 5};
-        rootCompound.setByteArray("byteArrayKey", byteArray);
-
-        // Adding an int array
-        int[] intArray = new int[] {10, 20, 30, 40};
-        rootCompound.setIntArray("intArrayKey", intArray);
-
-        // Adding a nested NBTTagCompound
-        NBTTagCompound nestedCompound = new NBTTagCompound();
-        nestedCompound.setString("nestedStringKey", "Inside Nested Compound");
-        nestedCompound.setInteger("nestedIntKey", 1000);
-        nestedCompound.setDouble("nestedDoubleKey", 654.321);
-
-        // Add the nested compound to the root
-        rootCompound.setTag("nestedCompoundKey", nestedCompound);
-
-        // Adding another level of nested compound inside the first nested compound
-        NBTTagCompound deepNestedCompound = new NBTTagCompound();
-        deepNestedCompound.setString("deepNestedStringKey", "Deeper still");
-        deepNestedCompound.setLong("deepNestedLongKey", 99999999L);
-
-        // Add the deep nested compound to the first nested compound
-        nestedCompound.setTag("deepNestedCompoundKey", deepNestedCompound);
-
-        return rootCompound;
     }
 
 
@@ -117,13 +65,11 @@ public class ClientTickHandler {
 
             // Initialize the TileEntity if the jsonElement is not null
             if (jsonElement != null && !jsonElement.isJsonNull()) {
-                //this.tile = JsonToNBT.deserialize(jsonElement.getAsJsonObject("nbt"));
+                this.tile = NBTConverter.decodeFromString(jsonElement.get("data").getAsString());
             } else {
                 this.tile = null; // No TileEntity if jsonElement is null
             }
         }
-
-
     }
 
 
@@ -174,15 +120,27 @@ public class ClientTickHandler {
 
         // If there's a TileEntity, create it and add it to the world
         if (pair.tile != null) {
-//            TileEntity tileEntity = createTileEntity(pair.tile);
-//            world.setTileEntity(x, y, z, tileEntity);
+            NBTTagCompound copy = (NBTTagCompound) pair.tile.copy();
+            copy.setInteger("x", x);
+            copy.setInteger("y", y);
+            copy.setInteger("z", z);
+
+            TileEntity tileEntity = createTileEntity(pair.tile);
+            world.setTileEntity(x, y, z, tileEntity);
         }
     }
 
     // Placeholder for TileEntity creation logic
-    private TileEntity createTileEntity(TileEntity tile) {
-        // Implement logic to create and return a new TileEntity instance based on the given tile data
-        return null; // Replace with actual implementation
+    private TileEntity createTileEntity(NBTTagCompound tile) {
+        // Create the TileEntity instance using the ID
+        TileEntity tileEntity = TileEntity.createAndLoadEntity(tile);
+
+        if (tileEntity != null) {
+            // Load the NBT data into the newly created TileEntity
+            tileEntity.readFromNBT(tile);
+        }
+
+        return tileEntity;
     }
 
 
@@ -212,10 +170,10 @@ public class ClientTickHandler {
 
 
 
-    public static void setTileEntity(World world, int x, int y, int z, TileEntity aTileEntity) {
-
-        if (world.getChunkFromBlockCoords(x, z) != null) {
-            world.setTileEntity(x, y, z, aTileEntity);  // Update tile entity
-        }
-    }
+//    public static void setTileEntity(World world, int x, int y, int z, TileEntity aTileEntity) {
+//
+//        if (world.getChunkFromBlockCoords(x, z) != null) {
+//            world.setTileEntity(x, y, z, aTileEntity);  // Update tile entity
+//        }
+//    }
 }
