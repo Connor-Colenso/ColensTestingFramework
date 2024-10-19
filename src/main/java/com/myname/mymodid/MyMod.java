@@ -43,6 +43,8 @@ public class MyMod {
         proxy.preInit(event);
     }
 
+    public static boolean magicStopTime = true;
+    public static boolean magicAccelTime = true;
 
 
     @Mod.EventHandler
