@@ -2,6 +2,8 @@ package com.myname.mymodid;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.myname.mymodid.keybindings.KeyBindings;
+import com.myname.mymodid.keybindings.KeyInputHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -10,11 +12,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,10 +39,11 @@ public class MyMod {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
+        new MovePlayer(); // Moves the user to specific x y z coords.
     }
 
-    public static boolean magicStopTime = true;
-    public static boolean magicAccelTime = true;
+    public static volatile boolean magicStopTime = true;
+    public static volatile boolean magicAccelTime = true;
 
 
     @Mod.EventHandler
@@ -53,6 +52,9 @@ public class MyMod {
         // Register the tick handler
         MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
         FMLCommonHandler.instance().bus().register(new ClientTickHandler());
+
+        KeyBindings.init();
+        FMLCommonHandler.instance().bus().register(new KeyInputHandler());
     }
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
@@ -107,12 +109,13 @@ public class MyMod {
         WorldSettings worldSettings = new WorldSettings(
             0, // Seed
             WorldSettings.GameType.CREATIVE, // Gamemode
+            false, // Map features (I think this is structures?)
             false, // Hardcore
-            true, // Allow Cheats
             WorldType.FLAT // World type (e.g., flat, amplified)
-        );
+        ).enableCommands();
 
-        Minecraft.getMinecraft().launchIntegratedServer("CTFWorld", "CTFWorld", worldSettings);
+
+        Minecraft.getMinecraft().launchIntegratedServer("CTFWorld1", "CTFWorld1", worldSettings);
 
 
     }

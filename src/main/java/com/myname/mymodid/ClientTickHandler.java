@@ -9,6 +9,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
@@ -85,7 +86,7 @@ public class ClientTickHandler {
 
             // Starting position
             int startX = 0;
-            int startY = 10;
+            int startY = 15;
             int startZ = 0;
 
             // Loop through the build array
