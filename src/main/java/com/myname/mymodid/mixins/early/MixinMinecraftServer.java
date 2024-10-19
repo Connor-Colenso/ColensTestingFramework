@@ -1,5 +1,6 @@
 package com.myname.mymodid.mixins.early;
 
+import com.myname.mymodid.MyMod;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.StartupQuery;
 import net.minecraft.crash.CrashReport;
@@ -74,14 +75,13 @@ public abstract class MixinMinecraftServer {
                 this.func_147138_a(this.field_147147_p);
 
                 while (this.serverRunning) {
+                    if (!MyMod.magicStopTime) {
+                        continue;
+                    }
                     long j = getSystemTimeMillis();
                     long k = j - i;
 
-                    if (k > 2000L && i - this.timeOfLastWarning >= 15000L) {
-                        k = 2000L;
-                        this.timeOfLastWarning = i;
-                    }
-
+                    // Remove the artificial cap
                     if (k < 0L) {
                         k = 0L;
                     }
@@ -89,19 +89,15 @@ public abstract class MixinMinecraftServer {
                     l += k;
                     i = j;
 
-                    if (false) { // sleep mechanic idc right now.
+                    // Directly tick as fast as the system allows
+                    while (l > 0L) {
                         this.tick();
-                        l = 0L;
-                    } else {
-                        while (l > 50L) {
-                            l -= 50L;
-                            this.tick();
-                        }
+                        l -= 1L; // Decrement by 1 or a small value to ensure it keeps ticking
                     }
 
-                    //Thread.sleep(Math.max(1L, 50L - l)); turn off time
                     this.serverIsRunning = true;
                 }
+
                 FMLCommonHandler.instance().handleServerStopping();
                 FMLCommonHandler.instance().expectServerStopped(); // has to come before finalTick to avoid race conditions
             } else {
