@@ -168,13 +168,4 @@ public class ClientTickHandler {
             keyMap.put(key, blockTilePair);
         }
     }
-
-
-
-//    public static void setTileEntity(World world, int x, int y, int z, TileEntity aTileEntity) {
-//
-//        if (world.getChunkFromBlockCoords(x, z) != null) {
-//            world.setTileEntity(x, y, z, aTileEntity);  // Update tile entity
-//        }
-//    }
 }
