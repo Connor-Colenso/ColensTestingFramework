@@ -44,7 +44,7 @@ public class MyMod {
 
     public static volatile boolean magicStopTime = false;
     public static volatile boolean magicAccelTime = true;
-    public static volatile int ticksToRun = 10;
+    public static volatile int ticksToRun = 34;
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
