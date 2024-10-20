@@ -74,25 +74,39 @@ public abstract class MixinMinecraftServer {
                 long l = 0L;
                 this.func_147138_a(this.field_147147_p);
 
-                while (this.serverRunning) {
-                    if (!MyMod.magicStopTime) {
-                        continue;
-                    }
+                while (this.serverRunning)
+                {
+                    if (MyMod.magicStopTime) continue;
+
                     long j = getSystemTimeMillis();
                     long k = j - i;
 
-                    // Remove the artificial cap
-                    if (k < 0L) {
+                    if (k > 2000L && i - this.timeOfLastWarning >= 15000L)
+                    {
+                        k = 2000L;
+                        this.timeOfLastWarning = i;
+                    }
+
+                    if (k < 0L)
+                    {
                         k = 0L;
                     }
 
                     l += k;
                     i = j;
 
-                    // Directly tick as fast as the system allows
-                    while (l > 0L) {
+                    if (!MyMod.magicAccelTime) {
+                        while (l > 50L)
+                        {
+                            l -= 50L;
+                            this.tick();
+                        }
+                    } else {
                         this.tick();
-                        l -= 1L; // Decrement by 1 or a small value to ensure it keeps ticking
+                    }
+
+                    if (!MyMod.magicAccelTime) {
+                        Thread.sleep(Math.max(1L, 50L - l));
                     }
 
                     this.serverIsRunning = true;

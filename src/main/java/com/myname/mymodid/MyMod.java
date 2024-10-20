@@ -42,9 +42,9 @@ public class MyMod {
         new MovePlayer(); // Moves the user to specific x y z coords.
     }
 
-    public static volatile boolean magicStopTime = true;
+    public static volatile boolean magicStopTime = false;
     public static volatile boolean magicAccelTime = true;
-
+    public static volatile int ticksToRun = 10;
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
