@@ -2,8 +2,6 @@ package com.myname.mymodid;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.myname.mymodid.keybindings.KeyBindings;
-import com.myname.mymodid.keybindings.KeyInputHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -26,6 +24,8 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Mod(modid = MyMod.MODID, version = Tags.VERSION, name = "MyMod", acceptedMinecraftVersions = "[1.7.10]")
 public class MyMod {
@@ -42,19 +42,16 @@ public class MyMod {
         new MovePlayer(); // Moves the user to specific x y z coords.
     }
 
-    public static volatile boolean magicStopTime = false;
-    public static volatile boolean magicAccelTime = true;
-    public static volatile int ticksToRun = 34;
+    public static volatile AtomicBoolean magicStopTime = new AtomicBoolean(false);
+    public static volatile AtomicInteger allowedTicks = new AtomicInteger(40000);
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
         // Register the tick handler
-        MinecraftForge.EVENT_BUS.register(new ClientTickHandler());
-        FMLCommonHandler.instance().bus().register(new ClientTickHandler());
+        MinecraftForge.EVENT_BUS.register(new TickHandler());
+        FMLCommonHandler.instance().bus().register(new TickHandler());
 
-        KeyBindings.init();
-        FMLCommonHandler.instance().bus().register(new KeyInputHandler());
     }
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
@@ -87,8 +84,7 @@ public class MyMod {
             try (InputStream inputStream = Files.newInputStream(json.toPath());
                  BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 
-                JsonParser parser = new JsonParser();
-                JsonObject jsonObject = parser.parse(reader).getAsJsonObject();
+                JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
                 jsonList.add(jsonObject); // Add the parsed JSON object to the list
             } catch (Exception e) {
                 System.err.println("Error reading JSON file: " + json.getName());
@@ -114,9 +110,7 @@ public class MyMod {
             WorldType.FLAT // World type (e.g., flat, amplified)
         ).enableCommands();
 
-
         Minecraft.getMinecraft().launchIntegratedServer("CTFWorld1", "CTFWorld1", worldSettings);
-
 
     }
 

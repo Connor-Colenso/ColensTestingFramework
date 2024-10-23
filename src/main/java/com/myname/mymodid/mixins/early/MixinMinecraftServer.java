@@ -15,6 +15,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static com.myname.mymodid.MyMod.allowedTicks;
+import static com.myname.mymodid.MyMod.magicStopTime;
+import static com.myname.mymodid.TickHandler.hasBuilt;
 import static net.minecraft.server.MinecraftServer.getSystemTimeMillis;
 
 @Mixin(MinecraftServer.class)
@@ -68,48 +71,21 @@ public abstract class MixinMinecraftServer {
         try {
             if (this.startServer()) {
                 FMLCommonHandler.instance().handleServerStarted();
-                long i = getSystemTimeMillis();
-                long l = 0L;
                 this.func_147138_a(this.field_147147_p);
 
+                // ------------------------------------------
+                // Simplified game loop for max speed.
                 while (this.serverRunning)
                 {
-                    if (MyMod.magicStopTime || MyMod.ticksToRun == 0) continue;
+                    if (magicStopTime.get() || allowedTicks.get() == 0) continue;
 
-                    long j = getSystemTimeMillis();
-                    long k = j - i;
+                    this.tick();
 
-                    if (k > 2000L && i - this.timeOfLastWarning >= 15000L)
-                    {
-                        k = 2000L;
-                        this.timeOfLastWarning = i;
-                    }
-
-                    if (k < 0L)
-                    {
-                        k = 0L;
-                    }
-
-                    l += k;
-                    i = j;
-
-                    if (!MyMod.magicAccelTime) {
-                        while (l > 50L)
-                        {
-                            l -= 50L;
-                            this.tick();
-                        }
-                    } else {
-                        this.tick();
-                    }
-                    MyMod.ticksToRun--;
-
-                    if (!MyMod.magicAccelTime) {
-                        Thread.sleep(Math.max(1L, 50L - l));
-                    }
+                    if (hasBuilt) allowedTicks.set(allowedTicks.get()-1);
 
                     this.serverIsRunning = true;
                 }
+                // ------------------------------------------
 
                 FMLCommonHandler.instance().handleServerStopping();
                 FMLCommonHandler.instance().expectServerStopped(); // has to come before finalTick to avoid race conditions

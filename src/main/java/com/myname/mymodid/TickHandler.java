@@ -9,22 +9,19 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagDouble;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import static com.myname.mymodid.MyMod.autoLoadWorld;
 import static com.myname.mymodid.MyMod.jsons;
 
-public class ClientTickHandler {
+public class TickHandler {
 
     private boolean hasRun = false;
 
@@ -35,19 +32,37 @@ public class ClientTickHandler {
 
         // Check if we are in the main menu and this hasn't run yet
         if (mc.currentScreen instanceof GuiMainMenu && !hasRun) {
-            System.out.println("In the main menu, before world load.");
             hasRun = true;
             autoLoadWorld();
         }
     }
 
-    boolean hasRun1 = false;
+    private static boolean readyToBuildStructure = false;
 
+    // Overworld
+    public static boolean hasAtLeastNChunksLoaded(int n) {
+        // Get the server instance
+        WorldServer server = MinecraftServer.getServer().worldServers[0];
+
+        int loadedChunks = server.getChunkProvider().getLoadedChunkCount();
+
+        // Check if the number of loaded chunks is greater than or equal to 25
+        return loadedChunks >= n;
+    }
+
+    public static boolean hasBuilt = false;
+    private static int tickCounter = 0;
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START && !hasRun1) {
+
+        if (!hasBuilt && tickCounter++ == 800) {
+            readyToBuildStructure = true;
+        }
+
+        if (readyToBuildStructure && event.phase == TickEvent.Phase.START) {
             createStructure(MinecraftServer.getServer().getEntityWorld());
-            hasRun1 = true;
+            hasBuilt = true;
+            readyToBuildStructure = false;
         }
     }
 
