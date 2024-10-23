@@ -14,6 +14,11 @@ import java.util.Queue;
 
 public class Test {
 
+    public final int startX = 0;
+    public final int startY = 25;
+    public final int startZ = 0;
+
+
     JsonObject structure;
     HashMap<String, TickHandler.BlockTilePair> keyMap;
     Queue<Procedure> procedureList = new LinkedList<Procedure>();
@@ -23,11 +28,6 @@ public class Test {
         final World world = MinecraftServer.getServer().getEntityWorld();
 
         JsonArray build = structure.getAsJsonArray("build");
-
-        // Starting position
-        int startX = 0;
-        int startY = 15;
-        int startZ = 0;
 
         // Loop through the build array
         for (int layer = 0; layer < build.size(); layer++) {

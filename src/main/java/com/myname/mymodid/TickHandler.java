@@ -1,7 +1,13 @@
 package com.myname.mymodid;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.myname.mymodid.conditionals.registry.ConditionalFunction;
+import com.myname.mymodid.conditionals.registry.RegisterConditionals;
+import com.myname.mymodid.procedures.CheckTile;
+import com.myname.mymodid.procedures.Procedure;
+import com.myname.mymodid.procedures.RunTicks;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -10,6 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 
 import java.util.HashMap;
@@ -38,11 +45,38 @@ public class TickHandler {
     public static boolean hasBuilt = false;
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
+        if (event.side.isClient()) return;
+
+        Test test = MyMod.tests.get(0);
 
         if (!hasBuilt && event.phase == TickEvent.Phase.START) {
-            Test test = MyMod.tests.get(0);
             test.buildStructure();
             hasBuilt = true;
+        }
+
+        if (event.phase == TickEvent.Phase.END) {
+            assert test.procedureList.peek() != null;
+            Procedure procedure = test.procedureList.peek();
+
+            if (procedure instanceof RunTicks) {
+                procedure.duration--;
+                if (procedure.duration <= -1) test.procedureList.poll();
+                return;
+            }
+
+            if (procedure instanceof CheckTile checkTile) {
+                ConditionalFunction f = RegisterConditionals.getFunc(checkTile.funcID);
+                WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
+                TileEntity te = worldServer.getTileEntity(test.startX + checkTile.x, test.startY + checkTile.y, test.startZ + checkTile.z);
+
+                if (!f.checkCondition(te, worldServer, 0)) {
+                    if (checkTile.optionalLabel != null) {
+                        throw new RuntimeException("Failed to pass procedure: " + checkTile.optionalLabel);
+                    } else {
+                        throw new RuntimeException("Failed to pass procedure");
+                    }
+                }
+            }
         }
     }
 
@@ -58,8 +92,45 @@ public class TickHandler {
     }
 
     private static void addProcedureInfo(JsonObject json, Test testObj) {
+        // Get the "instructions" array from the JSON object
+        JsonArray instructions = json.getAsJsonArray("instructions");
 
+        // Loop through the instructions array
+        for (int i = 0; i < instructions.size(); i++) {
+            JsonObject instruction = instructions.get(i).getAsJsonObject();
+
+            // Determine the type of procedure
+            String type = instruction.get("type").getAsString();
+
+            // Create the appropriate procedure based on the type
+            if (type.equals("runTicks")) {
+                // Create a new RunTicks procedure and set its duration
+                RunTicks runTicks = new RunTicks();
+                runTicks.duration = instruction.get("duration").getAsInt();
+
+                // Add the RunTicks procedure to the queue
+                testObj.procedureList.add(runTicks);
+
+            } else if (type.equals("checkTile")) {
+                // Create a new CheckTile procedure and set its properties
+                CheckTile checkTile = new CheckTile();
+
+                if (instruction.has("optionalLabel")) {
+                    checkTile.optionalLabel = instruction.get("optionalLabel").getAsString();
+                }
+
+                checkTile.funcID = instruction.get("funcRegistry").getAsString();
+                checkTile.x = instruction.get("x").getAsInt();
+                checkTile.y = instruction.get("y").getAsInt();
+                checkTile.z = instruction.get("z").getAsInt();
+
+                // Add the CheckTile procedure to the queue
+                testObj.procedureList.add(checkTile);
+            }
+            // You can add more procedure types here if needed in the future
+        }
     }
+
 
     static class BlockTilePair {
         Block block;
