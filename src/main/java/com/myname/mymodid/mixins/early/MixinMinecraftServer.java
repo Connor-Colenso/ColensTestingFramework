@@ -1,6 +1,5 @@
 package com.myname.mymodid.mixins.early;
 
-import com.myname.mymodid.MyMod;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.StartupQuery;
 import net.minecraft.crash.CrashReport;
@@ -14,11 +13,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import static com.myname.mymodid.MyMod.allowedTicks;
-import static com.myname.mymodid.MyMod.magicStopTime;
-import static com.myname.mymodid.TickHandler.hasBuilt;
-import static net.minecraft.server.MinecraftServer.getSystemTimeMillis;
 
 @Mixin(MinecraftServer.class)
 public abstract class MixinMinecraftServer {
@@ -77,12 +71,7 @@ public abstract class MixinMinecraftServer {
                 // Simplified game loop for max speed.
                 while (this.serverRunning)
                 {
-                    if (magicStopTime.get() || allowedTicks.get() == 0) continue;
-
                     this.tick();
-
-                    if (hasBuilt) allowedTicks.set(allowedTicks.get()-1);
-
                     this.serverIsRunning = true;
                 }
                 // ------------------------------------------

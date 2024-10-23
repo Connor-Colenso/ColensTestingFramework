@@ -1,6 +1,5 @@
 package com.myname.mymodid;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -11,8 +10,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import java.util.HashMap;
@@ -37,35 +34,32 @@ public class TickHandler {
         }
     }
 
-    private static boolean readyToBuildStructure = false;
-
-    // Overworld
-    public static boolean hasAtLeastNChunksLoaded(int n) {
-        // Get the server instance
-        WorldServer server = MinecraftServer.getServer().worldServers[0];
-
-        int loadedChunks = server.getChunkProvider().getLoadedChunkCount();
-
-        // Check if the number of loaded chunks is greater than or equal to 25
-        return loadedChunks >= n;
-    }
 
     public static boolean hasBuilt = false;
-    private static int tickCounter = 0;
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
 
-        if (!hasBuilt && tickCounter++ == 800) {
-            readyToBuildStructure = true;
-        }
-
-        if (readyToBuildStructure && event.phase == TickEvent.Phase.START) {
-            createStructure(MinecraftServer.getServer().getEntityWorld());
+        if (!hasBuilt && event.phase == TickEvent.Phase.START) {
+            Test test = MyMod.tests.get(0);
+            test.buildStructure();
             hasBuilt = true;
-            readyToBuildStructure = false;
         }
     }
 
+    public static void registerTests() {
+
+        for (JsonObject json : jsons) {
+            Test testObj = new Test();
+            addStructureInfo(json, testObj);
+            addProcedureInfo(json, testObj);
+
+            MyMod.tests.add(testObj);
+        }
+    }
+
+    private static void addProcedureInfo(JsonObject json, Test testObj) {
+
+    }
 
     static class BlockTilePair {
         Block block;
@@ -88,79 +82,18 @@ public class TickHandler {
         }
     }
 
-
-    private void createStructure(World world) {
+    private static void addStructureInfo(JsonObject json, Test testObj) {
+        JsonObject structure = json.getAsJsonObject("structure");
+        JsonObject keys = structure.getAsJsonObject("keys");
         HashMap<String, BlockTilePair> keyMap = new HashMap<>();
 
-        for (JsonObject json : jsons) {
-            JsonObject structure = json.getAsJsonObject("structure");
-            JsonArray build = structure.getAsJsonArray("build");
-            JsonObject keys = structure.getAsJsonObject("keys");
+        buildKeyMap(keys, keyMap);
 
-            buildKeyMap(keys, keyMap);
-
-            // Starting position
-            int startX = 0;
-            int startY = 15;
-            int startZ = 0;
-
-            // Loop through the build array
-            for (int layer = 0; layer < build.size(); layer++) {
-                JsonArray layerArray = build.get(layer).getAsJsonArray();
-                for (int row = 0; row < layerArray.size(); row++) {
-                    String rowData = layerArray.get(row).getAsString();
-                    for (int col = 0; col < rowData.length(); col++) {
-                        char key = rowData.charAt(col);
-                        BlockTilePair pair = keyMap.get(String.valueOf(key));
-
-                        // If a corresponding BlockTilePair exists for the key
-                        if (pair != null) {
-                            // Calculate the position in the world
-                            int x = startX + col;
-                            int y = startY + layer;
-                            int z = startZ + row;
-
-                            // Place the block in the world at the calculated position
-                            placeBlockInWorld(world, x, y, z, pair);
-                        }
-                    }
-                }
-            }
-        }
+        testObj.structure = structure;
+        testObj.keyMap = keyMap;
     }
 
-    // Method to place a block in the world at the specified coordinates
-    private void placeBlockInWorld(World world, int x, int y, int z, BlockTilePair pair) {
-        // Set the block in the world
-        world.setBlock(x, y, z, pair.block, pair.meta, 2);
-
-        // If there's a TileEntity, create it and add it to the world
-        if (pair.tile != null) {
-            NBTTagCompound copy = (NBTTagCompound) pair.tile.copy();
-            copy.setInteger("x", x);
-            copy.setInteger("y", y);
-            copy.setInteger("z", z);
-
-            TileEntity tileEntity = createTileEntity(pair.tile);
-            world.setTileEntity(x, y, z, tileEntity);
-        }
-    }
-
-    // Placeholder for TileEntity creation logic
-    private TileEntity createTileEntity(NBTTagCompound tile) {
-        // Create the TileEntity instance using the ID
-        TileEntity tileEntity = TileEntity.createAndLoadEntity(tile);
-
-        if (tileEntity != null) {
-            // Load the NBT data into the newly created TileEntity
-            tileEntity.readFromNBT(tile);
-        }
-
-        return tileEntity;
-    }
-
-
-    private void buildKeyMap(JsonObject keys, HashMap<String, BlockTilePair> keyMap) {
+    private static void buildKeyMap(JsonObject keys, HashMap<String, BlockTilePair> keyMap) {
         for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
             String key = entry.getKey();
             JsonObject value = entry.getValue().getAsJsonObject();

@@ -2,6 +2,8 @@ package com.myname.mymodid;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.myname.mymodid.conditionals.TestConditional;
+import com.myname.mymodid.conditionals.registry.RegisterConditionals;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -27,6 +29,8 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.myname.mymodid.TickHandler.registerTests;
+
 @Mod(modid = MyMod.MODID, version = Tags.VERSION, name = "MyMod", acceptedMinecraftVersions = "[1.7.10]")
 public class MyMod {
 
@@ -42,9 +46,6 @@ public class MyMod {
         new MovePlayer(); // Moves the user to specific x y z coords.
     }
 
-    public static volatile AtomicBoolean magicStopTime = new AtomicBoolean(false);
-    public static volatile AtomicInteger allowedTicks = new AtomicInteger(40000);
-
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
@@ -52,15 +53,19 @@ public class MyMod {
         MinecraftForge.EVENT_BUS.register(new TickHandler());
         FMLCommonHandler.instance().bus().register(new TickHandler());
 
+        RegisterConditionals.conditionalRegister("testing", TestConditional::isChestContainingStone);
+
     }
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
         jsons = loadAllJson();
+        registerTests();
     }
 
     public static List<JsonObject> jsons;
+    public static List<Test> tests = new ArrayList<>();
 
     @Mod.EventHandler
     // register server commands in this event handler (Remove if not needed)
