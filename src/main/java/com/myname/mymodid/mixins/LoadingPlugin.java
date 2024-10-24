@@ -44,6 +44,7 @@ public final class LoadingPlugin implements IEarlyMixinLoader, IFMLLoadingPlugin
     public List<String> getMixins(Set<String> loadedCoreMods) {
         final List<String> mixins = new ArrayList<>();
         mixins.add("MixinMinecraftServer");
+        mixins.add("MixinGuiScreen");
         return mixins;
     }
 }
