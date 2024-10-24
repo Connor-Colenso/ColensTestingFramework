@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 public class TestConditional {
 
-    public static boolean isChestContainingStone(TileEntity tile, World world, int tickCounter) {
+    public static boolean isChestContainingStone(TileEntity tile, World world) {
         return ((TileEntityChest) tile).getStackInSlot(13).stackSize == 1;
     }
 }

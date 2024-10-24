@@ -5,6 +5,6 @@ import net.minecraft.world.World;
 
 @FunctionalInterface
 public interface ConditionalFunction {
-    boolean checkCondition(TileEntity tile, World world, int tickCounter);
+    boolean checkCondition(TileEntity tile, World world);
 
 }

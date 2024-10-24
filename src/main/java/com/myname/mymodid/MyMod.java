@@ -48,13 +48,9 @@ public class MyMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-
         // Register the tick handler
-        MinecraftForge.EVENT_BUS.register(new TickHandler());
         FMLCommonHandler.instance().bus().register(new TickHandler());
-
         RegisterConditionals.conditionalRegister("testing", TestConditional::isChestContainingStone);
-
     }
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)

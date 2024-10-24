@@ -69,12 +69,18 @@ public class TickHandler {
                 WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
                 TileEntity te = worldServer.getTileEntity(test.startX + checkTile.x, test.startY + checkTile.y, test.startZ + checkTile.z);
 
-                if (!f.checkCondition(te, worldServer, 0)) {
-                    if (checkTile.optionalLabel != null) {
-                        throw new RuntimeException("Failed to pass procedure: " + checkTile.optionalLabel);
+                try {
+                    if (!f.checkCondition(te, worldServer)) {
+                        if (checkTile.optionalLabel != null) {
+                            System.out.println("\u001B[31m" + checkTile.optionalLabel + " FAILED\u001B[0m");
+                        } else {
+                            System.out.println("\u001B[31mFAILED\u001B[0m");
+                        }
                     } else {
-                        throw new RuntimeException("Failed to pass procedure");
+                        System.out.println("\u001B[32m" + checkTile.optionalLabel + " PASSED\u001B[0m");
                     }
+                } catch (Exception e) {
+                    System.out.println("\u001B[31mTest threw exception, which was caught by CTF.\u001B[0m");
                 }
             }
         }
