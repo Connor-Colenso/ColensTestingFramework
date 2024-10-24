@@ -2,6 +2,7 @@ package com.myname.mymodid;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.myname.mymodid.commands.CommandGetTileEntity;
 import com.myname.mymodid.conditionals.TestConditional;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -67,6 +68,7 @@ public class MyMod {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
+        event.registerServerCommand(new CommandGetTileEntity());
     }
 
 

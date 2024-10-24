@@ -17,6 +17,7 @@ public class Test {
     public final int startX = 0;
     public final int startY = 25;
     public final int startZ = 0;
+    public boolean failed = false;
 
 
     JsonObject structure;

@@ -28,6 +28,7 @@ import static com.myname.mymodid.MyMod.jsons;
 public class TickHandler {
 
     private boolean hasRun = false;
+    private boolean testComplete = false;
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -38,6 +39,11 @@ public class TickHandler {
         if (mc.currentScreen instanceof GuiMainMenu && !hasRun) {
             hasRun = true;
             autoLoadWorld();
+        }
+
+        if (testComplete) {
+//            Minecraft.stopIntegratedServer();
+            testComplete = false;
         }
     }
 
@@ -58,6 +64,11 @@ public class TickHandler {
             assert test.procedureList.peek() != null;
             Procedure procedure = test.procedureList.peek();
 
+            if (procedure == null) {
+                testComplete = true;
+                return;
+            }
+
             if (procedure instanceof RunTicks) {
                 procedure.duration--;
                 if (procedure.duration <= -1) test.procedureList.poll();
@@ -65,17 +76,23 @@ public class TickHandler {
             }
 
             if (procedure instanceof CheckTile checkTile) {
+
+                test.procedureList.poll();
+
                 ConditionalFunction f = RegisterConditionals.getFunc(checkTile.funcID);
                 WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
                 TileEntity te = worldServer.getTileEntity(test.startX + checkTile.x, test.startY + checkTile.y, test.startZ + checkTile.z);
 
                 try {
                     if (!f.checkCondition(te, worldServer)) {
+                        test.failed = true;
+
                         if (checkTile.optionalLabel != null) {
                             System.out.println("\u001B[31m" + checkTile.optionalLabel + " FAILED\u001B[0m");
                         } else {
                             System.out.println("\u001B[31mFAILED\u001B[0m");
                         }
+
                     } else {
                         System.out.println("\u001B[32m" + checkTile.optionalLabel + " PASSED\u001B[0m");
                     }
@@ -152,7 +169,17 @@ public class TickHandler {
 
             // Initialize the TileEntity if the jsonElement is not null
             if (jsonElement != null && !jsonElement.isJsonNull()) {
-                this.tile = NBTConverter.decodeFromString(jsonElement.get("data").getAsString());
+
+                // This will usually be encoded data, but if none then just make a blank tile entity and use that.
+                String data = jsonElement.get("data").getAsString();
+                if (data.toLowerCase().equals("default")) {
+                    NBTTagCompound tag = new NBTTagCompound();
+                    tag.setString("id", jsonElement.get("mappingForDefault").getAsString());
+                    this.tile = tag;
+                    return;
+                }
+
+                this.tile = NBTConverter.decodeFromString(data);
             } else {
                 this.tile = null; // No TileEntity if jsonElement is null
             }
