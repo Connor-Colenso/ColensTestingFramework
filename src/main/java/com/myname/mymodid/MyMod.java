@@ -5,6 +5,8 @@ import com.google.gson.JsonParser;
 import com.myname.mymodid.commands.CommandGetTileEntity;
 import com.myname.mymodid.conditionals.TestConditional;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
+import com.myname.mymodid.events.CTFWandEventHandler;
+import com.myname.mymodid.items.CTFWand;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -13,7 +15,9 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
@@ -47,11 +51,14 @@ public class MyMod {
         new MovePlayer(); // Moves the user to specific x y z coords.
     }
 
+
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         // Register the tick handler
         FMLCommonHandler.instance().bus().register(new TickHandler());
         RegisterConditionals.conditionalRegister("testing", TestConditional::isChestContainingStone);
+        GameRegistry.registerItem(new CTFWand(), "ctfWand");
+        MinecraftForge.EVENT_BUS.register(new CTFWandEventHandler());
     }
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
