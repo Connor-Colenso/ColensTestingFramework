@@ -11,9 +11,9 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 public class CTFWandEventHandler {
 
 
-    // Static fields to store positions
-    public static int[] firstPosition = new int[3];  // Array to store the first position (x, y, z)
-    public static int[] secondPosition = new int[3]; // Array to store the second position (x, y, z)
+    // Static fields to store positions.
+    public static int[] firstPosition = { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE };
+    public static int[] secondPosition = { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE };
 
 
     @SubscribeEvent
@@ -38,6 +38,8 @@ public class CTFWandEventHandler {
                 if (!world.isRemote) {
                     player.addChatMessage(new ChatComponentText("First position set: [" + blockX + ", " + blockY + ", " + blockZ + "]"));
                 }
+                // Stop user accidentally breaking stuff.
+                event.setCanceled(true);
             }
 
             // Record the left-click action
@@ -56,10 +58,6 @@ public class CTFWandEventHandler {
                     player.addChatMessage(new ChatComponentText("Second position set: [" + blockX + ", " + blockY + ", " + blockZ + "]"));
                 }
             }
-
         }
-
-        // Stop user accidentally breaking stuff.
-        event.setCanceled(true);
     }
 }

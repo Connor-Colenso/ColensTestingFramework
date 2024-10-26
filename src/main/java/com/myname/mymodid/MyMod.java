@@ -8,6 +8,7 @@ import com.myname.mymodid.conditionals.TestConditional;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
 import com.myname.mymodid.events.CTFWandEventHandler;
 import com.myname.mymodid.items.CTFWand;
+import com.myname.mymodid.rendering.RenderCTFWandFrame;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -60,6 +61,7 @@ public class MyMod {
         RegisterConditionals.conditionalRegister("testing", TestConditional::isChestContainingStone);
         GameRegistry.registerItem(new CTFWand(), "ctfWand");
         MinecraftForge.EVENT_BUS.register(new CTFWandEventHandler());
+        MinecraftForge.EVENT_BUS.register(new RenderCTFWandFrame());
     }
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
