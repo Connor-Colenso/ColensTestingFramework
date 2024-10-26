@@ -186,7 +186,7 @@ public class TickHandler {
         }
     }
 
-    private static void addStructureInfo(JsonObject json, Test testObj) {
+    public static void addStructureInfo(JsonObject json, Test testObj) {
         JsonObject structure = json.getAsJsonObject("structure");
         JsonObject keys = structure.getAsJsonObject("keys");
         HashMap<String, BlockTilePair> keyMap = new HashMap<>();
