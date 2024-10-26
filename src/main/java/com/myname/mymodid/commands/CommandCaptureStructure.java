@@ -134,7 +134,7 @@ public class CommandCaptureStructure extends CommandBase {
 
         try {
             // Define the file path in the CTF folder inside the config directory
-            File ctfConfigDir = new File(Minecraft.getMinecraft().mcDataDir, "config/CTF");
+            File ctfConfigDir = new File(Minecraft.getMinecraft().mcDataDir, "config/CTF/testing");
             if (!ctfConfigDir.exists()) {
                 ctfConfigDir.mkdirs(); // Create CTF directory if it doesn't exist
             }
