@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.myname.mymodid.NBTConverter;
 import com.myname.mymodid.Test;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,6 +15,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -41,7 +43,7 @@ public class CommandCaptureStructure extends CommandBase {
         overallJson.add("structure", structure);
         overallJson.addProperty("testName", "Blah blah");
         overallJson.add("instructions", new JsonArray());
-        saveJsonToFile(overallJson, "/Users/connorcolenso/Desktop/output.json");
+        saveJsonToFile(overallJson);
 
 
 
@@ -126,12 +128,26 @@ public class CommandCaptureStructure extends CommandBase {
         return structureJson;
     }
 
-    public static void saveJsonToFile(JsonObject overallJson, String filePath) {
+    public static void saveJsonToFile(JsonObject overallJson) {
+        // Create a pretty-printing Gson instance
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-        try (FileWriter fileWriter = new FileWriter(filePath)) {
-            fileWriter.write(gson.toJson(overallJson));
-            System.out.println("Json saved successfully to " + filePath);
+        try {
+            // Define the file path in the CTF folder inside the config directory
+            File ctfConfigDir = new File(Minecraft.getMinecraft().mcDataDir, "config/CTF");
+            if (!ctfConfigDir.exists()) {
+                ctfConfigDir.mkdirs(); // Create CTF directory if it doesn't exist
+            }
+
+            // Specify the output file path within the CTF folder
+            File outputFile = new File(ctfConfigDir, overallJson.get("testName").getAsString() + ".json");
+
+            // Write the JSON content to the file with pretty printing
+            try (FileWriter fileWriter = new FileWriter(outputFile)) {
+                fileWriter.write(gson.toJson(overallJson));
+                System.out.println("Json saved successfully to " + outputFile.getAbsolutePath());
+            }
+
         } catch (IOException e) {
             System.err.println("Error writing Json to file: " + e.getMessage());
         }
