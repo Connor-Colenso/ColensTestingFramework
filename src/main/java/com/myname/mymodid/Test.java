@@ -69,6 +69,9 @@ public class Test {
             TileEntity tileEntity = createTileEntity(pair.tile);
             world.setTileEntity(x, y, z, tileEntity);
         }
+
+        // Not sure why this needs setting twice, but it does.
+        world.setBlockMetadataWithNotify(x, y, z, pair.meta, 2);
     }
 
     // Placeholder for TileEntity creation logic

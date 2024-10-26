@@ -1,5 +1,7 @@
 package com.myname.mymodid.commands;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myname.mymodid.NBTConverter;
@@ -12,6 +14,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +42,9 @@ public class CommandCaptureStructure extends CommandBase {
         overallJson.addProperty("testName", "Blah blah");
         overallJson.addProperty("testName", "Blah blah");
         overallJson.add("instructions", new JsonArray());
+        saveJsonToFile(overallJson, "/Users/connorcolenso/Desktop/output.json");
+
+
 
         Test testObj = new Test();
         addStructureInfo(overallJson, testObj);
@@ -118,6 +125,17 @@ public class CommandCaptureStructure extends CommandBase {
         structureJson.add("keys", keysObject);
 
         return structureJson;
+    }
+
+    public static void saveJsonToFile(JsonObject overallJson, String filePath) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            fileWriter.write(gson.toJson(overallJson));
+            System.out.println("Json saved successfully to " + filePath);
+        } catch (IOException e) {
+            System.err.println("Error writing Json to file: " + e.getMessage());
+        }
     }
 
 }
