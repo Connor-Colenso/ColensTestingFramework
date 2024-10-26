@@ -25,7 +25,7 @@ public class CTFWandEventHandler {
         // Check if the player is holding the CTFWand
         if (itemStack != null && itemStack.getItem() instanceof CTFWand) {
             // Record the right-click action
-            if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
                 int blockX = event.x;
                 int blockY = event.y;
                 int blockZ = event.z;
@@ -41,7 +41,7 @@ public class CTFWandEventHandler {
             }
 
             // Record the left-click action
-            if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+            if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
                 int blockX = event.x;
                 int blockY = event.y;
                 int blockZ = event.z;
@@ -56,6 +56,10 @@ public class CTFWandEventHandler {
                     player.addChatMessage(new ChatComponentText("Second position set: [" + blockX + ", " + blockY + ", " + blockZ + "]"));
                 }
             }
+
         }
+
+        // Stop user accidentally breaking stuff.
+        event.setCanceled(true);
     }
 }

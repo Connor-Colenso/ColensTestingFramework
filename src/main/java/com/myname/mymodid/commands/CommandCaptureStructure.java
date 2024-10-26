@@ -40,7 +40,6 @@ public class CommandCaptureStructure extends CommandBase {
         JsonObject overallJson = new JsonObject();
         overallJson.add("structure", structure);
         overallJson.addProperty("testName", "Blah blah");
-        overallJson.addProperty("testName", "Blah blah");
         overallJson.add("instructions", new JsonArray());
         saveJsonToFile(overallJson, "/Users/connorcolenso/Desktop/output.json");
 
