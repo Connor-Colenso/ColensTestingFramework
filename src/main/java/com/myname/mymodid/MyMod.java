@@ -2,8 +2,10 @@ package com.myname.mymodid;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.myname.mymodid.commands.CommandAddInstruction;
 import com.myname.mymodid.commands.CommandCaptureStructure;
 import com.myname.mymodid.commands.CommandGetTileEntity;
+import com.myname.mymodid.commands.CommandInitTest;
 import com.myname.mymodid.conditionals.TestConditional;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
 import com.myname.mymodid.events.CTFWandEventHandler;
@@ -80,6 +82,8 @@ public class MyMod {
         proxy.serverStarting(event);
         event.registerServerCommand(new CommandGetTileEntity());
         event.registerServerCommand(new CommandCaptureStructure());
+        event.registerServerCommand(new CommandInitTest());
+        event.registerServerCommand(new CommandAddInstruction());
     }
 
 

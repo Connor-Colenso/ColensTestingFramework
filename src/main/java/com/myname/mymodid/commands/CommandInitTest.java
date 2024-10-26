@@ -1,58 +1,56 @@
 package com.myname.mymodid.commands;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myname.mymodid.NBTConverter;
-import com.myname.mymodid.Test;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.myname.mymodid.TickHandler.addStructureInfo;
 import static com.myname.mymodid.events.CTFWandEventHandler.firstPosition;
 import static com.myname.mymodid.events.CTFWandEventHandler.secondPosition;
 
-public class CommandCaptureStructure extends CommandBase {
+public class CommandInitTest extends CommandBase {
+
+    JsonObject currentTest;
+
     @Override
     public String getCommandName() {
-        return "getStructure";
+        return "inittest";
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "/getStructure";
+        return "inittest testname";
     }
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-        JsonObject structure = captureStructureJson();
-        JsonObject overallJson = new JsonObject();
-        overallJson.add("structure", structure);
-        overallJson.addProperty("testName", "Blah blah");
-        overallJson.add("instructions", new JsonArray());
-        saveJsonToFile(overallJson);
-        
-        Test testObj = new Test();
-        addStructureInfo(overallJson, testObj);
+        if (args.length == 0) {
+            sender.addChatMessage(new ChatComponentText("Must provide a valid test name. You may not use spaces."));
+            return;
+        }
 
-        testObj.startX = 25;
-        testObj.startY = 25;
-        testObj.startZ = 25;
+        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) {
+            sender.addChatMessage(new ChatComponentText("You have not selected a valid region using the CTF wand."));
+            return;
+        }
 
-        testObj.buildStructure();
+        currentTest = new JsonObject();
+        currentTest.addProperty("testName", args[0]);
+
+        // captureStructureJson will obtain it from the static coordinates set by the CTF Wand (though the event CTFWandEventHandler actually sets the coords).
+        currentTest.add("structure", captureStructureJson());
+        currentTest.add("instructions", new JsonArray());
+
     }
 
     public JsonObject captureStructureJson() {
@@ -124,31 +122,6 @@ public class CommandCaptureStructure extends CommandBase {
         structureJson.add("keys", keysObject);
 
         return structureJson;
-    }
-
-    public static void saveJsonToFile(JsonObject overallJson) {
-        // Create a pretty-printing Gson instance
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-        try {
-            // Define the file path in the CTF folder inside the config directory
-            File ctfConfigDir = new File(Minecraft.getMinecraft().mcDataDir, "config/CTF/testing");
-            if (!ctfConfigDir.exists()) {
-                ctfConfigDir.mkdirs(); // Create CTF directory if it doesn't exist
-            }
-
-            // Specify the output file path within the CTF folder
-            File outputFile = new File(ctfConfigDir, overallJson.get("testName").getAsString() + ".json");
-
-            // Write the JSON content to the file with pretty printing
-            try (FileWriter fileWriter = new FileWriter(outputFile)) {
-                fileWriter.write(gson.toJson(overallJson));
-                System.out.println("Json saved successfully to " + outputFile.getAbsolutePath());
-            }
-
-        } catch (IOException e) {
-            System.err.println("Error writing Json to file: " + e.getMessage());
-        }
     }
 
 }
