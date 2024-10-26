@@ -6,7 +6,7 @@ public class CTFWand extends Item {
 
     public CTFWand() {
         // Set the unlocalised name and texture for the wand (using stick texture)
-        this.setUnlocalizedName("ctfWand");
+        this.setUnlocalizedName("CTFWand");
         this.setTextureName("minecraft:stick");
         this.setMaxStackSize(1);  // Only one wand can be held in a stack
     }

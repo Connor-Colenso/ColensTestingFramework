@@ -20,7 +20,7 @@ import static com.myname.mymodid.events.CTFWandEventHandler.secondPosition;
 
 public class CommandInitTest extends CommandBase {
 
-    JsonObject currentTest;
+    public static JsonObject currentTest;
 
     @Override
     public String getCommandName() {

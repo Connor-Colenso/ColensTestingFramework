@@ -2,14 +2,16 @@ package com.myname.mymodid;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.myname.mymodid.commands.CommandAddInstruction;
+import com.myname.mymodid.commands.instructions.CommandAddInstruction;
 import com.myname.mymodid.commands.CommandCaptureStructure;
 import com.myname.mymodid.commands.CommandGetTileEntity;
 import com.myname.mymodid.commands.CommandInitTest;
 import com.myname.mymodid.conditionals.TestConditional;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
 import com.myname.mymodid.events.CTFWandEventHandler;
+import com.myname.mymodid.items.CTFTileEntityTag;
 import com.myname.mymodid.items.CTFWand;
+import com.myname.mymodid.items.RegisterItems;
 import com.myname.mymodid.rendering.RenderCTFWandFrame;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -21,7 +23,6 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.Item;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,8 +36,6 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.myname.mymodid.TickHandler.registerTests;
 
@@ -61,7 +60,8 @@ public class MyMod {
         // Register the tick handler
         FMLCommonHandler.instance().bus().register(new TickHandler());
         RegisterConditionals.conditionalRegister("testing", TestConditional::isChestContainingStone);
-        GameRegistry.registerItem(new CTFWand(), "ctfWand");
+        GameRegistry.registerItem(RegisterItems.CTFWand, "CTFWand");
+        GameRegistry.registerItem(RegisterItems.CTFTileEntityTag, "CTFTileEntityTag");
         MinecraftForge.EVENT_BUS.register(new CTFWandEventHandler());
         MinecraftForge.EVENT_BUS.register(new RenderCTFWandFrame());
     }
