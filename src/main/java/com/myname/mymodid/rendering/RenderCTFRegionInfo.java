@@ -9,6 +9,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL11;
 
+import static com.myname.mymodid.commands.CommandInitTest.currentTest;
 import static com.myname.mymodid.events.CTFWandEventHandler.firstPosition;
 import static com.myname.mymodid.events.CTFWandEventHandler.secondPosition;
 
@@ -32,9 +33,16 @@ public class RenderCTFRegionInfo {
         double y = Math.max(firstPosition[1], secondPosition[1]) + 1.5; // Slightly above
         double z = (firstPosition[2] + secondPosition[2]) / 2.0 + 0.5; // Center in z
 
+        if (currentTest == null) return;
+
+        String testName = "ERROR STRING, REPORT TO AUTHOR.";
+        if (currentTest.has("testName")) {
+            testName = currentTest.get("testName").getAsString();
+        }
+
         // Render the floating text.
         renderFloatingText(
-            "test",
+            testName,
             x, y, z
         );
     }
