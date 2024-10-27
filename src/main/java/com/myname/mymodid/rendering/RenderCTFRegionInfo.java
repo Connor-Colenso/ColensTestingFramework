@@ -28,7 +28,7 @@ public class RenderCTFRegionInfo {
         renderFloatingText(
             "test",
             x, y, z,
-            0xFFFFFF,                   // Color (white)
+            0xFFFFFF,             // Color (white)
             true,                       // Show background
             event.partialTicks,         // Use the event's partialTicks
             true                        // Enable depth test
@@ -83,15 +83,20 @@ public class RenderCTFRegionInfo {
         int textHeight = 10;
 
         // Render background if enabled
+// Render background if enabled
         if (renderBlackBackground) {
             int backgroundColor = 0x40000000;
             GL11.glDisable(GL11.GL_TEXTURE_2D);
+
             GL11.glPushMatrix();
-            GL11.glTranslatef(-textWidth / 2, -textHeight, 0);
-            drawRect(-2, -2, textWidth / 2 + 2, textHeight, backgroundColor);
+            // Center the rectangle based on text width and height, setting it slightly larger than the text
+            GL11.glTranslatef(-textWidth / 2 - 2, -textHeight, 0);
+            drawRect(0, 0, textWidth + 4, textHeight + 2, backgroundColor);
+
             GL11.glPopMatrix();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
+
 
         // Render the text
         fontrenderer.drawString(text, -textWidth / 2, 0, color);
