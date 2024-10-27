@@ -147,7 +147,7 @@ public class RenderCTFRegionInfo {
 
             GL11.glPushMatrix();
             // Center the rectangle based on text width and height
-            GL11.glTranslatef(-textWidth / 2 - 2, startY + i * (textHeight + 2), 0);
+            GL11.glTranslatef(-textWidth / 2 - 2, startY + i * (textHeight + 2) - 2, 0);
             drawRect(textWidth + 4, textHeight + 2);
             GL11.glPopMatrix();
         }
