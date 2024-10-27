@@ -3,7 +3,6 @@ package com.myname.mymodid.rendering;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
@@ -19,37 +18,37 @@ public class RenderCTFRegionInfo {
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
 
+        renderRegionLabel(event);
+        renderTileEntityTagPoints(event);
+    }
+
+    private static void renderTileEntityTagPoints(RenderWorldLastEvent event) {
+
+    }
+
+    private static void renderRegionLabel(RenderWorldLastEvent event) {
         // Calculate the center position for the text
         double x = (firstPosition[0] + secondPosition[0]) / 2.0 + 0.5; // Center in x
         double y = Math.max(firstPosition[1], secondPosition[1]) + 1.5; // Slightly above
         double z = (firstPosition[2] + secondPosition[2]) / 2.0 + 0.5; // Center in z
 
-        // Render the floating text
+        // Render the floating text.
         renderFloatingText(
             "test",
-            x, y, z,
-            0xFFFFFF,             // Color (white)
-            true,                       // Show background
-            event.partialTicks,         // Use the event's partialTicks
-            false                       // Disable depth test to render on top
+            x, y, z
         );
     }
 
     private static final Minecraft mc = Minecraft.getMinecraft();
 
     /**
-     * Renders text at specified coordinates in the world
+     * Renders text at specified coordinates in the world. If someone better than me at rendering can make this better, please do.
      * @param text The text to render
      * @param x The x coordinate in the world
      * @param y The y coordinate in the world
      * @param z The z coordinate in the world
-     * @param color The color of the text (0xRRGGBB format)
-     * @param renderBlackBackground Whether to render a black background behind the text
-     * @param partialTicks The partial tick time for smooth rendering
-     * @param depthTest Whether to enable depth testing (true = text can be hidden behind blocks)
      */
-    public static void renderFloatingText(String text, double x, double y, double z, int color,
-                                          boolean renderBlackBackground, float partialTicks, boolean depthTest) {
+    public static void renderFloatingText(String text, double x, double y, double z) {
         FontRenderer fontrenderer = mc.fontRenderer;
         RenderManager renderManager = RenderManager.instance;
 
@@ -82,22 +81,19 @@ public class RenderCTFRegionInfo {
         int textWidth = fontrenderer.getStringWidth(text);
         int textHeight = 10;
 
-        // Render background if enabled
-        if (renderBlackBackground) {
-            int backgroundColor = 0x40000000;
-            GL11.glDisable(GL11.GL_TEXTURE_2D);
+        // Render background rectangle.
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
 
-            GL11.glPushMatrix();
-            // Center the rectangle based on text width and height, setting it slightly larger than the text
-            GL11.glTranslatef(-textWidth / 2 - 2, -2, 0);
-            drawRect(0, 0, textWidth + 4, textHeight + 2, backgroundColor);
+        GL11.glPushMatrix();
+        // Center the rectangle based on text width and height, setting it slightly larger than the text
+        GL11.glTranslatef(-textWidth / 2 - 2, -2, 0);
+        drawRect(textWidth + 4, textHeight + 2);
 
-            GL11.glPopMatrix();
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
-        }
+        GL11.glPopMatrix();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         // Render the text
-        fontrenderer.drawString(text, -textWidth / 2, 0, color);
+        fontrenderer.drawString(text, -textWidth / 2, 0, 0xFFFFFF);
 
         // Restore GL state
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -110,18 +106,18 @@ public class RenderCTFRegionInfo {
     /**
      * Helper method to draw a rectangle
      */
-    private static void drawRect(int left, int top, int right, int bottom, int color) {
-        float alpha = (float)(color >> 24 & 255) / 255.0F;
-        float red = (float)(color >> 16 & 255) / 255.0F;
-        float green = (float)(color >> 8 & 255) / 255.0F;
-        float blue = (float)(color & 255) / 255.0F;
+    private static void drawRect(int right, int bottom) {
+        float alpha = (float)(0x40000000 >> 24 & 255) / 255.0F;
+        float red = (float)(0x40000000 >> 16 & 255) / 255.0F;
+        float green = (float)(0x40000000 >> 8 & 255) / 255.0F;
+        float blue = (float)(0x40000000 & 255) / 255.0F;
 
         GL11.glColor4f(red, green, blue, alpha);
         GL11.glBegin(GL11.GL_QUADS);
-        GL11.glVertex2f(left, bottom);
+        GL11.glVertex2f(0, bottom);
         GL11.glVertex2f(right, bottom);
-        GL11.glVertex2f(right, top);
-        GL11.glVertex2f(left, top);
+        GL11.glVertex2f(right, 0);
+        GL11.glVertex2f(0, 0);
         GL11.glEnd();
     }
 }
