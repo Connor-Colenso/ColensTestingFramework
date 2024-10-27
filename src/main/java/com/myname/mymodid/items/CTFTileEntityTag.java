@@ -79,7 +79,7 @@ public class CTFTileEntityTag extends Item {
         }
 
         instructionsArray.add(instruction);
-    }
+        }
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {

@@ -1,5 +1,7 @@
 package com.myname.mymodid.rendering;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.gui.FontRenderer;
@@ -24,17 +26,48 @@ public class RenderCTFRegionInfo {
     }
 
     private static void renderTileEntityTagPoints(RenderWorldLastEvent event) {
+        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
+        if (currentTest == null) return;
 
+        if (!currentTest.has("instructions")) {
+            return;
+        }
+
+        // Calculate the minimum and maximum coordinates for the bounding box
+        double minX = Math.min(firstPosition[0], secondPosition[0]);
+        double minY = Math.min(firstPosition[1], secondPosition[1]);
+        double minZ = Math.min(firstPosition[2], secondPosition[2]);
+
+        JsonArray instructionsArray = currentTest.getAsJsonArray("instructions");
+
+        for (int i = 0; i < instructionsArray.size(); i++) {
+            JsonObject instruction = instructionsArray.get(i).getAsJsonObject();
+            if (instruction.get("type").getAsString().equals("checkTile")) {
+                // Render text in the middle of the block defined by relative coordinates x, y, z
+                renderFloatingText(
+                    instruction.get("funcRegistry").getAsString(),
+                    minX + instruction.get("x").getAsDouble() + 0.5,
+                    minY + instruction.get("y").getAsDouble() + 0.5,
+                    minZ + instruction.get("z").getAsDouble() + 0.5
+                );
+            }
+        }
     }
 
+
     private static void renderRegionLabel(RenderWorldLastEvent event) {
-        // Calculate the center position for the text
+        // Not yet set.
+        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
+
+        // Calculate the center position for the text.
         double x = (firstPosition[0] + secondPosition[0]) / 2.0 + 0.5; // Center in x
         double y = Math.max(firstPosition[1], secondPosition[1]) + 1.5; // Slightly above
         double z = (firstPosition[2] + secondPosition[2]) / 2.0 + 0.5; // Center in z
 
+        // User has not initialised test yet.
         if (currentTest == null) return;
 
+        // Sanity check that the field exists...
         String testName = "ERROR STRING, REPORT TO AUTHOR.";
         if (currentTest.has("testName")) {
             testName = currentTest.get("testName").getAsString();
