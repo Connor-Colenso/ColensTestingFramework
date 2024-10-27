@@ -15,6 +15,10 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.myname.mymodid.CommonTestFields.ENCODED_NBT;
+import static com.myname.mymodid.CommonTestFields.INSTRUCTIONS;
+import static com.myname.mymodid.CommonTestFields.STRUCTURE;
+import static com.myname.mymodid.CommonTestFields.TEST_NAME;
 import static com.myname.mymodid.events.CTFWandEventHandler.firstPosition;
 import static com.myname.mymodid.events.CTFWandEventHandler.secondPosition;
 
@@ -45,11 +49,11 @@ public class CommandInitTest extends CommandBase {
         }
 
         currentTest = new JsonObject();
-        currentTest.addProperty("testName", args[0]);
+        currentTest.addProperty(TEST_NAME, args[0]);
 
         // captureStructureJson will obtain it from the static coordinates set by the CTF Wand (though the event CTFWandEventHandler actually sets the coords).
-        currentTest.add("structure", captureStructureJson());
-        currentTest.add("instructions", new JsonArray());
+        currentTest.add(STRUCTURE, captureStructureJson());
+        currentTest.add(INSTRUCTIONS, new JsonArray());
 
     }
 
@@ -98,7 +102,7 @@ public class CommandInitTest extends CommandBase {
                             tileEntity.writeToNBT(tileTag);
                             JsonObject te = new JsonObject();
                             te.addProperty("mappingForDefault", tileTag.getString("id"));
-                            te.addProperty("data", NBTConverter.encodeToString(tileTag));
+                            te.addProperty(ENCODED_NBT, NBTConverter.encodeToString(tileTag));
 
                             keyData.add("tileEntity", te);
                         } else {

@@ -58,7 +58,11 @@ public class CommandAddInstruction extends CommandBase {
             case "checktile":
                 // Handle the "checkTile" instruction
                 CheckTileInstructions.add(sender, args); // Instruction is added when item is used.
-                break;
+                return;
+            case "additem":
+                // Handle the "checkTile" instruction
+                AddItemInstructions.add(sender); // Instruction is added when item is used.
+                return;
 
             default:
                 sender.addChatMessage(new ChatComponentText("Unknown instruction. Use 'addinstruction' to list valid instructions."));

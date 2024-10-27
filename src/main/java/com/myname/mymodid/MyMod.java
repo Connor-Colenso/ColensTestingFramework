@@ -3,6 +3,7 @@ package com.myname.mymodid;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.myname.mymodid.commands.CommandCaptureStructure;
+import com.myname.mymodid.commands.CommandCompleteTest;
 import com.myname.mymodid.commands.CommandGetTileEntity;
 import com.myname.mymodid.commands.CommandInitTest;
 import com.myname.mymodid.commands.instructions.CommandAddInstruction;
@@ -60,11 +61,11 @@ public class MyMod {
         // Register the tick handler
         FMLCommonHandler.instance().bus().register(new TickHandler());
         RegisterConditionals.conditionalRegister("testing", TestConditional::isChestContainingStone);
-        GameRegistry.registerItem(RegisterItems.CTFWand, "CTFWand");
-        GameRegistry.registerItem(RegisterItems.CTFTileEntityTag, "CTFTileEntityTag");
         MinecraftForge.EVENT_BUS.register(new CTFWandEventHandler());
         MinecraftForge.EVENT_BUS.register(new RenderCTFWandFrame());
         MinecraftForge.EVENT_BUS.register(new RenderCTFRegionInfo());
+
+        RegisterItems.register();
     }
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
@@ -85,6 +86,7 @@ public class MyMod {
         event.registerServerCommand(new CommandCaptureStructure());
         event.registerServerCommand(new CommandInitTest());
         event.registerServerCommand(new CommandAddInstruction());
+        event.registerServerCommand(new CommandCompleteTest());
     }
 
 

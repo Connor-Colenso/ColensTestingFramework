@@ -21,6 +21,10 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.myname.mymodid.CommonTestFields.ENCODED_NBT;
+import static com.myname.mymodid.CommonTestFields.INSTRUCTIONS;
+import static com.myname.mymodid.CommonTestFields.STRUCTURE;
+import static com.myname.mymodid.CommonTestFields.TEST_NAME;
 import static com.myname.mymodid.TickHandler.addStructureInfo;
 import static com.myname.mymodid.events.CTFWandEventHandler.firstPosition;
 import static com.myname.mymodid.events.CTFWandEventHandler.secondPosition;
@@ -40,11 +44,11 @@ public class CommandCaptureStructure extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         JsonObject structure = captureStructureJson();
         JsonObject overallJson = new JsonObject();
-        overallJson.add("structure", structure);
-        overallJson.addProperty("testName", "Blah blah");
-        overallJson.add("instructions", new JsonArray());
+        overallJson.add(STRUCTURE, structure);
+        overallJson.addProperty(TEST_NAME, "Blah blah");
+        overallJson.add(INSTRUCTIONS, new JsonArray());
         saveJsonToFile(overallJson);
-        
+
         Test testObj = new Test();
         addStructureInfo(overallJson, testObj);
 
@@ -100,7 +104,7 @@ public class CommandCaptureStructure extends CommandBase {
                             tileEntity.writeToNBT(tileTag);
                             JsonObject te = new JsonObject();
                             te.addProperty("mappingForDefault", tileTag.getString("id"));
-                            te.addProperty("data", NBTConverter.encodeToString(tileTag));
+                            te.addProperty(ENCODED_NBT, NBTConverter.encodeToString(tileTag));
 
                             keyData.add("tileEntity", te);
                         } else {

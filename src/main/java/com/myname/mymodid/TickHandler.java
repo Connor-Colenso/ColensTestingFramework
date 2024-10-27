@@ -22,6 +22,8 @@ import net.minecraft.world.WorldServer;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.myname.mymodid.CommonTestFields.ENCODED_NBT;
+import static com.myname.mymodid.CommonTestFields.STRUCTURE;
 import static com.myname.mymodid.MyMod.autoLoadWorld;
 import static com.myname.mymodid.MyMod.jsons;
 
@@ -172,7 +174,7 @@ public class TickHandler {
             if (jsonElement != null && !jsonElement.isJsonNull()) {
 
                 // This will usually be encoded data, but if none then just make a blank tile entity and use that.
-                String data = jsonElement.get("data").getAsString();
+                String data = jsonElement.get(ENCODED_NBT).getAsString();
                 if (data.toLowerCase().equals("default")) {
                     NBTTagCompound tag = new NBTTagCompound();
                     tag.setString("id", jsonElement.get("mappingForDefault").getAsString());
@@ -188,7 +190,7 @@ public class TickHandler {
     }
 
     public static void addStructureInfo(JsonObject json, Test testObj) {
-        JsonObject structure = json.getAsJsonObject("structure");
+        JsonObject structure = json.getAsJsonObject(STRUCTURE);
         JsonObject keys = structure.getAsJsonObject("keys");
         HashMap<String, BlockTilePair> keyMap = new HashMap<>();
 
