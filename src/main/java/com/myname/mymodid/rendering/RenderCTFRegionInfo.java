@@ -20,12 +20,11 @@ public class RenderCTFRegionInfo {
         if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
 
         // Calculate the center position for the text
-        double x = (firstPosition[0] + secondPosition[0]) / 2.0;
-        double y = (firstPosition[1] + secondPosition[1]) / 2.0 + 1.0; // Offset slightly above
-        double z = (firstPosition[2] + secondPosition[2]) / 2.0;
+        double x = (firstPosition[0] + secondPosition[0]) / 2.0 + 0.5; // Center in x
+        double y = Math.max(firstPosition[1], secondPosition[1]) + 1.5; // Slightly above
+        double z = (firstPosition[2] + secondPosition[2]) / 2.0 + 0.5; // Center in z
 
         // The color parameter should be a hex color value, not 1
-        // 0xFFFFFF is white, you can use other colors like 0xFF0000 for red
         renderFloatingText(
             "test",
             x, y, z,
@@ -89,7 +88,7 @@ public class RenderCTFRegionInfo {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
             GL11.glPushMatrix();
             GL11.glTranslatef(-textWidth / 2, -textHeight, 0);
-            drawRect(-1, -1, textWidth + 1, textHeight, backgroundColor);
+            drawRect(-2, -2, textWidth / 2 + 2, textHeight, backgroundColor);
             GL11.glPopMatrix();
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
