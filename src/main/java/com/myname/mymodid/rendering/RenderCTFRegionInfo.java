@@ -24,14 +24,14 @@ public class RenderCTFRegionInfo {
         double y = Math.max(firstPosition[1], secondPosition[1]) + 1.5; // Slightly above
         double z = (firstPosition[2] + secondPosition[2]) / 2.0 + 0.5; // Center in z
 
-        // The color parameter should be a hex color value, not 1
+        // Render the floating text
         renderFloatingText(
             "test",
             x, y, z,
             0xFFFFFF,             // Color (white)
             true,                       // Show background
             event.partialTicks,         // Use the event's partialTicks
-            true                        // Enable depth test
+            false                       // Disable depth test to render on top
         );
     }
 
@@ -73,8 +73,8 @@ public class RenderCTFRegionInfo {
 
         // Set up GL states
         GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDepthMask(false);
-        if (!depthTest) GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthMask(false); // Disable depth writing for the text
+        GL11.glDisable(GL11.GL_DEPTH_TEST); // Disable depth test to ensure text appears above blocks
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -82,7 +82,6 @@ public class RenderCTFRegionInfo {
         int textWidth = fontrenderer.getStringWidth(text);
         int textHeight = 10;
 
-        // Render background if enabled
         // Render background if enabled
         if (renderBlackBackground) {
             int backgroundColor = 0x40000000;
@@ -97,13 +96,13 @@ public class RenderCTFRegionInfo {
             GL11.glEnable(GL11.GL_TEXTURE_2D);
         }
 
-
         // Render the text
         fontrenderer.drawString(text, -textWidth / 2, 0, color);
 
         // Restore GL state
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDepthMask(true);
+        GL11.glEnable(GL11.GL_DEPTH_TEST); // Re-enable depth test after rendering
+        GL11.glDepthMask(true); // Re-enable depth writing
         GL11.glPopAttrib();
         GL11.glPopMatrix();
     }
