@@ -83,14 +83,14 @@ public class RenderCTFRegionInfo {
         int textHeight = 10;
 
         // Render background if enabled
-// Render background if enabled
+        // Render background if enabled
         if (renderBlackBackground) {
             int backgroundColor = 0x40000000;
             GL11.glDisable(GL11.GL_TEXTURE_2D);
 
             GL11.glPushMatrix();
             // Center the rectangle based on text width and height, setting it slightly larger than the text
-            GL11.glTranslatef(-textWidth / 2 - 2, -textHeight, 0);
+            GL11.glTranslatef(-textWidth / 2 - 2, -2, 0);
             drawRect(0, 0, textWidth + 4, textHeight + 2, backgroundColor);
 
             GL11.glPopMatrix();
