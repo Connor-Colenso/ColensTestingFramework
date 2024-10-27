@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.myname.mymodid.conditionals.registry.ConditionalFunction;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
+import com.myname.mymodid.entities.EntityTextDisplay;
 import com.myname.mymodid.procedures.CheckTile;
 import com.myname.mymodid.procedures.Procedure;
 import com.myname.mymodid.procedures.RunTicks;
@@ -21,6 +22,7 @@ import net.minecraft.world.WorldServer;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import static com.myname.mymodid.MyMod.autoLoadWorld;
 import static com.myname.mymodid.MyMod.jsons;
@@ -49,10 +51,23 @@ public class TickHandler {
 
 
     public static boolean hasBuilt = false;
+    Random random = new Random();
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
         if (event.side.isClient()) return;
 
+        if (random.nextInt(200) == 50) {
+            // Create a new instance of your entity
+            EntityTextDisplay textEntity = new EntityTextDisplay(MinecraftServer.getServer().getEntityWorld(), 25.0, 25.0, 25.0);
+
+            // Set the entity's position
+            textEntity.setPosition(25.0, 25.0, 25.0);
+
+            // Spawn the entity in the world
+            MinecraftServer.getServer().getEntityWorld().spawnEntityInWorld(textEntity);
+
+        }
         Test test = MyMod.tests.get(0);
 
         if (!hasBuilt && event.phase == TickEvent.Phase.START) {

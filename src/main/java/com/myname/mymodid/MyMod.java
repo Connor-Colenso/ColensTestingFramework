@@ -8,10 +8,12 @@ import com.myname.mymodid.commands.CommandGetTileEntity;
 import com.myname.mymodid.commands.CommandInitTest;
 import com.myname.mymodid.conditionals.TestConditional;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
+import com.myname.mymodid.entities.EntityTextDisplay;
 import com.myname.mymodid.events.CTFWandEventHandler;
 import com.myname.mymodid.items.CTFTileEntityTag;
 import com.myname.mymodid.items.CTFWand;
 import com.myname.mymodid.items.RegisterItems;
+import com.myname.mymodid.rendering.RenderCTFRegionInfo;
 import com.myname.mymodid.rendering.RenderCTFWandFrame;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
@@ -21,6 +23,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.WorldSettings;
@@ -54,6 +57,7 @@ public class MyMod {
         new MovePlayer(); // Moves the user to specific x y z coords.
     }
 
+    public static final int ENTITY_TEXT_DISPLAY_ID = 319314; // Ensure this is defined here
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
@@ -64,6 +68,9 @@ public class MyMod {
         GameRegistry.registerItem(RegisterItems.CTFTileEntityTag, "CTFTileEntityTag");
         MinecraftForge.EVENT_BUS.register(new CTFWandEventHandler());
         MinecraftForge.EVENT_BUS.register(new RenderCTFWandFrame());
+        MinecraftForge.EVENT_BUS.register(new RenderCTFRegionInfo());
+
+        EntityRegistry.registerModEntity(EntityTextDisplay.class, "TextDisplay", ENTITY_TEXT_DISPLAY_ID, this, 80, 3, true);
     }
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
