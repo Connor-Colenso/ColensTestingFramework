@@ -4,8 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import net.minecraft.client.Minecraft;
@@ -14,6 +18,7 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.myname.mymodid.CommonTestFields.INSTRUCTIONS;
 import static com.myname.mymodid.commands.CommandInitTest.currentTest;
 import static com.myname.mymodid.events.CTFWandEventHandler.firstPosition;
 import static com.myname.mymodid.events.CTFWandEventHandler.secondPosition;
@@ -26,7 +31,66 @@ public class RenderCTFRegionInfo {
 
         renderRegionLabel(event);
         renderTileEntityTagPoints(event);
+        renderAddItemPoints(event);
     }
+
+    private void renderAddItemPoints(RenderWorldLastEvent event) {
+        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
+        if (currentTest == null) return;
+
+        if (!currentTest.has("instructions")) {
+            return;
+        }
+
+        // Calculate the minimum coordinates for the bounding box
+        double minX = Math.min(firstPosition[0], secondPosition[0]);
+        double minY = Math.min(firstPosition[1], secondPosition[1]);
+        double minZ = Math.min(firstPosition[2], secondPosition[2]);
+
+        JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
+
+        for (int i = 0; i < instructionsArray.size(); i++) {
+            JsonObject instruction = instructionsArray.get(i).getAsJsonObject();
+
+            // Check if this instruction is of type "addItem"
+            if (instruction.get("type").getAsString().equals("addItem")) {
+                // Initialize a list to store text lines
+                List<String> textList = new ArrayList<>();
+                textList.add("Add Item(s)");
+
+                // Add the optional label if it exists
+                if (instruction.has("optionalLabel")) {
+                    textList.add(instruction.get("optionalLabel").getAsString());
+                }
+
+                // Process each item in the "items" array
+                JsonArray itemsArray = instruction.getAsJsonArray("items");
+                for (int j = 0; j < itemsArray.size(); j++) {
+                    JsonObject itemObject = itemsArray.get(j).getAsJsonObject();
+
+                    // Extract item details, kinda hacky, but I don't see a good way around making an itemstack each time...
+                    String registryName = itemObject.get("registryName").getAsString();
+                    int stackSize = itemObject.get("stackSize").getAsInt();
+                    int meta = itemObject.get("metadata").getAsInt();
+
+                    String[] splitReg = registryName.split(":");
+                    Item item = GameRegistry.findItem(splitReg[0], splitReg[1]);
+                    ItemStack itemStack = new ItemStack(item, stackSize, meta);
+
+                    textList.add(itemStack.getDisplayName() + ":" + meta + "  x " + stackSize);
+                }
+
+                // Render text in the middle of the block defined by relative coordinates x, y, z
+                renderFloatingText(
+                    textList,
+                    minX + instruction.get("x").getAsDouble() + 0.5,
+                    minY + instruction.get("y").getAsDouble() + 0.5,
+                    minZ + instruction.get("z").getAsDouble() + 0.5
+                );
+            }
+        }
+    }
+
 
     private static void renderTileEntityTagPoints(RenderWorldLastEvent event) {
         if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
@@ -96,8 +160,6 @@ public class RenderCTFRegionInfo {
         );
     }
 
-    private static final Minecraft mc = Minecraft.getMinecraft();
-
     /**
      * Renders multiple lines of floating text at specified coordinates in the world.
      * @param lines The lines of text to render
@@ -106,7 +168,7 @@ public class RenderCTFRegionInfo {
      * @param z The z coordinate in the world
      */
     public static void renderFloatingText(List<String> lines, double x, double y, double z) {
-        FontRenderer fontrenderer = mc.fontRenderer;
+        FontRenderer fontrenderer = Minecraft.getMinecraft().fontRenderer;
         RenderManager renderManager = RenderManager.instance;
 
         // Save the current GL state

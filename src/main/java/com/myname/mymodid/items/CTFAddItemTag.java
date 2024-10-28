@@ -3,10 +3,12 @@ package com.myname.mymodid.items;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myname.mymodid.NBTConverter;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -46,18 +48,39 @@ public class CTFAddItemTag extends Item {
         instruction.addProperty("y", relativeY);
         instruction.addProperty("z", relativeZ);
 
-        // Prepare the items array with the details of the current item
+        // Prepare the items array
         JsonArray itemsArray = new JsonArray();
-        JsonObject itemData = new JsonObject();
-        itemData.addProperty("registryName", this.getUnlocalizedName().substring(5));
-        itemData.addProperty("stackSize", 1);
 
-        // Encode NBT data to a string (assume you have a method `encodeNBTToString`)
-        String encodedNBT = NBTConverter.encodeToString(stack.getTagCompound());
-        itemData.addProperty("encodedNBT", encodedNBT);
+        // Extract NBT data from the stack
+        NBTTagCompound nbtData = stack.getTagCompound();
+        if (nbtData != null && nbtData.hasKey("StoredItems", 9)) { // 9 is the type ID for NBTTagList
+            NBTTagList storedItems = nbtData.getTagList("StoredItems", 10); // 10 is the type ID for NBTTagCompound
 
-        // Add the item data to the items array and the array to the instruction
-        itemsArray.add(itemData);
+            for (int i = 0; i < storedItems.tagCount(); i++) {
+                NBTTagCompound heldItemNBT = storedItems.getCompoundTagAt(i);
+                ItemStack heldItemStack = ItemStack.loadItemStackFromNBT(heldItemNBT); // Deserialize the NBT to ItemStack
+
+                // Prepare JSON data for the held item
+                JsonObject itemData = new JsonObject();
+
+                GameRegistry.UniqueIdentifier uniqueIdentifier = GameRegistry.findUniqueIdentifierFor(heldItemStack.getItem());
+                itemData.addProperty("registryName", uniqueIdentifier.modId + ":" + uniqueIdentifier.name);
+
+                itemData.addProperty("stackSize", heldItemStack.stackSize);
+                itemData.addProperty("metadata", heldItemStack.getItemDamage());
+
+                // Encode NBT data to a string
+                if (heldItemStack.getTagCompound() != null){
+                    String encodedNBT = NBTConverter.encodeToString(heldItemStack.getTagCompound());
+                    itemData.addProperty("encodedNBT", encodedNBT);
+                }
+
+                // Add the item data to the items array
+                itemsArray.add(itemData);
+            }
+        }
+
+        // Add the items array to the instruction
         instruction.add("items", itemsArray);
 
         // Add instruction to current test JSON array
@@ -65,9 +88,8 @@ public class CTFAddItemTag extends Item {
         instructionsArray.add(instruction);
 
         // Notify player of the addition
-        player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Item instruction added for block at (" + relativeX + ", " + relativeY + ", " + relativeZ + ")."));
+        player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Item instructions added for block at (" + relativeX + ", " + relativeY + ", " + relativeZ + ")."));
 
         return true;
     }
-
 }

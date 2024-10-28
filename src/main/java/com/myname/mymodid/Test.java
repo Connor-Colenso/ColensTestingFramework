@@ -22,7 +22,7 @@ public class Test {
 
     JsonObject structure;
     HashMap<String, TickHandler.BlockTilePair> keyMap;
-    Queue<Procedure> procedureList = new LinkedList<Procedure>();
+    Queue<Procedure> procedureList = new LinkedList<>();
 
     public void buildStructure() {
 

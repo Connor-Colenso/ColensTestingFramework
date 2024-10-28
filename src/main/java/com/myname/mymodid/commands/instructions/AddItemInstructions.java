@@ -46,6 +46,4 @@ public class AddItemInstructions {
             sender.addChatMessage(new ChatComponentText("Command can only be used by a player."));
         }
     }
-
-
 }
