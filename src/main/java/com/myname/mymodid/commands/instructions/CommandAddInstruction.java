@@ -59,7 +59,7 @@ public class CommandAddInstruction extends CommandBase {
                 // Handle the "checkTile" instruction
                 CheckTileInstructions.add(sender, args); // Instruction is added when item is used.
                 return;
-            case "additem":
+            case "additems":
                 // Handle the "checkTile" instruction
                 AddItemInstructions.add(sender); // Instruction is added when item is used.
                 return;

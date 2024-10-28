@@ -5,21 +5,27 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.myname.mymodid.conditionals.registry.ConditionalFunction;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
+import com.myname.mymodid.procedures.AddItems;
 import com.myname.mymodid.procedures.CheckTile;
 import com.myname.mymodid.procedures.Procedure;
 import com.myname.mymodid.procedures.RunTicks;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.myname.mymodid.CommonTestFields.ENCODED_NBT;
@@ -78,8 +84,60 @@ public class TickHandler {
                 return;
             }
 
-            if (procedure instanceof CheckTile checkTile) {
+            if (procedure instanceof AddItems addItems) {
+                // Delete instruction.
+                test.procedureList.poll();
 
+                // Retrieve the WorldServer instance and TileEntity at specified coordinates
+                WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
+                TileEntity te = worldServer.getTileEntity(test.startX + addItems.x, test.startY + addItems.y, test.startZ + addItems.z);
+
+                // Ensure the TileEntity is not null and is an instance of IInventory
+                if (te instanceof IInventory) {
+                    IInventory inventory = (IInventory) te;
+                    List<ItemStack> items = addItems.itemsToAdd;
+
+                    // Iterate over items and add them to the inventory
+                    for (ItemStack itemStack : items) {
+                        boolean added = false;
+
+                        // Try to find an empty slot or stack existing items if they are the same type
+                        for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
+                            ItemStack existingStack = inventory.getStackInSlot(slot);
+
+                            // If slot is empty, set the item stack and mark it as added
+                            if (existingStack == null) {
+                                inventory.setInventorySlotContents(slot, itemStack);
+                                added = true;
+                                break;
+                            }
+                            // If the slot contains the same item and has space, merge stacks
+                            else if (existingStack.isItemEqual(itemStack) && existingStack.stackSize < existingStack.getMaxStackSize()) {
+                                int spaceLeft = existingStack.getMaxStackSize() - existingStack.stackSize;
+                                int amountToAdd = Math.min(itemStack.stackSize, spaceLeft);
+                                existingStack.stackSize += amountToAdd;
+                                itemStack.stackSize -= amountToAdd;
+                                added = true;
+
+                                // Stop if we've added the entire stack
+                                if (itemStack.stackSize <= 0) break;
+                            }
+                        }
+
+                        // If inventory is full and item was not added, handle overflow or notify
+                        if (!added) {
+                            // Handle overflow or log that inventory is full
+                        }
+                    }
+
+                    // Mark inventory as dirty to ensure changes are saved
+                    inventory.markDirty();
+                }
+
+            }
+
+            if (procedure instanceof CheckTile checkTile) {
+                // Delete instruction.
                 test.procedureList.poll();
 
                 ConditionalFunction f = RegisterConditionals.getFunc(checkTile.funcID);
@@ -153,6 +211,45 @@ public class TickHandler {
                 // Add the CheckTile procedure to the queue
                 testObj.procedureList.add(checkTile);
             }
+            else if (type.equals("addItems"))  {
+
+                AddItems addItems = new AddItems();
+
+                addItems.x = instruction.get("x").getAsInt();
+                addItems.y = instruction.get("y").getAsInt();
+                addItems.z = instruction.get("z").getAsInt();
+
+                // Parse each item from the "items" array
+                JsonArray itemsArray = instruction.getAsJsonArray("items");
+                for (int itemIndex = 0; itemIndex < itemsArray.size(); itemIndex++) {
+                    JsonObject itemObj = itemsArray.get(itemIndex).getAsJsonObject();
+
+                    // Get the registry name, stack size, and metadata.
+                    String registryName = itemObj.get("registryName").getAsString();
+                    int stackSize = itemObj.get("stackSize").getAsInt();
+                    int metadata = itemObj.get("metadata").getAsInt();
+
+                    // Decode the NBT data, if provided
+                    String[] splitReg = registryName.split(":");
+                    Item item = GameRegistry.findItem(splitReg[0], splitReg[1]);
+
+                    if (item != null) {
+                        ItemStack itemStack = new ItemStack(item, stackSize, metadata);
+
+                        // Check if "encodedNBT" is provided and decode it
+                        if (itemObj.has("encodedNBT")) {
+                            String encodedNBT = itemObj.get("encodedNBT").getAsString();
+                            NBTTagCompound nbtTagCompound = NBTConverter.decodeFromString(encodedNBT);
+                            itemStack.setTagCompound(nbtTagCompound);
+                        }
+
+                        addItems.itemsToAdd.add(itemStack);
+                    }
+                }
+
+                testObj.procedureList.add(addItems);
+            }
+
             // You can add more procedure types here if needed in the future
         }
     }

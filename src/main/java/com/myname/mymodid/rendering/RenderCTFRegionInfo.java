@@ -52,8 +52,8 @@ public class RenderCTFRegionInfo {
         for (int i = 0; i < instructionsArray.size(); i++) {
             JsonObject instruction = instructionsArray.get(i).getAsJsonObject();
 
-            // Check if this instruction is of type "addItem"
-            if (instruction.get("type").getAsString().equals("addItem")) {
+            // Check if this instruction is of type "addItems"
+            if (instruction.get("type").getAsString().equals("addItems")) {
                 // Initialize a list to store text lines
                 List<String> textList = new ArrayList<>();
                 textList.add("Add Item(s)");
@@ -109,6 +109,7 @@ public class RenderCTFRegionInfo {
 
         for (int i = 0; i < instructionsArray.size(); i++) {
             JsonObject instruction = instructionsArray.get(i).getAsJsonObject();
+
             if (instruction.get("type").getAsString().equals("checkTile")) {
                 // Render text in the middle of the block defined by relative coordinates x, y, z
 

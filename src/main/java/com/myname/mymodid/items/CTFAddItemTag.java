@@ -42,7 +42,7 @@ public class CTFAddItemTag extends Item {
 
         // Prepare the JSON structure for the instruction
         JsonObject instruction = new JsonObject();
-        instruction.addProperty("type", "addItem");
+        instruction.addProperty("type", "addItems");
         instruction.addProperty("optionalLabel", "Adds an item to the inventory of the block.");
         instruction.addProperty("x", relativeX);
         instruction.addProperty("y", relativeY);

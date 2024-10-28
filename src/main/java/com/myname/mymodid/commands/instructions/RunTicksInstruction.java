@@ -19,6 +19,7 @@ public class RunTicksInstruction {
                 sender.addChatMessage(new ChatComponentText("Added command to run for " + duration + " ticks."));
 
                 JsonObject runTicks = new JsonObject();
+                runTicks.addProperty("type", "runTicks");
                 runTicks.addProperty("duration", duration); // Use the parsed integer
 
                 instructions.add(runTicks);
