@@ -24,6 +24,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,108 +61,43 @@ public class TickHandler {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
-        if (event.side.isClient()) return;
+        if (event.side.isClient() || event.phase == TickEvent.Phase.END) return;
+
+        int serverTicks = MinecraftServer.getServer().getTickCounter();
 
         Test test = MyMod.tests.get(0);
 
-        if (!hasBuilt && event.phase == TickEvent.Phase.START) {
+        if (!hasBuilt) {
             test.buildStructure();
             hasBuilt = true;
         }
 
-        if (event.phase == TickEvent.Phase.END) {
-            assert test.procedureList.peek() != null;
-            Procedure procedure = test.procedureList.peek();
+        List<Procedure> toProcess = new ArrayList<>();
+        while (test.procedureList.peek() != null) {
+            Procedure currentProcedure = test.procedureList.peek();
 
-            if (procedure == null) {
-                testComplete = true;
-                return;
-            }
-
-            if (procedure instanceof RunTicks) {
-                procedure.duration--;
-                if (procedure.duration <= -1) test.procedureList.poll();
-                return;
-            }
-
-            if (procedure instanceof AddItems addItems) {
-                // Delete instruction.
-                test.procedureList.poll();
-
-                // Retrieve the WorldServer instance and TileEntity at specified coordinates
-                WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
-                TileEntity te = worldServer.getTileEntity(test.startX + addItems.x, test.startY + addItems.y, test.startZ + addItems.z);
-
-                // Ensure the TileEntity is not null and is an instance of IInventory
-                if (te instanceof IInventory) {
-                    IInventory inventory = (IInventory) te;
-                    List<ItemStack> items = addItems.itemsToAdd;
-
-                    // Iterate over items and add them to the inventory
-                    for (ItemStack itemStack : items) {
-                        boolean added = false;
-
-                        // Try to find an empty slot or stack existing items if they are the same type
-                        for (int slot = 0; slot < inventory.getSizeInventory(); slot++) {
-                            ItemStack existingStack = inventory.getStackInSlot(slot);
-
-                            // If slot is empty, set the item stack and mark it as added
-                            if (existingStack == null) {
-                                inventory.setInventorySlotContents(slot, itemStack);
-                                added = true;
-                                break;
-                            }
-                            // If the slot contains the same item and has space, merge stacks
-                            else if (existingStack.isItemEqual(itemStack) && existingStack.stackSize < existingStack.getMaxStackSize()) {
-                                int spaceLeft = existingStack.getMaxStackSize() - existingStack.stackSize;
-                                int amountToAdd = Math.min(itemStack.stackSize, spaceLeft);
-                                existingStack.stackSize += amountToAdd;
-                                itemStack.stackSize -= amountToAdd;
-                                added = true;
-
-                                // Stop if we've added the entire stack
-                                if (itemStack.stackSize <= 0) break;
-                            }
-                        }
-
-                        // If inventory is full and item was not added, handle overflow or notify
-                        if (!added) {
-                            // Handle overflow or log that inventory is full
-                        }
-                    }
-
-                    // Mark inventory as dirty to ensure changes are saved
-                    inventory.markDirty();
-                }
-
-            }
-
-            if (procedure instanceof CheckTile checkTile) {
-                // Delete instruction.
-                test.procedureList.poll();
-
-                ConditionalFunction f = RegisterConditionals.getFunc(checkTile.funcID);
-                WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
-                TileEntity te = worldServer.getTileEntity(test.startX + checkTile.x, test.startY + checkTile.y, test.startZ + checkTile.z);
-
-                try {
-                    if (!f.checkCondition(te, worldServer)) {
-                        test.failed = true;
-
-                        if (checkTile.optionalLabel != null) {
-                            System.out.println("\u001B[31m" + checkTile.optionalLabel + " FAILED\u001B[0m");
-                        } else {
-                            System.out.println("\u001B[31mFAILED\u001B[0m");
-                        }
-
-                    } else {
-                        System.out.println("\u001B[32m" + checkTile.optionalLabel + " PASSED\u001B[0m");
-                    }
-                } catch (Exception e) {
-                    System.out.println("\u001B[31mTest threw exception, which was caught by CTF.\u001B[0m");
-                }
+            if (currentProcedure.duration == 0) {
+                toProcess.add(test.procedureList.poll());
+            } else {
+                // Add currentProcedure to toProcess without polling.
+                toProcess.add(currentProcedure);
+                break; // Stop processing further since we reached a duration > 0
             }
         }
+
+        for (Procedure procedure : toProcess) {
+            if (procedure instanceof AddItems addItems) {
+                addItems.handleEvent(test);
+            } else if (procedure instanceof CheckTile checkTile) {
+                checkTile.handleEvent(test);
+            } else if (procedure instanceof RunTicks runTicks) {
+                if (runTicks.duration == 0) continue; // This run ticks is done and removed from procedure list.
+
+                runTicks.duration--;
+                return; // Exit after processing the first RunTicks found
+            }
+        }
+
     }
 
     public static void registerTests() {

@@ -3,6 +3,7 @@ package com.myname.mymodid;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myname.mymodid.procedures.Procedure;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
@@ -57,6 +58,7 @@ public class Test {
     // Method to place a block in the world at the specified coordinates
     private void placeBlockInWorld(World world, int x, int y, int z, TickHandler.BlockTilePair pair) {
         // Set the block in the world
+        world.setBlock(x, y, z, Blocks.air, 0, 2);
         world.setBlock(x, y, z, pair.block, pair.meta, 2);
 
         // If there's a TileEntity, create it and add it to the world
@@ -67,6 +69,7 @@ public class Test {
             copy.setInteger("z", z);
 
             TileEntity tileEntity = createTileEntity(pair.tile);
+            world.removeTileEntity(x,y,z);
             world.setTileEntity(x, y, z, tileEntity);
         }
 

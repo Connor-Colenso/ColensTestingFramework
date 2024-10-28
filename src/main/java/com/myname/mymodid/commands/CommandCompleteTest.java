@@ -31,7 +31,7 @@ public class CommandCompleteTest extends CommandBase {
         secondPosition[2] = Integer.MAX_VALUE;
 
         CommandCaptureStructure.saveJsonToFile(currentTest);
-        sender.addChatMessage(new ChatComponentText("Test completed and saved to config/CTF/testing/" + currentTest.get(TEST_NAME).getAsString() + "."));
+        sender.addChatMessage(new ChatComponentText("Test completed and saved to config/CTF/testing/" + currentTest.get(TEST_NAME).getAsString() + ".json"));
 
         currentTest = null;
 
