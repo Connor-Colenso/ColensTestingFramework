@@ -65,6 +65,8 @@ public class TickHandler {
 
         int serverTicks = MinecraftServer.getServer().getTickCounter();
 
+        if (serverTicks < 200) return;
+
         Test test = MyMod.tests.get(0);
 
         if (!hasBuilt) {

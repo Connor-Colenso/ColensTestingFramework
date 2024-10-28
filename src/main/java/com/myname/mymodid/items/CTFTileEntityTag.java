@@ -25,6 +25,7 @@ public class CTFTileEntityTag extends Item {
     }
 
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+        if (world.isRemote) return true; // Action is valid and should propagate to server but should handle server side only.
 
         // Calculate relative coordinates
         int relativeX = x - Math.min(firstPosition[0], secondPosition[0]);

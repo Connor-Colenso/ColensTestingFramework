@@ -60,7 +60,7 @@ public class MyMod {
     public void init(FMLInitializationEvent event) {
         // Register the tick handler
         FMLCommonHandler.instance().bus().register(new TickHandler());
-        RegisterConditionals.conditionalRegister("checkItemsX1", TestConditional::isChestContainingStone);
+        RegisterConditionals.conditionalRegister("ebfOutputCheck", TestConditional::isChestContainingStone);
         MinecraftForge.EVENT_BUS.register(new CTFWandEventHandler());
         MinecraftForge.EVENT_BUS.register(new RenderCTFWandFrame());
         MinecraftForge.EVENT_BUS.register(new RenderCTFRegionInfo());
