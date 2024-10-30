@@ -15,9 +15,9 @@ import java.util.Queue;
 
 public class Test {
 
-    public int startX = 0;
-    public int startY = 25;
-    public int startZ = 0;
+    public int startX = 7;
+    public int startY = 4;
+    public int startZ = 7;
     public boolean failed = false;
 
 
