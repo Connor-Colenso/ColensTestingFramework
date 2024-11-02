@@ -32,7 +32,8 @@ public class CheckTile extends Procedure {
                 System.out.println("\u001B[32m" + optionalLabel + " PASSED\u001B[0m");
             }
         } catch (Exception e) {
-            System.out.println("\u001B[31mTest threw exception, which was caught by CTF.\u001B[0m");
+            test.failed = true;
+            System.out.println("\u001B[31mTest " + optionalLabel + " threw exception, which was caught by CTF.\u001B[0m");
         }
     }
 }
