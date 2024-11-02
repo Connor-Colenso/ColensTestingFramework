@@ -13,6 +13,8 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 import static com.myname.mymodid.CommonTestFields.INSTRUCTIONS;
 import static com.myname.mymodid.commands.CommandInitTest.currentTest;
 import static com.myname.mymodid.events.CTFWandEventHandler.firstPosition;
@@ -91,5 +93,26 @@ public class CTFAddItemTag extends Item {
         player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Item instructions added for block at (" + relativeX + ", " + relativeY + ", " + relativeZ + ")."));
 
         return true;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+        // Get the NBT data
+        if (stack.hasTagCompound()) {
+            NBTTagList storedItems = stack.getTagCompound().getTagList("StoredItems", 10);
+            for (int i = 0; i < storedItems.tagCount(); i++) {
+
+                NBTTagCompound heldItemNBT = storedItems.getCompoundTagAt(i);
+                ItemStack heldItemStack = ItemStack.loadItemStackFromNBT(heldItemNBT);
+                if (heldItemStack == null) {
+                    tooltip.add(EnumChatFormatting.RED + "ERROR ITEM! Something has gone wrong.");
+                } else {
+                    tooltip.add(heldItemStack.getDisplayName() + ":" + heldItemStack.getItemDamage() + " x " + heldItemStack.stackSize);
+                }
+            }
+
+            // Call super to add any additional information
+            super.addInformation(stack, player, tooltip, advanced);
+        }
     }
 }
