@@ -21,7 +21,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.WorldSettings;
 import net.minecraft.world.WorldType;
@@ -54,8 +53,6 @@ public class MyMod {
         new MovePlayer(); // Moves the user to specific x y z coords.
     }
 
-    public static final int ENTITY_TEXT_DISPLAY_ID = 319314; // Ensure this is defined here
-
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         // Register the tick handler
@@ -87,6 +84,9 @@ public class MyMod {
         event.registerServerCommand(new CommandInitTest());
         event.registerServerCommand(new CommandAddInstruction());
         event.registerServerCommand(new CommandCompleteTest());
+
+        // Turn off mobs.
+        event.getServer().getEntityWorld().getGameRules().setOrCreateGameRule("doMobSpawning", "false");
     }
 
 
