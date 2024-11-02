@@ -1,13 +1,13 @@
 package com.myname.mymodid.commands.instructions;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
 import java.util.HashMap;
 
+import static com.myname.mymodid.CommonTestFields.INSTRUCTIONS;
 import static com.myname.mymodid.commands.CommandInitTest.currentTest;
 
 public class CommandAddInstruction extends CommandBase {
@@ -47,7 +47,7 @@ public class CommandAddInstruction extends CommandBase {
             return; // Exit after listing instructions
         }
 
-        JsonArray instructionArray = currentTest.getAsJsonArray("instructions");
+        JsonArray instructionArray = currentTest.getAsJsonArray(INSTRUCTIONS);
 
         // Process the first argument as a command (case-insensitive)
         String command = args[0].toLowerCase();
