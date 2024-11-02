@@ -1,6 +1,7 @@
 package com.myname.mymodid.rendering;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -38,7 +39,7 @@ public class RenderCTFRegionInfo {
         if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
         if (currentTest == null) return;
 
-        if (!currentTest.has("instructions")) {
+        if (!currentTest.has(INSTRUCTIONS)) {
             return;
         }
 
@@ -77,7 +78,7 @@ public class RenderCTFRegionInfo {
                     Item item = GameRegistry.findItem(splitReg[0], splitReg[1]);
                     ItemStack itemStack = new ItemStack(item, stackSize, meta);
 
-                    textList.add(itemStack.getDisplayName() + ":" + meta + "  x " + stackSize);
+                    textList.add(itemStack.getDisplayName() + ":" + meta + " x " + stackSize);
                 }
 
                 // Render text in the middle of the block defined by relative coordinates x, y, z
@@ -96,7 +97,7 @@ public class RenderCTFRegionInfo {
         if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
         if (currentTest == null) return;
 
-        if (!currentTest.has("instructions")) {
+        if (!currentTest.has(INSTRUCTIONS)) {
             return;
         }
 
@@ -105,7 +106,7 @@ public class RenderCTFRegionInfo {
         double minY = Math.min(firstPosition[1], secondPosition[1]);
         double minZ = Math.min(firstPosition[2], secondPosition[2]);
 
-        JsonArray instructionsArray = currentTest.getAsJsonArray("instructions");
+        JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
 
         for (int i = 0; i < instructionsArray.size(); i++) {
             JsonObject instruction = instructionsArray.get(i).getAsJsonObject();
@@ -150,9 +151,17 @@ public class RenderCTFRegionInfo {
             testName = currentTest.get("testName").getAsString();
         }
 
+        int totalTicks = 0;
+        for(JsonElement jsonObject : currentTest.getAsJsonArray(INSTRUCTIONS)) {
+            JsonObject instruction = jsonObject.getAsJsonObject();
+            if (instruction.has("duration")) {
+                totalTicks += instruction.get("duration").getAsInt();
+            }
+        }
+
         List<String> textList = new ArrayList<>();
         textList.add(testName);
-        textList.add("Total ticks: " + 3);
+        textList.add("Total ticks: " + totalTicks);
 
         // Render the floating text.
         renderFloatingText(
