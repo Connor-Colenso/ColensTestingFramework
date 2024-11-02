@@ -6,12 +6,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
 import java.util.List;
 
+import static com.myname.mymodid.CommonTestFields.INSTRUCTIONS;
 import static com.myname.mymodid.commands.CommandInitTest.currentTest;
 import static com.myname.mymodid.events.CTFWandEventHandler.firstPosition;
 import static com.myname.mymodid.events.CTFWandEventHandler.secondPosition;
@@ -25,7 +27,10 @@ public class CTFTileEntityTag extends Item {
     }
 
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-        if (world.isRemote) return true; // Action is valid and should propagate to server but should handle server side only.
+        // Only process on the server side
+        if (world.isRemote) {
+            return true;
+        }
 
         // Calculate relative coordinates
         int relativeX = x - Math.min(firstPosition[0], secondPosition[0]);
@@ -33,24 +38,29 @@ public class CTFTileEntityTag extends Item {
         int relativeZ = z - Math.min(firstPosition[2], secondPosition[2]);
 
         // Check if the block has a tile entity
-        if (world.getTileEntity(x, y, z) == null) {
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        if (tileEntity == null) {
             // Warn the player if there's no tile entity
             player.addChatMessage(new ChatComponentText("Warning: The clicked block has no tile entity."));
 
-            // Check if the warning was already given
-            if (stack.getTagCompound() == null) {
-                stack.setTagCompound(new NBTTagCompound());
+            NBTTagCompound tag = stack.getTagCompound();
+
+            // Ensure the stack has a tag compound for tracking warnings
+            if (tag == null) {
+                tag = new NBTTagCompound();
+                stack.setTagCompound(tag);
             }
 
-            if (!stack.getTagCompound().getBoolean("warned")) {
-                stack.getTagCompound().setBoolean("warned", true);
+            // Check if the warning was already given
+            if (!tag.getBoolean("warned")) {
+                tag.setBoolean("warned", true);
             } else {
-                // Set the tile entity anyway if the player has been warned
+                // Set the tile entity if the player has already been warned
                 setInstructionInTest(player, relativeX, relativeY, relativeZ, stack.getTagCompound());
                 player.addChatMessage(new ChatComponentText("Tile entity has been set at the clicked block."));
             }
         } else {
-            // The block already has a tile entity
+            // The block already has a tile entity, set instruction
             setInstructionInTest(player, relativeX, relativeY, relativeZ, stack.getTagCompound());
             player.addChatMessage(new ChatComponentText("Tile entity has been set at the clicked block."));
         }
@@ -58,9 +68,9 @@ public class CTFTileEntityTag extends Item {
         return true;
     }
 
-    // Method to set a tile entity (implementation can vary)
+
     private void setInstructionInTest(EntityPlayer player, int relX, int relY, int relZ, NBTTagCompound tagNBT) {
-        JsonArray instructionsArray = currentTest.getAsJsonArray("instructions");
+        JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
         JsonObject instruction = new JsonObject();
         instruction.addProperty("type", "checkTile");
 
