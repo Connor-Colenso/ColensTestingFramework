@@ -3,8 +3,6 @@ package com.myname.mymodid;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.myname.mymodid.conditionals.registry.ConditionalFunction;
-import com.myname.mymodid.conditionals.registry.RegisterConditionals;
 import com.myname.mymodid.procedures.AddItems;
 import com.myname.mymodid.procedures.CheckTile;
 import com.myname.mymodid.procedures.Procedure;
@@ -16,13 +14,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.WorldServer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,10 +57,7 @@ public class TickHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
         if (event.side.isClient() || event.phase == TickEvent.Phase.END) return;
-
-        int serverTicks = MinecraftServer.getServer().getTickCounter();
-
-        if (serverTicks < 200) return;
+        if (MinecraftServer.getServer().getTickCounter() == 0) return;
 
         Test test = MyMod.tests.get(0);
 
