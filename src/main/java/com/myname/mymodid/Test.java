@@ -12,12 +12,14 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Random;
 
 public class Test {
 
-    public int startX = 7;
-    public int startY = 4;
-    public int startZ = 7;
+    private static final Random rand = new Random();
+    public int startX = rand.nextInt(65) - 32; // Range -32 to 32
+    public int startY = rand.nextInt(21) + 4;  // Range 4 to 24
+    public int startZ = rand.nextInt(65) - 32; // Range -32 to 32
     public boolean failed = false;
 
 
