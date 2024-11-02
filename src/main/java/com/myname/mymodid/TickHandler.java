@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.myname.mymodid.CommonTestFields.ENCODED_NBT;
+import static com.myname.mymodid.CommonTestFields.INSTRUCTIONS;
 import static com.myname.mymodid.CommonTestFields.STRUCTURE;
 import static com.myname.mymodid.MyMod.autoLoadWorld;
 import static com.myname.mymodid.MyMod.jsons;
@@ -107,7 +108,7 @@ public class TickHandler {
 
     private static void addProcedureInfo(JsonObject json, Test testObj) {
         // Get the "instructions" array from the JSON object
-        JsonArray instructions = json.getAsJsonArray("instructions");
+        JsonArray instructions = json.getAsJsonArray(INSTRUCTIONS);
 
         // Loop through the instructions array
         for (int i = 0; i < instructions.size(); i++) {
