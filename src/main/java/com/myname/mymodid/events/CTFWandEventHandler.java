@@ -8,23 +8,30 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
-public class CTFWandEventHandler {
+import static com.myname.mymodid.commands.CommandInitTest.currentTest;
 
+public class CTFWandEventHandler {
 
     // Static fields to store positions.
     public static int[] firstPosition = { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE };
     public static int[] secondPosition = { Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE };
 
-
     @SubscribeEvent
     public void onPlayerInteract(PlayerInteractEvent event) {
         EntityPlayer player = event.entityPlayer;
-        World world = player.worldObj;
+        if (player.worldObj.isRemote) return;
         ItemStack itemStack = player.getHeldItem();
 
         // Check if the player is holding the CTFWand
         if (itemStack != null && itemStack.getItem() instanceof CTFWand) {
             // Record the right-click action
+
+            if (currentTest != null) {
+                player.addChatMessage(new ChatComponentText("Test is already in progress. Complete it or reset the region to change the bounds."));
+                event.setCanceled(true);
+                return;
+            }
+
             if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
                 int blockX = event.x;
                 int blockY = event.y;
@@ -35,9 +42,7 @@ public class CTFWandEventHandler {
                 firstPosition[2] = blockZ;
 
                 // Send message to player
-                if (!world.isRemote) {
-                    player.addChatMessage(new ChatComponentText("First position set: [" + blockX + ", " + blockY + ", " + blockZ + "]"));
-                }
+                player.addChatMessage(new ChatComponentText("First position set: [" + blockX + ", " + blockY + ", " + blockZ + "]"));
                 // Stop user accidentally breaking stuff.
                 event.setCanceled(true);
             }
@@ -54,9 +59,7 @@ public class CTFWandEventHandler {
                 secondPosition[2] = blockZ;
 
                 // Send message to player
-                if (!world.isRemote) {
-                    player.addChatMessage(new ChatComponentText("Second position set: [" + blockX + ", " + blockY + ", " + blockZ + "]"));
-                }
+                player.addChatMessage(new ChatComponentText("Second position set: [" + blockX + ", " + blockY + ", " + blockZ + "]"));
             }
         }
     }

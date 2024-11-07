@@ -72,7 +72,7 @@ public class CommandCaptureStructure extends CommandBase {
             }
 
             // Specify the output file path within the CTF folder
-            File outputFile = new File(ctfConfigDir, overallJson.get("testName").getAsString() + ".json");
+            File outputFile = new File(ctfConfigDir, overallJson.get(TEST_NAME).getAsString() + ".json");
 
             // Write the JSON content to the file with pretty printing
             try (FileWriter fileWriter = new FileWriter(outputFile)) {

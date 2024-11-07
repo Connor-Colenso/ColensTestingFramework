@@ -2,6 +2,7 @@ package com.myname.mymodid.items;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.myname.mymodid.utils.RegionUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,8 +28,20 @@ public class CTFTileEntityTag extends Item {
     }
 
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-        // Only process on the server side
-        if (world.isRemote) {
+        if (world.isRemote) return false;
+        if (!player.isSneaking()) return false;
+        if (currentTest == null) {
+            player.addChatMessage(new ChatComponentText("There is no valid test in construction!"));
+            return false;
+        }
+
+        if (firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE) {
+            player.addChatMessage(new ChatComponentText("Region is not yet defined. Use the CTF wand to select a valid region."));
+            return true;
+        }
+
+        if (!RegionUtils.isWithinRegion(x, y, z)) {
+            player.addChatMessage(new ChatComponentText("You must use this on a block within the selected CTF region."));
             return true;
         }
 
@@ -41,7 +54,7 @@ public class CTFTileEntityTag extends Item {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (tileEntity == null) {
             // Warn the player if there's no tile entity
-            player.addChatMessage(new ChatComponentText("Warning: The clicked block has no tile entity."));
+            player.addChatMessage(new ChatComponentText("Warning: The clicked block has no tile entity. Click again to confirm."));
 
             NBTTagCompound tag = stack.getTagCompound();
 

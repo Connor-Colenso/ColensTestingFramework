@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.myname.mymodid.CommonTestFields.INSTRUCTIONS;
+import static com.myname.mymodid.CommonTestFields.TEST_NAME;
 import static com.myname.mymodid.commands.CommandInitTest.currentTest;
 import static com.myname.mymodid.events.CTFWandEventHandler.firstPosition;
 import static com.myname.mymodid.events.CTFWandEventHandler.secondPosition;
@@ -147,17 +148,29 @@ public class RenderCTFRegionInfo {
 
         // Sanity check that the field exists...
         String testName = "ERROR STRING, REPORT TO AUTHOR.";
-        if (currentTest.has("testName")) {
-            testName = currentTest.get("testName").getAsString();
+        if (currentTest.has(TEST_NAME)) {
+            testName = currentTest.get(TEST_NAME).getAsString();
         }
 
         int totalTicks = 0;
-        for(JsonElement jsonObject : currentTest.getAsJsonArray(INSTRUCTIONS)) {
-            JsonObject instruction = jsonObject.getAsJsonObject();
-            if (instruction.has("duration")) {
-                totalTicks += instruction.get("duration").getAsInt();
+        if (currentTest.has(INSTRUCTIONS)) {
+            JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
+            if (instructionsArray != null) {
+                for (JsonElement jsonObject : instructionsArray) {
+                    JsonObject instruction = jsonObject.getAsJsonObject();
+                    if (instruction.has("duration")) {
+                        totalTicks += instruction.get("duration").getAsInt();
+                    }
+                }
+            } else {
+                // Handle the case where the JsonArray is null
+                System.err.println("Instructions array is null");
             }
+        } else {
+            // Handle the case where the key doesn't exist
+            System.err.println("Key 'INSTRUCTIONS' does not exist in the JsonObject");
         }
+
 
         List<String> textList = new ArrayList<>();
         textList.add(testName);

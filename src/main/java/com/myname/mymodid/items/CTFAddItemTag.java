@@ -3,6 +3,7 @@ package com.myname.mymodid.items;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.myname.mymodid.NBTConverter;
+import com.myname.mymodid.utils.RegionUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -35,6 +36,16 @@ public class CTFAddItemTag extends Item {
         if (currentTest == null) {
             player.addChatMessage(new ChatComponentText("There is no valid test in construction!"));
             return false;
+        }
+
+        if (firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE) {
+            player.addChatMessage(new ChatComponentText("Region is not yet defined. Use the CTF wand to select a valid region."));
+            return true;
+        }
+
+        if (!RegionUtils.isWithinRegion(x, y, z)) {
+            player.addChatMessage(new ChatComponentText("You must use this on a block within the selected CTF region."));
+            return true;
         }
 
         // Calculate relative coordinates
