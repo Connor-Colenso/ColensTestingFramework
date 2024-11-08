@@ -2,4 +2,10 @@ dependencies {
     runtimeOnlyNonPublishable("com.github.GTNewHorizons:NotEnoughItems:2.6.42-GTNH:dev")
     implementation('com.google.code.gson:gson:2.11.0')
     api('com.github.GTNewHorizons:GT5-Unofficial:5.09.50.54:dev')
+
+    // Can't get this to work as a testImplementation, must be api, why?
+    // JUnit 5 dependencies for testing
+    api(platform('org.junit:junit-bom:5.9.2'))
+    api('org.junit.jupiter:junit-jupiter')
+    api('org.junit.platform:junit-platform-launcher')
 }
