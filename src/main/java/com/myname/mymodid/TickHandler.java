@@ -11,6 +11,7 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+import gregtech.common.GTProxy;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -54,47 +55,56 @@ public class TickHandler {
 
 
     public static boolean hasBuilt = false;
+    private static final int SAFE_TICK_THRESHOLD = 20;
+
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
         if (event.side.isClient() || event.phase == TickEvent.Phase.END) return;
-        if (MinecraftServer.getServer().getTickCounter() == 0) return;
+        if (MinecraftServer.getServer().getTickCounter() < SAFE_TICK_THRESHOLD) return;
 
         Test test = MyMod.tests.get(0);
 
-        if (!hasBuilt) {
-            test.buildStructure();
-            hasBuilt = true;
-        }
-
-        List<Procedure> toProcess = new ArrayList<>();
-        while (test.procedureList.peek() != null) {
-            Procedure currentProcedure = test.procedureList.peek();
-
-            if (currentProcedure.duration == 0) {
-                toProcess.add(test.procedureList.poll());
-            } else {
-                // Add currentProcedure to toProcess without polling.
-                toProcess.add(currentProcedure);
-                break; // Stop processing further since we reached a duration > 0
+        // Only build once and ensure chunks are loaded
+        if (!hasBuilt && test.areChunksLoadedForStructure()) {
+            // Attempt to acquire TICK_LOCK
+            if (GTProxy.TICK_LOCK.tryLock()) {
+                try {
+                    test.buildStructure();
+                    hasBuilt = true;
+                } finally {
+                    GTProxy.TICK_LOCK.unlock();
+                }
             }
         }
 
+        // Process immediate-duration procedures
+        List<Procedure> toProcess = new ArrayList<>();
+        while (test.procedureList.peek() != null) {
+            Procedure currentProcedure = test.procedureList.peek();
+            if (currentProcedure.duration == 0) {
+                toProcess.add(test.procedureList.poll());
+            } else {
+                // Keep the procedure in the queue for later
+                toProcess.add(currentProcedure);
+                break;
+            }
+        }
+
+        // Execute each procedure
         for (Procedure procedure : toProcess) {
             if (procedure instanceof AddItems addItems) {
                 addItems.handleEvent(test);
             } else if (procedure instanceof CheckTile checkTile) {
                 checkTile.handleEvent(test);
             } else if (procedure instanceof RunTicks runTicks) {
-                if (runTicks.duration == 0) continue; // This run ticks is done and removed from procedure list.
+                if (runTicks.duration == 0) continue;
 
                 runTicks.duration--;
-                return; // Exit after processing the first RunTicks found
+                return;
             }
         }
-
     }
-
     public static void registerTests() {
 
         for (JsonObject json : jsons) {

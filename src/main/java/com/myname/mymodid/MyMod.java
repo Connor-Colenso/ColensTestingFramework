@@ -58,6 +58,8 @@ public class MyMod {
         // Register the tick handler
         FMLCommonHandler.instance().bus().register(new TickHandler());
         RegisterConditionals.conditionalRegister("ebfOutputCheck", TestConditional::isChestContainingStone);
+        RegisterConditionals.conditionalRegister("func", TestConditional::isChestContainingStone);
+        RegisterConditionals.conditionalRegister("checkStructure", TestConditional::checkStructure);
 
         if (event.getSide().isClient()) {
             MinecraftForge.EVENT_BUS.register(new RenderCTFWandFrame());

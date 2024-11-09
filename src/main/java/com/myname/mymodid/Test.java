@@ -93,4 +93,31 @@ public class Test {
     }
 
 
+    public boolean areChunksLoadedForStructure() {
+        final World world = MinecraftServer.getServer().getEntityWorld();
+
+        JsonArray build = structure.getAsJsonArray("build");
+
+        for (int layer = 0; layer < build.size(); layer++) {
+            JsonArray layerArray = build.get(layer).getAsJsonArray();
+            for (int row = 0; row < layerArray.size(); row++) {
+                String rowData = layerArray.get(row).getAsString();
+                for (int col = 0; col < rowData.length(); col++) {
+                    // Calculate the block's world coordinates
+                    int x = startX + col;
+                    int z = startZ + row;
+
+                    // Convert block coordinates to chunk coordinates
+                    int chunkX = x >> 4; // Divide by 16
+                    int chunkZ = z >> 4;
+
+                    // Check if the chunk is loaded
+                    if (!world.getChunkProvider().chunkExists(chunkX, chunkZ)) {
+                        return false; // If any chunk is not loaded, return false
+                    }
+                }
+            }
+        }
+        return true; // All necessary chunks are loaded
+    }
 }
