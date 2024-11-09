@@ -4,30 +4,19 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.myname.mymodid.NBTConverter;
 import com.myname.mymodid.Test;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
-import static com.myname.mymodid.CommonTestFields.ENCODED_NBT;
 import static com.myname.mymodid.CommonTestFields.INSTRUCTIONS;
 import static com.myname.mymodid.CommonTestFields.STRUCTURE;
 import static com.myname.mymodid.CommonTestFields.TEST_NAME;
 import static com.myname.mymodid.TickHandler.addStructureInfo;
-import static com.myname.mymodid.events.CTFWandEventHandler.firstPosition;
-import static com.myname.mymodid.events.CTFWandEventHandler.secondPosition;
 import static com.myname.mymodid.utils.Structure.captureStructureJson;
 
 public class CommandCaptureStructure extends CommandBase {

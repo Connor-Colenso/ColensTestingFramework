@@ -6,6 +6,7 @@ import com.myname.mymodid.commands.CommandCaptureStructure;
 import com.myname.mymodid.commands.CommandCompleteTest;
 import com.myname.mymodid.commands.CommandGetTileEntity;
 import com.myname.mymodid.commands.CommandInitTest;
+import com.myname.mymodid.commands.CommandLoadTest;
 import com.myname.mymodid.commands.instructions.CommandAddInstruction;
 import com.myname.mymodid.conditionals.TestConditional;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
@@ -86,6 +87,7 @@ public class MyMod {
         proxy.serverStarting(event);
         event.registerServerCommand(new CommandGetTileEntity());
         event.registerServerCommand(new CommandCaptureStructure());
+        event.registerServerCommand(new CommandLoadTest());
         event.registerServerCommand(new CommandInitTest());
         event.registerServerCommand(new CommandAddInstruction());
         event.registerServerCommand(new CommandCompleteTest());
