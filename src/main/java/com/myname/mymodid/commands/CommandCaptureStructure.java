@@ -57,13 +57,17 @@ public class CommandCaptureStructure extends CommandBase {
             // Define the file path in the CTF folder inside the config directory
             File ctfConfigDir = new File(Minecraft.getMinecraft().mcDataDir, "config/CTF/testing");
             if (!ctfConfigDir.exists()) {
-                ctfConfigDir.mkdirs(); // Create CTF directory if it doesn't exist
+                if (ctfConfigDir.mkdirs()) {
+                    System.out.println("Successfully saved CTF test.");
+                } else {
+                    System.out.println("Failed to save CTF test, please report to author.");
+                }
             }
 
             // Specify the output file path within the CTF folder
             File outputFile = new File(ctfConfigDir, overallJson.get(TEST_NAME).getAsString() + ".json");
 
-            // Write the JSON content to the file with pretty printing
+            // Write the JSON content to the file with pretty printing (provided by Gson).
             try (FileWriter fileWriter = new FileWriter(outputFile)) {
                 fileWriter.write(gson.toJson(overallJson));
                 System.out.println("Json saved successfully to " + outputFile.getAbsolutePath());

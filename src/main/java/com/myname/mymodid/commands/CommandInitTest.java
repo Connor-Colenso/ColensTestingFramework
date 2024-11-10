@@ -53,10 +53,8 @@ public class CommandInitTest extends CommandBase {
         currentTest = new JsonObject();
         currentTest.addProperty(TEST_NAME, args[0]);
 
-        // captureStructureJson will obtain it from the static coordinates set by the CTF Wand (though the event CTFWandEventHandler actually sets the coords).
-        currentTest.add(STRUCTURE, captureStructureJson());
+        // Structure is saved at the end.
         currentTest.add(INSTRUCTIONS, new JsonArray());
-
     }
 
 
