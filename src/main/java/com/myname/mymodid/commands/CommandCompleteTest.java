@@ -1,5 +1,6 @@
 package com.myname.mymodid.commands;
 
+import com.myname.mymodid.utils.JsonUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
@@ -36,7 +37,7 @@ public class CommandCompleteTest extends CommandBase {
         currentTest.add(STRUCTURE, captureStructureJson());
 
         // Save the test.
-        CommandCaptureStructure.saveJsonToFile(currentTest);
+        JsonUtils.saveJsonToFile(currentTest);
         sender.addChatMessage(new ChatComponentText("Test completed and saved to config/CTF/testing/" + currentTest.get(TEST_NAME).getAsString() + ".json"));
 
         // Reset all info for next test.
