@@ -12,10 +12,9 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChunkCoordinates;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class CommandLoadTest extends CommandBase {
-
-    Test loadedTest;
 
     @Override
     public String getCommandName() {
@@ -30,23 +29,19 @@ public class CommandLoadTest extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         Test test = MyMod.tests.get(0);
-        ChunkCoordinates coords = sender.getPlayerCoordinates();
-        test.startX = coords.posX;
-        test.startY = coords.posY;
-        test.startZ = coords.posZ;
+        Random random = new Random();
+        test.startX = random.nextInt(65) - 32;
+        test.startY = random.nextInt(30);
+        test.startZ = random.nextInt(65) - 32;
 
+        test.buildStructure();
+        AddItems addItems = new AddItems();
+        addItems.x = 0;
+        addItems.y = 0;
+        addItems.z = 2;
+        addItems.itemsToAdd = new ArrayList<>();
+        addItems.itemsToAdd.add(new ItemStack(Items.diamond, 15));
+        addItems.handleEvent(test);
 
-        if (test.areChunksLoadedForStructure()) {
-            test.buildStructure();
-            AddItems addItems = new AddItems();
-            addItems.x = 0;
-            addItems.y = 0;
-            addItems.z = 2;
-            addItems.itemsToAdd = new ArrayList<>();
-            addItems.itemsToAdd.add(new ItemStack(Items.diamond, 15));
-            addItems.handleEvent(test);
-        } else {
-            sender.addChatMessage(new ChatComponentText("This test exceeds the loaded area, it cannot be instantiated. It is likely too big."));
-        }
     }
 }

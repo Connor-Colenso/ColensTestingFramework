@@ -25,7 +25,7 @@ public class Test {
 
     JsonObject structure;
     HashMap<String, TickHandler.BlockTilePair> keyMap;
-    Queue<Procedure> procedureList = new LinkedList<>();
+    public Queue<Procedure> procedureList = new LinkedList<>();
 
     public void buildStructure() {
 
@@ -70,9 +70,8 @@ public class Test {
             copy.setInteger("y", y);
             copy.setInteger("z", z);
 
-            TileEntity tileEntity = createTileEntity(pair.tile);
-            world.removeTileEntity(x,y,z);
-            world.setTileEntity(x, y, z, tileEntity);
+            TileEntity te = world.getTileEntity(x,y,z);
+            te.readFromNBT(copy);
         }
 
         // Not sure why this needs setting twice, but it does.

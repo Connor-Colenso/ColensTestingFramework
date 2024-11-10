@@ -11,7 +11,6 @@ import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import gregtech.common.GTProxy;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
@@ -48,35 +47,57 @@ public class TickHandler {
         }
 
         if (testComplete) {
-//            Minecraft.stopIntegratedServer();
+            Minecraft.stopIntegratedServer();
             testComplete = false;
         }
     }
 
 
     public static boolean hasBuilt = false;
-    private static final int SAFE_TICK_THRESHOLD = 20;
-
+    private static boolean initialBuild = false;
+    private static boolean stopTrying;
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
-        if (event.side.isClient() || event.phase == TickEvent.Phase.END) return;
-        if (MinecraftServer.getServer().getTickCounter() < SAFE_TICK_THRESHOLD) return;
+        if (event.side.isClient() || event.phase == TickEvent.Phase.START) return;
+        if (MinecraftServer.getServer().getTickCounter() == 1) return;
+//        if (!initialBuild) {
+//            MinecraftServer.getServer().getEntityWorld().setBlock(0,0,0, Blocks.chest, 1, 2);
+//            initialBuild = true;
+//            return; // Skip rest of tick.
+//        }
 
         Test test = MyMod.tests.get(0);
 
         // Only build once and ensure chunks are loaded
-        if (!hasBuilt && test.areChunksLoadedForStructure()) {
-            // Attempt to acquire TICK_LOCK
-            if (GTProxy.TICK_LOCK.tryLock()) {
-                try {
-                    test.buildStructure();
-                    hasBuilt = true;
-                } finally {
-                    GTProxy.TICK_LOCK.unlock();
-                }
+//        if (!hasBuilt) {
+//            // Attempt to acquire TICK_LOCK
+//            if (GTProxy.TICK_LOCK.tryLock()) {
+//                try {
+//                    hasBuilt = true;
+//                } finally {
+//                    GTProxy.TICK_LOCK.unlock();
+//                }
+//            }
+//        }
+
+        if (!stopTrying) {
+            try {
+                System.out.println("Tick counter: " + MinecraftServer.getServer().getTickCounter());
+                test.buildStructure();
+//                AddItems addItems = (AddItems) test.procedureList.peek();
+//                addItems.handleEvent(test);
+                stopTrying = true;
+                System.out.println("Test complete!");
+                return;
+            } catch(Exception e) {
+                System.out.println("Test failure!");
+                e.printStackTrace();
+                return;
             }
         }
+
+
 
         // Process immediate-duration procedures
         List<Procedure> toProcess = new ArrayList<>();
