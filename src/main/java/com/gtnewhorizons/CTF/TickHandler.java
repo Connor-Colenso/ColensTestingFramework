@@ -3,6 +3,7 @@ package com.gtnewhorizons.CTF;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.procedures.AddFluids;
 import com.gtnewhorizons.CTF.procedures.AddItems;
 import com.gtnewhorizons.CTF.procedures.CheckTile;
 import com.gtnewhorizons.CTF.procedures.Procedure;
@@ -84,6 +85,8 @@ public class TickHandler {
         for (Procedure procedure : toProcess) {
             if (procedure instanceof AddItems addItems) {
                 addItems.handleEvent(test);
+            } else if (procedure instanceof AddFluids addFluids) {
+                addFluids.handleEvent(test);
             } else if (procedure instanceof CheckTile checkTile) {
                 checkTile.handleEvent(test);
             } else if (procedure instanceof RunTicks runTicks) {
@@ -142,41 +145,11 @@ public class TickHandler {
                 testObj.procedureList.add(checkTile);
             }
             else if (type.equals("addItems"))  {
-
-                AddItems addItems = new AddItems();
-
-                addItems.x = instruction.get("x").getAsInt();
-                addItems.y = instruction.get("y").getAsInt();
-                addItems.z = instruction.get("z").getAsInt();
-
-                // Parse each item from the "items" array
-                JsonArray itemsArray = instruction.getAsJsonArray("items");
-                for (int itemIndex = 0; itemIndex < itemsArray.size(); itemIndex++) {
-                    JsonObject itemObj = itemsArray.get(itemIndex).getAsJsonObject();
-
-                    // Get the registry name, stack size, and metadata.
-                    String registryName = itemObj.get("registryName").getAsString();
-                    int stackSize = itemObj.get("stackSize").getAsInt();
-                    int metadata = itemObj.get("metadata").getAsInt();
-
-                    // Decode the NBT data, if provided
-                    String[] splitReg = registryName.split(":");
-                    Item item = GameRegistry.findItem(splitReg[0], splitReg[1]);
-
-                    if (item != null) {
-                        ItemStack itemStack = new ItemStack(item, stackSize, metadata);
-
-                        // Check if "encodedNBT" is provided and decode it
-                        if (itemObj.has("encodedNBT")) {
-                            String encodedNBT = itemObj.get("encodedNBT").getAsString();
-                            NBTTagCompound nbtTagCompound = NBTConverter.decodeFromString(encodedNBT);
-                            itemStack.setTagCompound(nbtTagCompound);
-                        }
-
-                        addItems.itemsToAdd.add(itemStack);
-                    }
-                }
-
+                AddItems addItems = new AddItems(instruction);
+                testObj.procedureList.add(addItems);
+            }
+            else if (type.equals("addFluids"))  {
+                AddFluids addItems = new AddFluids(instruction);
                 testObj.procedureList.add(addItems);
             }
 

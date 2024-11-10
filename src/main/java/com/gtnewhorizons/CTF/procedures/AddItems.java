@@ -1,8 +1,14 @@
 package com.gtnewhorizons.CTF.procedures;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.NBTConverter;
 import com.gtnewhorizons.CTF.Test;
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
@@ -15,6 +21,42 @@ public class AddItems extends Procedure {
     public int x;
     public int y;
     public int z;
+
+    public AddItems(JsonObject instruction) {
+
+        x = instruction.get("x").getAsInt();
+        y = instruction.get("y").getAsInt();
+        z = instruction.get("z").getAsInt();
+
+        // Parse each item from the "items" array
+        JsonArray itemsArray = instruction.getAsJsonArray("items");
+        for (int itemIndex = 0; itemIndex < itemsArray.size(); itemIndex++) {
+            JsonObject itemObj = itemsArray.get(itemIndex).getAsJsonObject();
+
+            // Get the registry name, stack size, and metadata.
+            String registryName = itemObj.get("registryName").getAsString();
+            int stackSize = itemObj.get("stackSize").getAsInt();
+            int metadata = itemObj.get("metadata").getAsInt();
+
+            // Decode the NBT data, if provided
+            String[] splitReg = registryName.split(":");
+            Item item = GameRegistry.findItem(splitReg[0], splitReg[1]);
+
+            if (item != null) {
+                ItemStack itemStack = new ItemStack(item, stackSize, metadata);
+
+                // Check if "encodedNBT" is provided and decode it
+                if (itemObj.has("encodedNBT")) {
+                    String encodedNBT = itemObj.get("encodedNBT").getAsString();
+                    NBTTagCompound nbtTagCompound = NBTConverter.decodeFromString(encodedNBT);
+                    itemStack.setTagCompound(nbtTagCompound);
+                }
+
+                itemsToAdd.add(itemStack);
+            }
+        }
+
+    }
 
     public void handleEvent(Test test) {
 

@@ -6,10 +6,12 @@ import com.gtnewhorizons.CTF.NBTConverter;
 import com.gtnewhorizons.CTF.utils.RegionUtils;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
@@ -20,6 +22,7 @@ import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
 public class CTFAddItemTag extends Item {
 
@@ -34,76 +37,110 @@ public class CTFAddItemTag extends Item {
         if (world.isRemote) return false;
         if (!player.isSneaking()) return false;
         if (currentTest == null) {
-            player.addChatMessage(new ChatComponentText("There is no valid test in construction!"));
+            notifyPlayer(player, EnumChatFormatting.RED + "There is no valid test in construction!");
             return false;
         }
 
-        if (firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE) {
-            player.addChatMessage(new ChatComponentText("Region is not yet defined. Use the CTF wand to select a valid region."));
+        if (isRegionNotDefined()) {
+            notifyPlayer(player, EnumChatFormatting.RED + "Region is not yet defined. Use the CTF wand to select a valid region.");
             return true;
         }
 
         if (!RegionUtils.isWithinRegion(x, y, z)) {
-            player.addChatMessage(new ChatComponentText("You must use this on a block within the selected CTF region."));
+            handleInventoryAbsorption(stack, player, world, x, y, z);
             return true;
         }
 
-        // Calculate relative coordinates
+        addItemInstruction(stack, player, x, y, z);
+        return true;
+    }
+
+    private boolean isRegionNotDefined() {
+        return firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE;
+    }
+
+    private void handleInventoryAbsorption(ItemStack stack, EntityPlayer player, World world, int x, int y, int z) {
+        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        if (!(tileEntity instanceof IInventory)) {
+            notifyPlayer(player, EnumChatFormatting.RED + "You must use this on an inventory block outside the selected region.");
+            return;
+        }
+
+        IInventory inventory = (IInventory) tileEntity;
+        NBTTagCompound nbtData = stack.getTagCompound();
+        if (nbtData == null) {
+            nbtData = new NBTTagCompound();
+            stack.setTagCompound(nbtData);
+        }
+
+        NBTTagList storedItems = nbtData.hasKey("StoredItems") ? nbtData.getTagList("StoredItems", 10) : new NBTTagList();
+        absorbInventoryItems(inventory, storedItems);
+        if (storedItems.tagCount() > 0) {
+            nbtData.setTag("StoredItems", storedItems);
+            notifyPlayer(player, EnumChatFormatting.GREEN + "Items absorbed into the tag item for later deployment.");
+        } else {
+            notifyPlayer(player, EnumChatFormatting.RED + "No items to absorb from this inventory.");
+        }
+        return;
+    }
+
+    private void absorbInventoryItems(IInventory inventory, NBTTagList storedItems) {
+        for (int i = 0; i < inventory.getSizeInventory(); i++) {
+            ItemStack itemStack = inventory.getStackInSlot(i);
+            if (itemStack != null) {
+                NBTTagCompound itemTag = new NBTTagCompound();
+                itemStack.writeToNBT(itemTag);
+                storedItems.appendTag(itemTag);
+            }
+        }
+    }
+
+    private void addItemInstruction(ItemStack stack, EntityPlayer player, int x, int y, int z) {
         int relativeX = x - Math.min(firstPosition[0], secondPosition[0]);
         int relativeY = y - Math.min(firstPosition[1], secondPosition[1]);
         int relativeZ = z - Math.min(firstPosition[2], secondPosition[2]);
 
-        // Prepare the JSON structure for the instruction
-        JsonObject instruction = new JsonObject();
-        instruction.addProperty("type", "addItems");
-        instruction.addProperty("optionalLabel", "Adds an item to the inventory of the block.");
-        instruction.addProperty("x", relativeX);
-        instruction.addProperty("y", relativeY);
-        instruction.addProperty("z", relativeZ);
-
-        // Prepare the items array
-        JsonArray itemsArray = new JsonArray();
-
-        // Extract NBT data from the stack
-        NBTTagCompound nbtData = stack.getTagCompound();
-        if (nbtData != null && nbtData.hasKey("StoredItems", 9)) { // 9 is the type ID for NBTTagList
-            NBTTagList storedItems = nbtData.getTagList("StoredItems", 10); // 10 is the type ID for NBTTagCompound
-
-            for (int i = 0; i < storedItems.tagCount(); i++) {
-                NBTTagCompound heldItemNBT = storedItems.getCompoundTagAt(i);
-                ItemStack heldItemStack = ItemStack.loadItemStackFromNBT(heldItemNBT); // Deserialize the NBT to ItemStack
-
-                // Prepare JSON data for the held item
-                JsonObject itemData = new JsonObject();
-
-                GameRegistry.UniqueIdentifier uniqueIdentifier = GameRegistry.findUniqueIdentifierFor(heldItemStack.getItem());
-                itemData.addProperty("registryName", uniqueIdentifier.modId + ":" + uniqueIdentifier.name);
-
-                itemData.addProperty("stackSize", heldItemStack.stackSize);
-                itemData.addProperty("metadata", heldItemStack.getItemDamage());
-
-                // Encode NBT data to a string
-                if (heldItemStack.getTagCompound() != null){
-                    String encodedNBT = NBTConverter.encodeToString(heldItemStack.getTagCompound());
-                    itemData.addProperty("encodedNBT", encodedNBT);
-                }
-
-                // Add the item data to the items array
-                itemsArray.add(itemData);
-            }
-        }
-
-        // Add the items array to the instruction
-        instruction.add("items", itemsArray);
-
-        // Add instruction to current test JSON array
+        JsonObject instruction = createInstructionJson(relativeX, relativeY, relativeZ, stack);
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
         instructionsArray.add(instruction);
 
-        // Notify player of the addition
-        player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "Item instructions added for block at (" + relativeX + ", " + relativeY + ", " + relativeZ + ")."));
+        notifyPlayer(player, EnumChatFormatting.GREEN + "Item instructions added for block at (" + relativeX + ", " + relativeY + ", " + relativeZ + ").");
+    }
 
-        return true;
+    private JsonObject createInstructionJson(int x, int y, int z, ItemStack stack) {
+        JsonObject instruction = new JsonObject();
+        instruction.addProperty("type", "addItems");
+        instruction.addProperty("optionalLabel", "Adds an item to the inventory of the block.");
+        instruction.addProperty("x", x);
+        instruction.addProperty("y", y);
+        instruction.addProperty("z", z);
+
+        JsonArray itemsArray = new JsonArray();
+        NBTTagCompound nbtData = stack.getTagCompound();
+        if (nbtData != null && nbtData.hasKey("StoredItems", 9)) {
+            NBTTagList storedItems = nbtData.getTagList("StoredItems", 10);
+            for (int i = 0; i < storedItems.tagCount(); i++) {
+                JsonObject itemData = createItemDataJson(storedItems.getCompoundTagAt(i));
+                itemsArray.add(itemData);
+            }
+        }
+        instruction.add("items", itemsArray);
+        return instruction;
+    }
+
+    private JsonObject createItemDataJson(NBTTagCompound heldItemNBT) {
+        ItemStack heldItemStack = ItemStack.loadItemStackFromNBT(heldItemNBT);
+        JsonObject itemData = new JsonObject();
+        GameRegistry.UniqueIdentifier uniqueIdentifier = GameRegistry.findUniqueIdentifierFor(heldItemStack.getItem());
+        itemData.addProperty("registryName", uniqueIdentifier.modId + ":" + uniqueIdentifier.name);
+        itemData.addProperty("stackSize", heldItemStack.stackSize);
+        itemData.addProperty("metadata", heldItemStack.getItemDamage());
+
+        if (heldItemStack.getTagCompound() != null) {
+            String encodedNBT = NBTConverter.encodeToString(heldItemStack.getTagCompound());
+            itemData.addProperty("encodedNBT", encodedNBT);
+        }
+        return itemData;
     }
 
     @Override

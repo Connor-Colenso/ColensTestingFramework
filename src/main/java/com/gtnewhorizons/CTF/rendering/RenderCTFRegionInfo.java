@@ -88,7 +88,38 @@ public class RenderCTFRegionInfo {
                     minY + instruction.get("y").getAsDouble() + 0.5,
                     minZ + instruction.get("z").getAsDouble() + 0.5
                 );
+            } else if (instruction.get("type").getAsString().equals("addFluids")) {
+                // Initialize a list to store text lines
+                List<String> textList = new ArrayList<>();
+                textList.add("Add Fluid(s)");
+
+                // Add the optional label if it exists
+                if (instruction.has("optionalLabel")) {
+                    textList.add(instruction.get("optionalLabel").getAsString());
+                }
+
+                // Process each fluid in the "fluids" array
+                JsonArray fluidsArray = instruction.getAsJsonArray("fluids");
+                for (int j = 0; j < fluidsArray.size(); j++) {
+                    JsonObject fluidObject = fluidsArray.get(j).getAsJsonObject();
+
+                    // Extract fluid details
+                    String fluidName = fluidObject.get("fluidName").getAsString();
+                    int amount = fluidObject.get("amount").getAsInt();
+
+                    // Append fluid information to text list
+                    textList.add(fluidName + " x " + amount + "mB");
+                }
+
+                // Render text in the middle of the block defined by relative coordinates x, y, z
+                renderFloatingText(
+                    textList,
+                    minX + instruction.get("x").getAsDouble() + 0.5,
+                    minY + instruction.get("y").getAsDouble() + 0.5,
+                    minZ + instruction.get("z").getAsDouble() + 0.5
+                );
             }
+
         }
     }
 

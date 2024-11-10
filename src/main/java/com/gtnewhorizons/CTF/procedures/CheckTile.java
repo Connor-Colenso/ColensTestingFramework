@@ -24,17 +24,17 @@ public class CheckTile extends Procedure {
                 test.failed = true;
 
                 if (optionalLabel != null) {
-                    PrintUtils.printRed(optionalLabel + " FAILED");
+                    PrintUtils.printConsoleRed(optionalLabel + " FAILED");
                 } else {
-                    PrintUtils.printRed(" FAILED");
+                    PrintUtils.printConsoleRed(" FAILED");
                 }
 
             } else {
-                PrintUtils.printGreen(optionalLabel + " PASSED");
+                PrintUtils.printConsoleGreen(optionalLabel + " PASSED");
             }
         } catch (Exception e) {
             test.failed = true;
-            PrintUtils.printRed("Test " + optionalLabel + " threw exception, which was caught by CTF.");
+            PrintUtils.printConsoleRed("Test " + optionalLabel + " threw exception, which was caught by CTF.");
             e.printStackTrace();
         }
     }
