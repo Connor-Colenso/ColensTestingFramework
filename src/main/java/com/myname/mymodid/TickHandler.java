@@ -61,36 +61,13 @@ public class TickHandler {
     public void onWorldTick(TickEvent.ServerTickEvent event) {
         if (event.side.isClient() || event.phase == TickEvent.Phase.START) return;
         if (MinecraftServer.getServer().getTickCounter() == 1) return;
-//        if (!initialBuild) {
-//            MinecraftServer.getServer().getEntityWorld().setBlock(0,0,0, Blocks.chest, 1, 2);
-//            initialBuild = true;
-//            return; // Skip rest of tick.
-//        }
 
         Test test = MyMod.tests.get(0);
 
-        // Only build once and ensure chunks are loaded
-//        if (!hasBuilt) {
-//            // Attempt to acquire TICK_LOCK
-//            if (GTProxy.TICK_LOCK.tryLock()) {
-//                try {
-//                    hasBuilt = true;
-//                } finally {
-//                    GTProxy.TICK_LOCK.unlock();
-//                }
-//            }
-//        }
-
         if (!stopTrying) {
-            try {
-                test.buildStructure();
-                stopTrying = true;
-                return;
-            } catch(Exception e) {
-                System.out.println("Test failure!");
-                e.printStackTrace();
-                return;
-            }
+            test.buildStructure();
+            stopTrying = true;
+            return;
         }
 
 
