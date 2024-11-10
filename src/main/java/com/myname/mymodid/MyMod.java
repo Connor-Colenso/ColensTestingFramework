@@ -7,6 +7,7 @@ import com.myname.mymodid.commands.CommandCompleteTest;
 import com.myname.mymodid.commands.CommandGetTileEntity;
 import com.myname.mymodid.commands.CommandInitTest;
 import com.myname.mymodid.commands.CommandLoadTest;
+import com.myname.mymodid.commands.CommandResetTest;
 import com.myname.mymodid.commands.instructions.CommandAddInstruction;
 import com.myname.mymodid.conditionals.TestConditional;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
@@ -91,8 +92,9 @@ public class MyMod {
         event.registerServerCommand(new CommandInitTest());
         event.registerServerCommand(new CommandAddInstruction());
         event.registerServerCommand(new CommandCompleteTest());
+        event.registerServerCommand(new CommandResetTest());
 
-        // Turn off mobs.
+        // Turn off mobs. Not interested in these currently.
         event.getServer().getEntityWorld().getGameRules().setOrCreateGameRule("doMobSpawning", "false");
     }
 
