@@ -52,9 +52,6 @@ public class TickHandler {
         }
     }
 
-
-    public static boolean hasBuilt = false;
-    private static boolean initialBuild = false;
     private static boolean stopTrying;
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
@@ -69,8 +66,6 @@ public class TickHandler {
             stopTrying = true;
             return;
         }
-
-
 
         // Process immediate-duration procedures
         List<Procedure> toProcess = new ArrayList<>();
