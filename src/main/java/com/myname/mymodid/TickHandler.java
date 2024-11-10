@@ -83,12 +83,8 @@ public class TickHandler {
 
         if (!stopTrying) {
             try {
-                System.out.println("Tick counter: " + MinecraftServer.getServer().getTickCounter());
                 test.buildStructure();
-//                AddItems addItems = (AddItems) test.procedureList.peek();
-//                addItems.handleEvent(test);
                 stopTrying = true;
-                System.out.println("Test complete!");
                 return;
             } catch(Exception e) {
                 System.out.println("Test failure!");
