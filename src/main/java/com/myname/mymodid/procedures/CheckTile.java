@@ -3,6 +3,7 @@ package com.myname.mymodid.procedures;
 import com.myname.mymodid.Test;
 import com.myname.mymodid.conditionals.registry.ConditionalFunction;
 import com.myname.mymodid.conditionals.registry.RegisterConditionals;
+import com.myname.mymodid.utils.PrintUtils;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
@@ -23,17 +24,17 @@ public class CheckTile extends Procedure {
                 test.failed = true;
 
                 if (optionalLabel != null) {
-                    System.out.println("\u001B[31m" + optionalLabel + " FAILED\u001B[0m");
+                    PrintUtils.printRed(optionalLabel + " FAILED");
                 } else {
-                    System.out.println("\u001B[31mFAILED\u001B[0m");
+                    PrintUtils.printRed(" FAILED");
                 }
 
             } else {
-                System.out.println("\u001B[32m" + optionalLabel + " PASSED\u001B[0m");
+                PrintUtils.printGreen(optionalLabel + " PASSED");
             }
         } catch (Exception e) {
             test.failed = true;
-            System.out.println("\u001B[31mTest " + optionalLabel + " threw exception, which was caught by CTF.\u001B[0m");
+            PrintUtils.printRed("Test " + optionalLabel + " threw exception, which was caught by CTF.");
             e.printStackTrace();
         }
     }
