@@ -9,13 +9,14 @@ import org.lwjgl.opengl.GL11;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
 
 // Client side only rendering.
 public class RenderCTFWandFrame {
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) {
+        if (isRegionNotDefined()) {
             return; // Skip rendering if positions are not set
         }
 

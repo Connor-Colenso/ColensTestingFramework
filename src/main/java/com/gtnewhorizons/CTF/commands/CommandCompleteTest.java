@@ -9,6 +9,8 @@ import static com.gtnewhorizons.CTF.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.commands.CommandResetTest.resetTest;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.Structure.captureStructureJson;
 
 public class CommandCompleteTest extends CommandBase {
@@ -23,10 +25,10 @@ public class CommandCompleteTest extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) {
+    public void processCommand(ICommandSender player, String[] args) {
 
-        if (currentTest == null) {
-            sender.addChatMessage(new ChatComponentText("No test is in construction!"));
+        if (isTestNotStarted()) {
+            notifyPlayer(player,"No test is in construction!");
             return;
         }
 
@@ -36,9 +38,10 @@ public class CommandCompleteTest extends CommandBase {
 
         // Save the test.
         JsonUtils.saveJsonToFile(currentTest);
-        sender.addChatMessage(new ChatComponentText("Test completed and saved to config/CTF/testing/" + currentTest.get(TEST_NAME).getAsString() + ".json"));
+        notifyPlayer(player, "Test completed and saved to config/CTF/testing/" + currentTest.get(TEST_NAME).getAsString() + ".json");
 
         // Reset all info for next test.
         resetTest();
     }
+
 }

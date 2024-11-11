@@ -11,6 +11,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+
 public class CommandGetTileEntity extends CommandBase {
 
     @Override
@@ -48,22 +50,22 @@ public class CommandGetTileEntity extends CommandBase {
 
                 TileEntity tileEntity = world.getTileEntity(blockX, blockY, blockZ);
                 if (tileEntity != null) {
-                    player.addChatMessage(new ChatComponentText("TileEntity found at: " + blockX + ", " + blockY + ", " + blockZ));
+                    notifyPlayer(player, "TileEntity found at: " + blockX + ", " + blockY + ", " + blockZ);
                     NBTTagCompound tag = new NBTTagCompound();
                     tileEntity.writeToNBT(tag);
 
                     String encodedNBT = NBTConverter.encodeToString(tag);
 
                     System.out.println("Encoded: " + encodedNBT);
-                    player.addChatMessage(new ChatComponentText("Encoded: " + encodedNBT));
+                    notifyPlayer(player, "Encoded: " + encodedNBT);
 
                     System.out.println("Metadata: " + tileEntity.blockMetadata);
-                    player.addChatMessage(new ChatComponentText("Metadata: " + tileEntity.blockMetadata));
+                    notifyPlayer(player,"Metadata: " + tileEntity.blockMetadata);
                 } else {
-                    player.addChatMessage(new ChatComponentText("No TileEntity at the specified location."));
+                    notifyPlayer(player, "No TileEntity at the specified location.");
                 }
             } else {
-                player.addChatMessage(new ChatComponentText("No block targeted."));
+                notifyPlayer(player, "No block targeted.");
             }
         }
     }

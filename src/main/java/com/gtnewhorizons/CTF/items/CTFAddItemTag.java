@@ -18,11 +18,14 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
+import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
 import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 public class CTFAddItemTag extends Item {
 
@@ -36,7 +39,7 @@ public class CTFAddItemTag extends Item {
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         if (world.isRemote) return false;
         if (!player.isSneaking()) return false;
-        if (currentTest == null) {
+        if (isTestNotStarted()) {
             notifyPlayer(player, EnumChatFormatting.RED + "There is no valid test in construction!");
             return false;
         }
@@ -53,10 +56,6 @@ public class CTFAddItemTag extends Item {
 
         addItemInstruction(stack, player, x, y, z);
         return true;
-    }
-
-    private boolean isRegionNotDefined() {
-        return firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE;
     }
 
     private void handleInventoryAbsorption(ItemStack stack, EntityPlayer player, World world, int x, int y, int z) {
@@ -138,7 +137,7 @@ public class CTFAddItemTag extends Item {
 
         if (heldItemStack.getTagCompound() != null) {
             String encodedNBT = NBTConverter.encodeToString(heldItemStack.getTagCompound());
-            itemData.addProperty("encodedNBT", encodedNBT);
+            itemData.addProperty(ENCODED_NBT, encodedNBT);
         }
         return itemData;
     }

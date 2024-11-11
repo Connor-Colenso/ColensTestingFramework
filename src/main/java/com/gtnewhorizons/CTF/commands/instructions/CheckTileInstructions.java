@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+
 public class CheckTileInstructions {
 
     public static void add(ICommandSender sender, String[] args) {
@@ -25,7 +27,7 @@ public class CheckTileInstructions {
                 String funcRegistry = args[1]; // First argument after the command
                 tagCompound.setString("funcRegistry", funcRegistry); // Set funcRegistry in the NBT
             } else {
-                player.addChatMessage(new ChatComponentText("Usage: /command funcRegistry [optionalLabel]"));
+                notifyPlayer(player, "Usage: /command funcRegistry [optionalLabel]");
                 return; // Exit if funcRegistry is missing
             }
 
@@ -39,16 +41,16 @@ public class CheckTileInstructions {
 
             // Give the stick to the player
             if (!player.inventory.addItemStackToInventory(stick)) {
-                player.addChatMessage(new ChatComponentText("Inventory full. Could not issue tile entity tag."));
+                notifyPlayer(player,"Inventory full. Could not issue tile entity tag.");
                 return; // Exit the method if the item couldn't be added
             }
 
             // Notify the player that they received the item
-            player.addChatMessage(new ChatComponentText("You have been given a tile entity tag. Please select the block you wish to associate with this test."));
+            notifyPlayer(player,"You have been given a tile entity tag. Please select the block you wish to associate with this test.");
 
         } else {
             // If the sender is not a player (e.g., console), send a message to the console
-            sender.addChatMessage(new ChatComponentText("This command can only be issued by a player."));
+            notifyPlayer(sender,"This command can only be issued by a player.");
         }
     }
 

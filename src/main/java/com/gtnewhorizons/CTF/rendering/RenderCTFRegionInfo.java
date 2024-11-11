@@ -23,12 +23,14 @@ import static com.gtnewhorizons.CTF.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 public class RenderCTFRegionInfo {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
+        if (isRegionNotDefined()) return;
 
         renderRegionLabel(event);
         renderTileEntityTagPoints(event);
@@ -36,12 +38,9 @@ public class RenderCTFRegionInfo {
     }
 
     private void renderAddItemPoints(RenderWorldLastEvent event) {
-        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
-        if (currentTest == null) return;
+        if (isRegionNotDefined()) return;
+        if (isTestNotStarted()) return;
 
-        if (!currentTest.has(INSTRUCTIONS)) {
-            return;
-        }
 
         // Calculate the minimum coordinates for the bounding box
         double minX = Math.min(firstPosition[0], secondPosition[0]);
@@ -125,12 +124,8 @@ public class RenderCTFRegionInfo {
 
 
     private static void renderTileEntityTagPoints(RenderWorldLastEvent event) {
-        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
-        if (currentTest == null) return;
-
-        if (!currentTest.has(INSTRUCTIONS)) {
-            return;
-        }
+        if (isRegionNotDefined()) return;
+        if (isTestNotStarted()) return;
 
         // Calculate the minimum and maximum coordinates for the bounding box
         double minX = Math.min(firstPosition[0], secondPosition[0]);
@@ -165,16 +160,15 @@ public class RenderCTFRegionInfo {
 
 
     private static void renderRegionLabel(RenderWorldLastEvent event) {
-        // Not yet set.
-        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) return;
+        if (isRegionNotDefined()) return;
+        if (isTestNotStarted()) return;
 
         // Calculate the center position for the text.
         double x = (firstPosition[0] + secondPosition[0]) / 2.0 + 0.5; // Center in x
         double y = Math.max(firstPosition[1], secondPosition[1]) + 1.5; // Slightly above
         double z = (firstPosition[2] + secondPosition[2]) / 2.0 + 0.5; // Center in z
 
-        // User has not initialised test yet.
-        if (currentTest == null) return;
+
 
         // Sanity check that the field exists...
         String testName = "ERROR STRING, REPORT TO AUTHOR.";

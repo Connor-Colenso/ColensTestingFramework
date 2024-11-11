@@ -9,6 +9,9 @@ import java.util.HashMap;
 
 import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 public class CommandAddInstruction extends CommandBase {
 
@@ -30,19 +33,24 @@ public class CommandAddInstruction extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) {
+    public void processCommand(ICommandSender player, String[] args) {
 
-        if (currentTest == null) {
-            sender.addChatMessage(new ChatComponentText("This cannot be used if no test has been initialised. Use /inittest with a valid region selected."));
+        if (isRegionNotDefined()) {
+            notifyPlayer(player, "No region has been selected.");
+            return;
+        }
+
+        if (isTestNotStarted()) {
+            notifyPlayer(player, "This cannot be used if no test has been initialised. Use /inittest with a valid region selected.");
             return;
         }
 
         // Check if no arguments were provided
         if (args.length == 0) {
             // Print out the list of instructions and their descriptions
-            sender.addChatMessage(new ChatComponentText("Valid instructions are:"));
+            notifyPlayer(player,"Valid instructions are:");
             for (String instruction : instructionsMap.keySet()) {
-                sender.addChatMessage(new ChatComponentText(instruction + ": " + instructionsMap.get(instruction)));
+                notifyPlayer(player,instruction + ": " + instructionsMap.get(instruction));
             }
             return; // Exit after listing instructions
         }
@@ -53,19 +61,19 @@ public class CommandAddInstruction extends CommandBase {
         String command = args[0].toLowerCase();
         switch (command) {
             case "runticks":
-                RunTicksInstruction.add(sender, args, instructionArray);
+                RunTicksInstruction.add(player, args, instructionArray);
                 return;
             case "checktile":
                 // Handle the "checkTile" instruction
-                CheckTileInstructions.add(sender, args); // Instruction is added when item is used.
+                CheckTileInstructions.add(player, args);
                 return;
             case "additems":
                 // Handle the "checkTile" instruction
-                AddItemInstructions.add(sender); // Instruction is added when item is used.
+                AddItemInstructions.add(player);
                 return;
 
             default:
-                sender.addChatMessage(new ChatComponentText("Unknown instruction. Use 'addinstruction' to list valid instructions."));
+                notifyPlayer(player, "Unknown instruction. Use 'addinstruction' to list valid instructions.");
                 break;
         }
 

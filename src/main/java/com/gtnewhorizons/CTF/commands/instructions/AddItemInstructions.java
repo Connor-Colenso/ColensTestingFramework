@@ -8,6 +8,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ChatComponentText;
 
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+
 public class AddItemInstructions {
 
     public static void add(ICommandSender sender) {
@@ -15,7 +17,7 @@ public class AddItemInstructions {
             ItemStack heldItemStack = player.getHeldItem();
 
             if (heldItemStack == null) {
-                player.addChatMessage(new ChatComponentText("You are not holding any item."));
+                notifyPlayer(player, "You are not holding any item.");
                 return;
             }
 
@@ -37,13 +39,13 @@ public class AddItemInstructions {
 
             // Add the new item to the player's inventory
             if (player.inventory.addItemStackToInventory(newTagItemStack)) {
-                player.addChatMessage(new ChatComponentText("Item saved: " + heldItemStack.getDisplayName()));
+                notifyPlayer(player,"Item saved: " + heldItemStack.getDisplayName());
             } else {
-                player.addChatMessage(new ChatComponentText("Inventory full. Could not save item."));
+                notifyPlayer(player, "Inventory full. Could not save item.");
             }
         } else {
             // Console users are invalid.
-            sender.addChatMessage(new ChatComponentText("Command can only be used by a player."));
+            notifyPlayer(sender,"Command can only be used by a player.");
         }
     }
 }

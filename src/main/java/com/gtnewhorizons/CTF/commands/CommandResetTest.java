@@ -2,11 +2,12 @@ package com.gtnewhorizons.CTF.commands;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
 
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 public class CommandResetTest  extends CommandBase {
     @Override
@@ -20,14 +21,13 @@ public class CommandResetTest  extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) {
-        if (currentTest != null) {
-            resetTest();
-            sender.addChatMessage(new ChatComponentText("Test in construction was aborted and not saved."));
+    public void processCommand(ICommandSender player, String[] args) {
+        if (isTestNotStarted()) {
+            notifyPlayer(player, "There is no test in construction to abort!");
         } else {
-            sender.addChatMessage(new ChatComponentText("There is no test in construction to abort!"));
+            resetTest();
+            notifyPlayer(player, "Test in construction was aborted and not saved.");
         }
-
     }
 
     public static void resetTest() {

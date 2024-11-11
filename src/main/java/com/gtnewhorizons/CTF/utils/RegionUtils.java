@@ -1,12 +1,13 @@
 package com.gtnewhorizons.CTF.utils;
 
+import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 
 public class RegionUtils {
     public static boolean isWithinRegion(int x, int y, int z) {
 
-        if (firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE) return false;
+        if (isRegionNotDefined()) return false;
 
         // Determine the minimum and maximum bounds for the region
         int minX = Math.min(firstPosition[0], secondPosition[0]);
@@ -20,5 +21,13 @@ public class RegionUtils {
         return (x >= minX && x <= maxX) &&
             (y >= minY && y <= maxY) &&
             (z >= minZ && z <= maxZ);
+    }
+
+    public static boolean isRegionNotDefined() {
+        return firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE;
+    }
+
+    public static boolean isTestNotStarted() {
+        return currentTest == null;
     }
 }

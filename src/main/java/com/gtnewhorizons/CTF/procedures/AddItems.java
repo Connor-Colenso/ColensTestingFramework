@@ -16,6 +16,8 @@ import net.minecraft.world.WorldServer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
+
 public class AddItems extends Procedure {
     public List<ItemStack> itemsToAdd = new ArrayList<>();
     public int x;
@@ -46,8 +48,8 @@ public class AddItems extends Procedure {
                 ItemStack itemStack = new ItemStack(item, stackSize, metadata);
 
                 // Check if "encodedNBT" is provided and decode it
-                if (itemObj.has("encodedNBT")) {
-                    String encodedNBT = itemObj.get("encodedNBT").getAsString();
+                if (itemObj.has(ENCODED_NBT)) {
+                    String encodedNBT = itemObj.get(ENCODED_NBT).getAsString();
                     NBTTagCompound nbtTagCompound = NBTConverter.decodeFromString(encodedNBT);
                     itemStack.setTagCompound(nbtTagCompound);
                 }

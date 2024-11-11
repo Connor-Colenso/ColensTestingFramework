@@ -19,11 +19,14 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.List;
 
+import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
 import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 public class CTFAddFluidsTag extends Item {
 
@@ -37,7 +40,7 @@ public class CTFAddFluidsTag extends Item {
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         if (world.isRemote) return false;
         if (!player.isSneaking()) return false;
-        if (currentTest == null) {
+        if (isTestNotStarted()) {
             notifyPlayer(player, EnumChatFormatting.RED + "There is no valid test in construction!");
             return false;
         }
@@ -54,10 +57,6 @@ public class CTFAddFluidsTag extends Item {
 
         addFluidInstruction(stack, player, x, y, z);
         return true;
-    }
-
-    private boolean isRegionNotDefined() {
-        return firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE;
     }
 
     private void handleFluidAbsorption(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, ForgeDirection forgeDirection) {
@@ -137,10 +136,6 @@ public class CTFAddFluidsTag extends Item {
         fluidData.addProperty("fluidName", fluidStack.getFluid().getName());
         fluidData.addProperty("amount", fluidStack.amount);
 
-        if (fluidStack.tag != null) {
-            String encodedNBT = NBTConverter.encodeToString(fluidStack.tag);
-            fluidData.addProperty("encodedNBT", encodedNBT);
-        }
         return fluidData;
     }
 

@@ -18,6 +18,9 @@ import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 public class CTFTileEntityTag extends Item {
 
@@ -30,18 +33,18 @@ public class CTFTileEntityTag extends Item {
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
         if (world.isRemote) return false;
         if (!player.isSneaking()) return false;
-        if (currentTest == null) {
-            player.addChatMessage(new ChatComponentText("There is no valid test in construction!"));
+        if (isTestNotStarted()) {
+            notifyPlayer(player, "There is no valid test in construction!");
             return false;
         }
 
-        if (firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE) {
-            player.addChatMessage(new ChatComponentText("Region is not yet defined. Use the CTF wand to select a valid region."));
+        if (isRegionNotDefined()) {
+            notifyPlayer(player, "Region is not yet defined. Use the CTF wand to select a valid region.");
             return true;
         }
 
         if (!RegionUtils.isWithinRegion(x, y, z)) {
-            player.addChatMessage(new ChatComponentText("You must use this on a block within the selected CTF region."));
+            notifyPlayer(player,"You must use this on a block within the selected CTF region.");
             return true;
         }
 
@@ -54,7 +57,7 @@ public class CTFTileEntityTag extends Item {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (tileEntity == null) {
             // Warn the player if there's no tile entity
-            player.addChatMessage(new ChatComponentText("Warning: The clicked block has no tile entity. Click again to confirm."));
+            notifyPlayer(player,"Warning: The clicked block has no tile entity. Click again to confirm.");
 
             NBTTagCompound tag = stack.getTagCompound();
 
@@ -70,12 +73,12 @@ public class CTFTileEntityTag extends Item {
             } else {
                 // Set the tile entity if the player has already been warned
                 setInstructionInTest(player, relativeX, relativeY, relativeZ, stack.getTagCompound());
-                player.addChatMessage(new ChatComponentText("Tile entity has been set at the clicked block."));
+                notifyPlayer(player,"Tile entity has been set at the clicked block.");
             }
         } else {
             // The block already has a tile entity, set instruction
             setInstructionInTest(player, relativeX, relativeY, relativeZ, stack.getTagCompound());
-            player.addChatMessage(new ChatComponentText("Tile entity has been set at the clicked block."));
+            notifyPlayer(player,"Tile entity has been set at the clicked block.");
         }
 
         return true;
@@ -98,12 +101,12 @@ public class CTFTileEntityTag extends Item {
         if (tagNBT.hasKey("funcRegistry")) {
             instruction.addProperty("funcRegistry", tagNBT.getString("funcRegistry"));
         } else {
-            player.addChatMessage(new ChatComponentText("This tag has not been initialised properly; it may have been spawned in. Please get a new one."));
+            notifyPlayer(player,"This tag has not been initialised properly; it may have been spawned in. Please get a new one.");
             return;
         }
 
         instructionsArray.add(instruction);
-        }
+    }
 
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {

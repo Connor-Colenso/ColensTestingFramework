@@ -10,6 +10,8 @@ import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
 
 public class CommandInitTest extends CommandBase {
 
@@ -26,14 +28,14 @@ public class CommandInitTest extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender sender, String[] args) {
+    public void processCommand(ICommandSender player, String[] args) {
         if (args.length == 0) {
-            sender.addChatMessage(new ChatComponentText("Must provide a valid test name. You may not use spaces."));
+            notifyPlayer(player, "Must provide a valid test name. You may not use spaces.");
             return;
         }
 
-        if (firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE) {
-            sender.addChatMessage(new ChatComponentText("You have not selected a valid region using the CTF wand."));
+        if (isRegionNotDefined()) {
+            notifyPlayer(player,"You have not selected a valid region using the CTF wand.");
             return;
         }
 

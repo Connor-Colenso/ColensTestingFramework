@@ -8,6 +8,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
 public class CTFWandEventHandler {
 
@@ -26,7 +27,7 @@ public class CTFWandEventHandler {
             // Record the right-click action
 
             if (currentTest != null) {
-                player.addChatMessage(new ChatComponentText("Test is already in progress. Complete it or reset the region to change the bounds."));
+                notifyPlayer(player, "Test is already in progress. Complete it or reset the region to change the bounds.");
                 event.setCanceled(true);
                 return;
             }
@@ -41,7 +42,7 @@ public class CTFWandEventHandler {
                 firstPosition[2] = blockZ;
 
                 // Send message to player
-                player.addChatMessage(new ChatComponentText("First position set: [" + blockX + ", " + blockY + ", " + blockZ + "]"));
+                notifyPlayer(player, "First position set: [" + blockX + ", " + blockY + ", " + blockZ + "]");
                 // Stop user accidentally breaking stuff.
                 event.setCanceled(true);
             }
@@ -58,7 +59,7 @@ public class CTFWandEventHandler {
                 secondPosition[2] = blockZ;
 
                 // Send message to player
-                player.addChatMessage(new ChatComponentText("Second position set: [" + blockX + ", " + blockY + ", " + blockZ + "]"));
+                notifyPlayer(player, "Second position set: [" + blockX + ", " + blockY + ", " + blockZ + "]");
             }
         }
     }
