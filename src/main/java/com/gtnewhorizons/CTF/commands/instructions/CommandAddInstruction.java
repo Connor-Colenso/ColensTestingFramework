@@ -3,7 +3,7 @@ package com.gtnewhorizons.CTF.commands.instructions;
 import com.google.gson.JsonArray;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 import java.util.HashMap;
 
@@ -33,49 +33,51 @@ public class CommandAddInstruction extends CommandBase {
     }
 
     @Override
-    public void processCommand(ICommandSender player, String[] args) {
+    public void processCommand(ICommandSender sender, String[] args) {
 
-        if (isRegionNotDefined()) {
-            notifyPlayer(player, "No region has been selected.");
-            return;
-        }
+        if (sender instanceof EntityPlayerMP player) {
 
-        if (isTestNotStarted()) {
-            notifyPlayer(player, "This cannot be used if no test has been initialised. Use /inittest with a valid region selected.");
-            return;
-        }
-
-        // Check if no arguments were provided
-        if (args.length == 0) {
-            // Print out the list of instructions and their descriptions
-            notifyPlayer(player,"Valid instructions are:");
-            for (String instruction : instructionsMap.keySet()) {
-                notifyPlayer(player,instruction + ": " + instructionsMap.get(instruction));
+            if (isRegionNotDefined()) {
+                notifyPlayer(player, "No region has been selected.");
+                return;
             }
-            return; // Exit after listing instructions
+
+            if (isTestNotStarted()) {
+                notifyPlayer(player, "This cannot be used if no test has been initialised. Use /inittest with a valid region selected.");
+                return;
+            }
+
+            // Check if no arguments were provided
+            if (args.length == 0) {
+                // Print out the list of instructions and their descriptions
+                notifyPlayer(player,"Valid instructions are:");
+                for (String instruction : instructionsMap.keySet()) {
+                    notifyPlayer(player,instruction + ": " + instructionsMap.get(instruction));
+                }
+                return; // Exit after listing instructions
+            }
+
+            JsonArray instructionArray = currentTest.getAsJsonArray(INSTRUCTIONS);
+
+            // Process the first argument as a command (case-insensitive)
+            String command = args[0].toLowerCase();
+            switch (command) {
+                case "runticks":
+                    RunTicksInstruction.add(player, args, instructionArray);
+                    return;
+                case "checktile":
+                    // Handle the "checkTile" instruction
+                    CheckTileInstructions.add(player, args);
+                    return;
+                case "additems":
+                    // Handle the "checkTile" instruction
+                    AddItemInstructions.add(player);
+                    return;
+
+                default:
+                    notifyPlayer(player, "Unknown instruction. Use 'addinstruction' to list valid instructions.");
+                    break;
+            }
         }
-
-        JsonArray instructionArray = currentTest.getAsJsonArray(INSTRUCTIONS);
-
-        // Process the first argument as a command (case-insensitive)
-        String command = args[0].toLowerCase();
-        switch (command) {
-            case "runticks":
-                RunTicksInstruction.add(player, args, instructionArray);
-                return;
-            case "checktile":
-                // Handle the "checkTile" instruction
-                CheckTileInstructions.add(player, args);
-                return;
-            case "additems":
-                // Handle the "checkTile" instruction
-                AddItemInstructions.add(player);
-                return;
-
-            default:
-                notifyPlayer(player, "Unknown instruction. Use 'addinstruction' to list valid instructions.");
-                break;
-        }
-
     }
 }

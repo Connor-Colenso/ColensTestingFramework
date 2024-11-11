@@ -6,7 +6,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ChatComponentText;
 
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
@@ -22,7 +21,7 @@ public class AddItemInstructions {
             }
 
             // Create a new ItemStack of CTFAddItemTag
-            ItemStack newTagItemStack = new ItemStack(RegisterItems.CTFAddItemTag);
+            ItemStack itemStack = new ItemStack(RegisterItems.CTFAddItemTag);
 
             // Create an NBT Tag Compound for saving the held item
             NBTTagCompound nbtData = new NBTTagCompound();
@@ -33,19 +32,19 @@ public class AddItemInstructions {
             heldItemStack.writeToNBT(heldItemNBT);  // Serialise the held item to NBT
             storedItems.appendTag(heldItemNBT);
 
-            // Add the storedItems list to newTagItemStack's NBT data
+            // Add the storedItems list to itemStack's NBT data
             nbtData.setTag("StoredItems", storedItems);
-            newTagItemStack.setTagCompound(nbtData);
+            itemStack.setTagCompound(nbtData);
 
             // Add the new item to the player's inventory
-            if (player.inventory.addItemStackToInventory(newTagItemStack)) {
+            if (player.inventory.addItemStackToInventory(itemStack)) {
                 notifyPlayer(player,"Item saved: " + heldItemStack.getDisplayName());
             } else {
                 notifyPlayer(player, "Inventory full. Could not save item.");
             }
         } else {
             // Console users are invalid.
-            notifyPlayer(sender,"Command can only be used by a player.");
+            notifyPlayer(sender,"Command can only be used by a player in world.");
         }
     }
 }
