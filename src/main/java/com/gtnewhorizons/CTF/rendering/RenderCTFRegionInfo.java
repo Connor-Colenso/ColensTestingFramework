@@ -18,7 +18,10 @@ import org.lwjgl.opengl.GL11;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gtnewhorizons.CTF.CommonTestFields.FLUID_AMOUNT;
+import static com.gtnewhorizons.CTF.CommonTestFields.FLUID_NAME;
 import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.CommonTestFields.STORED_FLUIDS;
 import static com.gtnewhorizons.CTF.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
@@ -40,7 +43,6 @@ public class RenderCTFRegionInfo {
     private void renderAddItemPoints(RenderWorldLastEvent event) {
         if (isRegionNotDefined()) return;
         if (isTestNotStarted()) return;
-
 
         // Calculate the minimum coordinates for the bounding box
         double minX = Math.min(firstPosition[0], secondPosition[0]);
@@ -98,13 +100,13 @@ public class RenderCTFRegionInfo {
                 }
 
                 // Process each fluid in the "fluids" array
-                JsonArray fluidsArray = instruction.getAsJsonArray("fluids");
+                JsonArray fluidsArray = instruction.getAsJsonArray(STORED_FLUIDS);
                 for (int j = 0; j < fluidsArray.size(); j++) {
                     JsonObject fluidObject = fluidsArray.get(j).getAsJsonObject();
 
                     // Extract fluid details
-                    String fluidName = fluidObject.get("fluidName").getAsString();
-                    int amount = fluidObject.get("amount").getAsInt();
+                    String fluidName = fluidObject.get(FLUID_NAME).getAsString();
+                    int amount = fluidObject.get(FLUID_AMOUNT).getAsInt();
 
                     // Append fluid information to text list
                     textList.add(fluidName + " x " + amount + "mB");

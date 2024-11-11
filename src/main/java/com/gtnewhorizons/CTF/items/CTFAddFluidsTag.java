@@ -2,7 +2,6 @@ package com.gtnewhorizons.CTF.items;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.NBTConverter;
 import com.gtnewhorizons.CTF.utils.RegionUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -19,8 +18,10 @@ import net.minecraftforge.fluids.IFluidHandler;
 
 import java.util.List;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
+import static com.gtnewhorizons.CTF.CommonTestFields.FLUID_AMOUNT;
+import static com.gtnewhorizons.CTF.CommonTestFields.FLUID_NAME;
 import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.CommonTestFields.STORED_FLUIDS;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
@@ -73,10 +74,10 @@ public class CTFAddFluidsTag extends Item {
             stack.setTagCompound(nbtData);
         }
 
-        NBTTagList storedFluids = nbtData.hasKey("StoredFluids") ? nbtData.getTagList("StoredFluids", 10) : new NBTTagList();
+        NBTTagList storedFluids = nbtData.hasKey(STORED_FLUIDS) ? nbtData.getTagList(STORED_FLUIDS, 10) : new NBTTagList();
         absorbFluids(fluidHandler, storedFluids, forgeDirection);
         if (storedFluids.tagCount() > 0) {
-            nbtData.setTag("StoredFluids", storedFluids);
+            nbtData.setTag(STORED_FLUIDS, storedFluids);
             notifyPlayer(player, EnumChatFormatting.GREEN + "Fluids absorbed into the tag item for later deployment.");
         } else {
             notifyPlayer(player, EnumChatFormatting.RED + "No fluids to absorb from this tank.");
@@ -119,22 +120,22 @@ public class CTFAddFluidsTag extends Item {
 
         JsonArray fluidsArray = new JsonArray();
         NBTTagCompound nbtData = stack.getTagCompound();
-        if (nbtData != null && nbtData.hasKey("StoredFluids", 9)) {
-            NBTTagList storedFluids = nbtData.getTagList("StoredFluids", 10);
+        if (nbtData != null && nbtData.hasKey(STORED_FLUIDS, 9)) {
+            NBTTagList storedFluids = nbtData.getTagList(STORED_FLUIDS, 10);
             for (int i = 0; i < storedFluids.tagCount(); i++) {
                 JsonObject fluidData = createFluidDataJson(storedFluids.getCompoundTagAt(i));
                 fluidsArray.add(fluidData);
             }
         }
-        instruction.add("fluids", fluidsArray);
+        instruction.add(STORED_FLUIDS, fluidsArray);
         return instruction;
     }
 
     private JsonObject createFluidDataJson(NBTTagCompound fluidNBT) {
         FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(fluidNBT);
         JsonObject fluidData = new JsonObject();
-        fluidData.addProperty("fluidName", fluidStack.getFluid().getName());
-        fluidData.addProperty("amount", fluidStack.amount);
+        fluidData.addProperty(FLUID_NAME, fluidStack.getFluid().getName());
+        fluidData.addProperty(FLUID_AMOUNT, fluidStack.amount);
 
         return fluidData;
     }
@@ -142,7 +143,7 @@ public class CTFAddFluidsTag extends Item {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
         if (stack.hasTagCompound()) {
-            NBTTagList storedFluids = stack.getTagCompound().getTagList("StoredFluids", 10);
+            NBTTagList storedFluids = stack.getTagCompound().getTagList(STORED_FLUIDS, 10);
             for (int i = 0; i < storedFluids.tagCount(); i++) {
                 NBTTagCompound fluidNBT = storedFluids.getCompoundTagAt(i);
                 FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(fluidNBT);

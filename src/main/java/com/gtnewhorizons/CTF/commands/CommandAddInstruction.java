@@ -1,6 +1,10 @@
-package com.gtnewhorizons.CTF.commands.instructions;
+package com.gtnewhorizons.CTF.commands;
 
 import com.google.gson.JsonArray;
+import com.gtnewhorizons.CTF.commands.instructions.AddItemInstructions;
+import com.gtnewhorizons.CTF.commands.instructions.CheckTileInstructions;
+import com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction;
+import com.gtnewhorizons.CTF.commands.instructions.RunTicksInstruction;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -9,6 +13,7 @@ import java.util.HashMap;
 
 import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
+import static com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction.execute;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
@@ -51,9 +56,7 @@ public class CommandAddInstruction extends CommandBase {
             if (args.length == 0) {
                 // Print out the list of instructions and their descriptions
                 notifyPlayer(player,"Valid instructions are:");
-                for (String instruction : instructionsMap.keySet()) {
-                    notifyPlayer(player,instruction + ": " + instructionsMap.get(instruction));
-                }
+                RegisterInstruction.informPlayerOfOptions(player);
                 return; // Exit after listing instructions
             }
 
@@ -61,22 +64,11 @@ public class CommandAddInstruction extends CommandBase {
 
             // Process the first argument as a command (case-insensitive)
             String command = args[0].toLowerCase();
-            switch (command) {
-                case "runticks":
-                    RunTicksInstruction.add(player, args, instructionArray);
-                    return;
-                case "checktile":
-                    // Handle the "checkTile" instruction
-                    CheckTileInstructions.add(player, args);
-                    return;
-                case "additems":
-                    // Handle the "checkTile" instruction
-                    AddItemInstructions.add(player);
-                    return;
 
-                default:
-                    notifyPlayer(player, "Unknown instruction. Use 'addinstruction' to list valid instructions.");
-                    break;
+            if (execute(command, player, args, instructionArray)) {
+                notifyPlayer(player, "Success.");
+            } else {
+                notifyPlayer(player, "Unknown instruction " + command + ". Use 'addinstruction' to list valid instructions.");
             }
         }
     }

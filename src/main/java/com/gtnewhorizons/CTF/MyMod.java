@@ -7,7 +7,12 @@ import com.gtnewhorizons.CTF.commands.CommandGetTileEntity;
 import com.gtnewhorizons.CTF.commands.CommandInitTest;
 import com.gtnewhorizons.CTF.commands.CommandLoadTest;
 import com.gtnewhorizons.CTF.commands.CommandResetTest;
-import com.gtnewhorizons.CTF.commands.instructions.CommandAddInstruction;
+import com.gtnewhorizons.CTF.commands.CommandAddInstruction;
+import com.gtnewhorizons.CTF.commands.instructions.AddFluidInstructions;
+import com.gtnewhorizons.CTF.commands.instructions.AddItemInstructions;
+import com.gtnewhorizons.CTF.commands.instructions.CheckTileInstructions;
+import com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction;
+import com.gtnewhorizons.CTF.commands.instructions.RunTicksInstruction;
 import com.gtnewhorizons.CTF.conditionals.TestConditional;
 import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
 import com.gtnewhorizons.CTF.events.CTFWandEventHandler;
@@ -61,6 +66,11 @@ public class MyMod {
         RegisterConditionals.conditionalRegister("ebfOutputCheck", TestConditional::isChestContainingStone);
         RegisterConditionals.conditionalRegister("func", TestConditional::isChestContainingStone);
         RegisterConditionals.conditionalRegister("checkStructure", TestConditional::checkStructure);
+
+        RegisterInstruction.register("addItems", AddItemInstructions::add);
+        RegisterInstruction.register("runTicks", RunTicksInstruction::add);
+        RegisterInstruction.register("checkTile", CheckTileInstructions::add);
+        RegisterInstruction.register("addFluids", AddFluidInstructions::add);
 
         if (event.getSide().isClient()) {
             MinecraftForge.EVENT_BUS.register(new RenderCTFWandFrame());

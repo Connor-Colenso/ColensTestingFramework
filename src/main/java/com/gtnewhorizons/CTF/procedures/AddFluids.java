@@ -16,6 +16,10 @@ import net.minecraft.server.MinecraftServer;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.gtnewhorizons.CTF.CommonTestFields.FLUID_AMOUNT;
+import static com.gtnewhorizons.CTF.CommonTestFields.FLUID_NAME;
+import static com.gtnewhorizons.CTF.CommonTestFields.STORED_FLUIDS;
+
 public class AddFluids extends Procedure {
     public List<FluidStack> fluidsToAdd = new ArrayList<>();
     public int x;
@@ -29,13 +33,13 @@ public class AddFluids extends Procedure {
         z = instruction.get("z").getAsInt();
 
         // Parse each fluid from the "fluids" array
-        JsonArray fluidsArray = instruction.getAsJsonArray("fluids");
+        JsonArray fluidsArray = instruction.getAsJsonArray(STORED_FLUIDS);
         for (int fluidIndex = 0; fluidIndex < fluidsArray.size(); fluidIndex++) {
             JsonObject fluidObj = fluidsArray.get(fluidIndex).getAsJsonObject();
 
             // Get registry name and amount
-            String registryName = fluidObj.get("registryName").getAsString();
-            int amount = fluidObj.get("amount").getAsInt();
+            String registryName = fluidObj.get(FLUID_NAME).getAsString();
+            int amount = fluidObj.get(FLUID_AMOUNT).getAsInt();
 
             // Retrieve the fluid from the registry
             Fluid fluid = FluidRegistry.getFluid(registryName);

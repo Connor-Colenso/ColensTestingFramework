@@ -24,7 +24,7 @@ public class RegionUtils {
     }
 
     public static boolean isRegionNotDefined() {
-        return firstPosition[0] == Integer.MAX_VALUE && secondPosition[0] == Integer.MAX_VALUE;
+        return firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE;
     }
 
     public static boolean isTestNotStarted() {
