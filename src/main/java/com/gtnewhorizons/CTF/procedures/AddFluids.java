@@ -50,7 +50,7 @@ public class AddFluids extends Procedure {
         }
     }
 
-    public void handleEvent(Test test) {
+    public void handleEventCustom(Test test) {
         // Retrieve the WorldServer instance and TileEntity at specified coordinates
         WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
         TileEntity te = worldServer.getTileEntity(test.startX + x, test.startY + y, test.startZ + z);

@@ -8,13 +8,16 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 
+import static com.gtnewhorizons.CTF.utils.PrintUtils.GREEN;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.RED;
+
 public class CheckTile extends Procedure {
     public String funcID;
     public int x;
     public int y;
     public int z;
 
-    public void handleEvent(Test test) {
+    public void handleEventCustom(Test test) {
         ConditionalFunction f = RegisterConditionals.getFunc(funcID);
         WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
         TileEntity te = worldServer.getTileEntity(test.startX + x, test.startY + y, test.startZ + z);
@@ -24,17 +27,17 @@ public class CheckTile extends Procedure {
                 test.failed = true;
 
                 if (optionalLabel != null) {
-                    PrintUtils.printConsoleRed(optionalLabel + " FAILED");
+                    PrintUtils.printColourConsole(RED, optionalLabel + " FAILED");
                 } else {
-                    PrintUtils.printConsoleRed(" FAILED");
+                    PrintUtils.printColourConsole(RED, "FAILED");
                 }
 
             } else {
-                PrintUtils.printConsoleGreen(optionalLabel + " PASSED");
+                PrintUtils.printColourConsole(GREEN, optionalLabel + " PASSED");
             }
         } catch (Exception e) {
             test.failed = true;
-            PrintUtils.printConsoleRed("Test " + optionalLabel + " threw exception, which was caught by CTF.");
+            PrintUtils.printColourConsole(RED, "Test " + optionalLabel + " threw exception, which was caught by CTF.");
             e.printStackTrace();
         }
     }

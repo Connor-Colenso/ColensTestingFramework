@@ -4,8 +4,12 @@ import com.gtnewhorizons.CTF.Test;
 
 public class RunTicks extends Procedure {
 
+    public RunTicks() {
+        shouldPrintInfo = false;
+    }
+
     @Override
-    public void handleEvent(Test test) {
+    public void handleEventCustom(Test test) {
 
     }
 }

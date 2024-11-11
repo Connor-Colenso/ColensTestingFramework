@@ -80,14 +80,9 @@ public class TickHandler {
 
         // Execute each procedure
         for (Procedure procedure : toProcess) {
-            if (procedure instanceof RunTicks runTicks) {
-                if (runTicks.duration == 0) continue;
+            if (procedure.duration-- > 0) return;
 
-                runTicks.duration--;
-                return;
-            } else {
-                procedure.handleEvent(test);
-            }
+            procedure.handleEvent(test);
         }
     }
     public static void registerTests() {

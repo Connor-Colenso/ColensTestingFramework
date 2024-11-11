@@ -60,7 +60,7 @@ public class AddItems extends Procedure {
 
     }
 
-    public void handleEvent(Test test) {
+    public void handleEventCustom(Test test) {
 
         // Retrieve the WorldServer instance and TileEntity at specified coordinates
         WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
