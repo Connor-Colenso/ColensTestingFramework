@@ -10,13 +10,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class CTFAddFluidsTag extends Item {
 
     CTFAddFluidsTag() {
         this.setUnlocalizedName("CTFAddFluidsTag");
-        this.setTextureName("minecraft:water");
+        this.setTextureName("minecraft:emerald");
         this.setMaxStackSize(1);
     }
 
