@@ -65,35 +65,26 @@ public class TickHandler {
             return;
         }
 
-        // Process immediate-duration procedures
+        // Collect and process immediate-duration procedures
         List<Procedure> toProcess = new ArrayList<>();
-        while (test.procedureList.peek() != null) {
-            Procedure currentProcedure = test.procedureList.peek();
-            if (currentProcedure.duration == 0) {
-                toProcess.add(test.procedureList.poll());
-            } else {
-                // Keep the procedure in the queue for later
-                toProcess.add(currentProcedure);
-                break;
-            }
+        while (!test.procedureList.isEmpty() && test.procedureList.peek().duration == 0) {
+            toProcess.add(test.procedureList.poll());
         }
 
-        // Execute each procedure
+// Execute each procedure
         for (Procedure procedure : toProcess) {
-            if (procedure instanceof AddItems addItems) {
-                addItems.handleEvent(test);
-            } else if (procedure instanceof AddFluids addFluids) {
-                addFluids.handleEvent(test);
-            } else if (procedure instanceof CheckTile checkTile) {
-                checkTile.handleEvent(test);
-            } else if (procedure instanceof RunTicks runTicks) {
-                if (runTicks.duration == 0) continue;
-
-                runTicks.duration--;
-                return;
+            if (procedure instanceof RunTicks runTicks) {
+                if (runTicks.duration > 0) {
+                    runTicks.duration--;
+                    return;
+                }
+            } else {
+                procedure.handleEvent(test); // Call the common handler method for all other types
             }
         }
+
     }
+
     public static void registerTests() {
 
         for (JsonObject json : jsons) {
@@ -117,40 +108,40 @@ public class TickHandler {
             String type = instruction.get("type").getAsString();
 
             // Create the appropriate procedure based on the type
-            if (type.equals("runTicks")) {
-                // Create a new RunTicks procedure and set its duration
-                RunTicks runTicks = new RunTicks();
-                runTicks.duration = instruction.get("duration").getAsInt();
+            switch (type) {
+                case "runTicks" -> {
+                    // Create a new RunTicks procedure and set its duration
+                    RunTicks runTicks = new RunTicks();
+                    runTicks.duration = instruction.get("duration").getAsInt();
 
-                // Add the RunTicks procedure to the queue
-                testObj.procedureList.add(runTicks);
-
-            } else if (type.equals("checkTile")) {
-                // Create a new CheckTile procedure and set its properties
-                CheckTile checkTile = new CheckTile();
-
-                if (instruction.has("optionalLabel")) {
-                    checkTile.optionalLabel = instruction.get("optionalLabel").getAsString();
+                    // Add the RunTicks procedure to the queue
+                    testObj.procedureList.add(runTicks);
                 }
+                case "checkTile" -> {
+                    // Create a new CheckTile procedure and set its properties
+                    CheckTile checkTile = new CheckTile();
 
-                checkTile.funcID = instruction.get("funcRegistry").getAsString();
-                checkTile.x = instruction.get("x").getAsInt();
-                checkTile.y = instruction.get("y").getAsInt();
-                checkTile.z = instruction.get("z").getAsInt();
+                    if (instruction.has("optionalLabel")) {
+                        checkTile.optionalLabel = instruction.get("optionalLabel").getAsString();
+                    }
 
-                // Add the CheckTile procedure to the queue
-                testObj.procedureList.add(checkTile);
-            }
-            else if (type.equals("addItems"))  {
-                AddItems addItems = new AddItems(instruction);
-                testObj.procedureList.add(addItems);
-            }
-            else if (type.equals("addFluids"))  {
-                AddFluids addItems = new AddFluids(instruction);
-                testObj.procedureList.add(addItems);
-            }
+                    checkTile.funcID = instruction.get("funcRegistry").getAsString();
+                    checkTile.x = instruction.get("x").getAsInt();
+                    checkTile.y = instruction.get("y").getAsInt();
+                    checkTile.z = instruction.get("z").getAsInt();
 
-            // You can add more procedure types here if needed in the future
+                    // Add the CheckTile procedure to the queue
+                    testObj.procedureList.add(checkTile);
+                }
+                case "addItems" -> {
+                    AddItems addItems = new AddItems(instruction);
+                    testObj.procedureList.add(addItems);
+                }
+                case "addFluids" -> {
+                    AddFluids addItems = new AddFluids(instruction);
+                    testObj.procedureList.add(addItems);
+                }
+            }
         }
     }
 
