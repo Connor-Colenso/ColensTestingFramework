@@ -11,12 +11,9 @@ import com.gtnewhorizons.CTF.procedures.RunTicks;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 
@@ -53,7 +50,7 @@ public class TickHandler {
         }
     }
 
-    private static boolean stopTrying;
+    private static boolean hasBuilt;
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onWorldTick(TickEvent.ServerTickEvent event) {
@@ -62,9 +59,9 @@ public class TickHandler {
 
         Test test = MyMod.tests.get(0);
 
-        if (!stopTrying) {
+        if (!hasBuilt) {
             test.buildStructure();
-            stopTrying = true;
+            hasBuilt = true;
             return;
         }
 
