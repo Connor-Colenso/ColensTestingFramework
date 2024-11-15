@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
+import static com.gtnewhorizons.CTF.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.MyMod.autoLoadWorld;
@@ -89,10 +90,23 @@ public class TickHandler {
 
         for (JsonObject json : jsons) {
             Test testObj = new Test();
+            addGameruleInfo(json, testObj);
             addStructureInfo(json, testObj);
             addProcedureInfo(json, testObj);
 
             MyMod.tests.add(testObj);
+        }
+    }
+
+    private static void addGameruleInfo(JsonObject json, Test testObj) {
+        JsonObject gamerules = json.get(GAMERULES).getAsJsonObject();
+
+        // Iterate over each entry in the "gamerules" entries of our json.
+        for (Map.Entry<String, JsonElement> entry : gamerules.entrySet()) {
+            String ruleName = entry.getKey();
+            String ruleValue = entry.getValue().getAsString();
+
+            testObj.registerGameRule(ruleName, ruleValue);
         }
     }
 

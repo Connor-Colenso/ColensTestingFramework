@@ -8,9 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
@@ -22,6 +24,7 @@ public class Test {
     public int startZ = rand.nextInt(65) - 32; // Range -32 to 32
     public boolean failed = false;
 
+    private final HashMap<String, String> gameruleMap = new HashMap<>();
 
     JsonObject structure;
     HashMap<String, TickHandler.BlockTilePair> keyMap;
@@ -119,4 +122,16 @@ public class Test {
         }
         return true; // All necessary chunks are loaded
     }
+
+    public void registerGameRule(String rule, String state) {
+        String  doesExist = gameruleMap.putIfAbsent(rule, state);
+        if (doesExist != null) throw new RuntimeException("Duplicate gamerule: " + rule);
+    }
+
+    public void initGameRulesWorldLoad(WorldServer world) {
+        for (Map.Entry<String, String> entry : gameruleMap.entrySet()) {
+            world.getGameRules().setOrCreateGameRule(entry.getKey(), entry.getValue());
+        }
+    }
+
 }

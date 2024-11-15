@@ -102,8 +102,8 @@ public class MyMod {
         event.registerServerCommand(new CommandCompleteTest());
         event.registerServerCommand(new CommandResetTest());
 
-        // Turn off mobs. Not interested in these currently.
-        event.getServer().getEntityWorld().getGameRules().setOrCreateGameRule("doMobSpawning", "false");
+        // Set relevant gamerules.
+        tests.get(0).initGameRulesWorldLoad(event.getServer().worldServerForDimension(0));
     }
 
 
