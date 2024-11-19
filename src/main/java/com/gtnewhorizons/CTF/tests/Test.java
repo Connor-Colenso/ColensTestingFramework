@@ -1,8 +1,9 @@
-package com.gtnewhorizons.CTF;
+package com.gtnewhorizons.CTF.tests;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.procedures.Procedure;
+import com.gtnewhorizons.CTF.utils.BlockTilePair;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -18,6 +19,8 @@ import java.util.Random;
 
 public class Test {
 
+    private TestSettings testSettings = new TestSettings();
+
     private static final Random rand = new Random();
     public int startX = rand.nextInt(65) - 32; // Range -32 to 32
     public int startY = rand.nextInt(21) + 4;  // Range 4 to 24
@@ -26,8 +29,8 @@ public class Test {
 
     private final HashMap<String, String> gameruleMap = new HashMap<>();
 
-    JsonObject structure;
-    HashMap<String, TickHandler.BlockTilePair> keyMap;
+    public JsonObject structure;
+    public HashMap<String, BlockTilePair> keyMap;
     public Queue<Procedure> procedureList = new LinkedList<>();
 
     public void buildStructure() {
@@ -43,7 +46,7 @@ public class Test {
                 String rowData = layerArray.get(row).getAsString();
                 for (int col = 0; col < rowData.length(); col++) {
                     char key = rowData.charAt(col);
-                    TickHandler.BlockTilePair pair = keyMap.get(String.valueOf(key));
+                    BlockTilePair pair = keyMap.get(String.valueOf(key));
 
                     // If a corresponding BlockTilePair exists for the key
                     if (pair != null) {
@@ -61,7 +64,7 @@ public class Test {
     }
 
     // Method to place a block in the world at the specified coordinates
-    private void placeBlockInWorld(World world, int x, int y, int z, TickHandler.BlockTilePair pair) {
+    private void placeBlockInWorld(World world, int x, int y, int z, BlockTilePair pair) {
         // Set the block in the world
         world.setBlock(x, y, z, Blocks.air, 0, 2);
         world.setBlock(x, y, z, pair.block, pair.meta, 2);
@@ -94,35 +97,6 @@ public class Test {
         return tileEntity;
     }
 
-
-    public boolean areChunksLoadedForStructure() {
-        final World world = MinecraftServer.getServer().getEntityWorld();
-
-        JsonArray build = structure.getAsJsonArray("build");
-
-        for (int layer = 0; layer < build.size(); layer++) {
-            JsonArray layerArray = build.get(layer).getAsJsonArray();
-            for (int row = 0; row < layerArray.size(); row++) {
-                String rowData = layerArray.get(row).getAsString();
-                for (int col = 0; col < rowData.length(); col++) {
-                    // Calculate the block's world coordinates
-                    int x = startX + col;
-                    int z = startZ + row;
-
-                    // Convert block coordinates to chunk coordinates
-                    int chunkX = x >> 4; // Divide by 16
-                    int chunkZ = z >> 4;
-
-                    // Check if the chunk is loaded
-                    if (!world.getChunkProvider().chunkExists(chunkX, chunkZ)) {
-                        return false; // If any chunk is not loaded, return false
-                    }
-                }
-            }
-        }
-        return true; // All necessary chunks are loaded
-    }
-
     public void registerGameRule(String rule, String state) {
         String  doesExist = gameruleMap.putIfAbsent(rule, state);
         if (doesExist != null) throw new RuntimeException("Duplicate gamerule: " + rule);
@@ -133,5 +107,4 @@ public class Test {
             world.getGameRules().setOrCreateGameRule(entry.getKey(), entry.getValue());
         }
     }
-
 }

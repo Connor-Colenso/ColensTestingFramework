@@ -1,4 +1,4 @@
-package com.gtnewhorizons.CTF;
+package com.gtnewhorizons.CTF.utils.nbt;
 
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;

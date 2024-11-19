@@ -2,7 +2,7 @@ package com.gtnewhorizons.CTF.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.NBTConverter;
+import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

@@ -8,13 +8,11 @@ import com.gtnewhorizons.CTF.procedures.AddItems;
 import com.gtnewhorizons.CTF.procedures.CheckTile;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.procedures.RunTicks;
+import com.gtnewhorizons.CTF.tests.Test;
+import com.gtnewhorizons.CTF.utils.BlockTilePair;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiMainMenu;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.ArrayList;
@@ -22,34 +20,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
 import static com.gtnewhorizons.CTF.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.CommonTestFields.STRUCTURE;
-import static com.gtnewhorizons.CTF.MyMod.autoLoadWorld;
 import static com.gtnewhorizons.CTF.MyMod.jsons;
 
 public class TickHandler {
-
-    private boolean hasRun = false;
-    private boolean testComplete = false;
-
-    @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-
-        Minecraft mc = Minecraft.getMinecraft();
-
-        // Check if we are in the main menu and this hasn't run yet
-        if (mc.currentScreen instanceof GuiMainMenu && !hasRun) {
-            hasRun = true;
-            autoLoadWorld();
-        }
-
-        if (testComplete) {
-            Minecraft.stopIntegratedServer();
-            testComplete = false;
-        }
-    }
 
     private static boolean hasBuilt;
 
@@ -99,15 +75,18 @@ public class TickHandler {
     }
 
     private static void addGameruleInfo(JsonObject json, Test testObj) {
-        JsonObject gamerules = json.get(GAMERULES).getAsJsonObject();
+        if (json.has(GAMERULES)) {
+            JsonObject gamerules = json.get(GAMERULES).getAsJsonObject();
 
-        // Iterate over each entry in the "gamerules" entries of our json.
-        for (Map.Entry<String, JsonElement> entry : gamerules.entrySet()) {
-            String ruleName = entry.getKey();
-            String ruleValue = entry.getValue().getAsString();
+            // Iterate over each entry in the "gamerules" entries of our json.
+            for (Map.Entry<String, JsonElement> entry : gamerules.entrySet()) {
+                String ruleName = entry.getKey();
+                String ruleValue = entry.getValue().getAsString();
 
-            testObj.registerGameRule(ruleName, ruleValue);
+                testObj.registerGameRule(ruleName, ruleValue);
+            }
         }
+
     }
 
     private static void addProcedureInfo(JsonObject json, Test testObj) {
@@ -147,49 +126,16 @@ public class TickHandler {
                 testObj.procedureList.add(checkTile);
             }
             else if (type.equals("addItems"))  {
-                AddItems addItems = new AddItems(instruction);
-                testObj.procedureList.add(addItems);
+                testObj.procedureList.add(new AddItems(instruction));
             }
             else if (type.equals("addFluids"))  {
-                AddFluids addItems = new AddFluids(instruction);
-                testObj.procedureList.add(addItems);
+                testObj.procedureList.add(new AddFluids(instruction));
             }
 
             // You can add more procedure types here if needed in the future
         }
     }
 
-
-    static class BlockTilePair {
-        Block block;
-        NBTTagCompound tile;
-        int meta;
-
-        public BlockTilePair(String blockName, int meta, JsonObject jsonElement) {
-            // Initialize the meta value
-            this.meta = meta;
-
-            // Initialize the Block using the blockName
-            this.block = Block.getBlockFromName(blockName); // Assuming there's a method to get Block by name
-
-            // Initialize the TileEntity if the jsonElement is not null
-            if (jsonElement != null && !jsonElement.isJsonNull()) {
-
-                // This will usually be encoded data, but if none then just make a blank tile entity and use that.
-                String data = jsonElement.get(ENCODED_NBT).getAsString();
-                if (data.toLowerCase().equals("default")) {
-                    NBTTagCompound tag = new NBTTagCompound();
-                    tag.setString("id", jsonElement.get("mappingForDefault").getAsString());
-                    this.tile = tag;
-                    return;
-                }
-
-                this.tile = NBTConverter.decodeFromString(data);
-            } else {
-                this.tile = null; // No TileEntity if jsonElement is null
-            }
-        }
-    }
 
     public static void addStructureInfo(JsonObject json, Test testObj) {
         JsonObject structure = json.getAsJsonObject(STRUCTURE);

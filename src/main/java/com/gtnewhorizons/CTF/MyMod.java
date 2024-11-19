@@ -19,6 +19,7 @@ import com.gtnewhorizons.CTF.events.CTFWandEventHandler;
 import com.gtnewhorizons.CTF.items.RegisterItems;
 import com.gtnewhorizons.CTF.rendering.RenderCTFRegionInfo;
 import com.gtnewhorizons.CTF.rendering.RenderCTFWandFrame;
+import com.gtnewhorizons.CTF.tests.Test;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -27,9 +28,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.WorldSettings;
-import net.minecraft.world.WorldType;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -80,6 +78,7 @@ public class MyMod {
 
         RegisterItems.register();
     }
+
     @Mod.EventHandler
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
@@ -134,23 +133,6 @@ public class MyMod {
     }
 
     // Registering server start event
-
-    public static void autoLoadWorld() {
-
-        // Specify the folder where the world should be located
-
-        // Create a new world settings
-        WorldSettings worldSettings = new WorldSettings(
-            0, // Seed
-            WorldSettings.GameType.CREATIVE, // Gamemode
-            false, // Map features (I think this is structures?)
-            false, // Hardcore
-            WorldType.FLAT // World type (e.g., flat, amplified)
-        ).enableCommands();
-
-        Minecraft.getMinecraft().launchIntegratedServer("CTFWorld1", "CTFWorld1", worldSettings);
-
-    }
 
 
 }

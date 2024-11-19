@@ -1,12 +1,11 @@
 package com.gtnewhorizons.CTF.commands;
 
-import com.gtnewhorizons.CTF.NBTConverter;
+import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;

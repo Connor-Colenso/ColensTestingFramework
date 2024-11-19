@@ -1,6 +1,6 @@
 package com.gtnewhorizons.CTF.procedures;
 
-import com.gtnewhorizons.CTF.Test;
+import com.gtnewhorizons.CTF.tests.Test;
 
 public class RunTicks extends Procedure {
 

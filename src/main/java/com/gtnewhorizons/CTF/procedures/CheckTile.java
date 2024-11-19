@@ -1,6 +1,6 @@
 package com.gtnewhorizons.CTF.procedures;
 
-import com.gtnewhorizons.CTF.Test;
+import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.conditionals.registry.ConditionalFunction;
 import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
 import com.gtnewhorizons.CTF.utils.PrintUtils;

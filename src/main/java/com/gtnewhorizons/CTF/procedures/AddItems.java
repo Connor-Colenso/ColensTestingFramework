@@ -2,8 +2,8 @@ package com.gtnewhorizons.CTF.procedures;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.NBTConverter;
-import com.gtnewhorizons.CTF.Test;
+import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
+import com.gtnewhorizons.CTF.tests.Test;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;

@@ -2,8 +2,7 @@ package com.gtnewhorizons.CTF.procedures;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.Test;
-import cpw.mods.fml.common.registry.GameRegistry;
+import com.gtnewhorizons.CTF.tests.Test;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
