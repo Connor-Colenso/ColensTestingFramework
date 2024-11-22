@@ -3,10 +3,9 @@ package com.gtnewhorizons.CTF.commands;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.STRUCTURE;
-import static com.gtnewhorizons.CTF.CommonTestFields.TEST_NAME;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.commands.CommandResetTest.resetTest;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;

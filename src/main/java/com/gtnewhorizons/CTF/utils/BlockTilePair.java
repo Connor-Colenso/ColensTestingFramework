@@ -5,7 +5,7 @@ import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
 
 public class BlockTilePair {
     public Block block;

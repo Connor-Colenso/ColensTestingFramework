@@ -16,7 +16,7 @@ import net.minecraft.world.WorldServer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
 
 public class AddItems extends Procedure {
     public List<ItemStack> itemsToAdd = new ArrayList<>();

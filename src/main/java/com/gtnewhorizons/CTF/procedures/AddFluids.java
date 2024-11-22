@@ -15,9 +15,9 @@ import net.minecraft.server.MinecraftServer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.FLUID_AMOUNT;
-import static com.gtnewhorizons.CTF.CommonTestFields.FLUID_NAME;
-import static com.gtnewhorizons.CTF.CommonTestFields.STORED_FLUIDS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_NAME;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
 
 public class AddFluids extends Procedure {
     public List<FluidStack> fluidsToAdd = new ArrayList<>();

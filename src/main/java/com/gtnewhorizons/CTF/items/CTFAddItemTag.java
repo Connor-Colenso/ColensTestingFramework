@@ -17,8 +17,8 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
-import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;

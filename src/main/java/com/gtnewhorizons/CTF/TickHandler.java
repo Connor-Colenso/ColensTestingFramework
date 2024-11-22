@@ -1,28 +1,16 @@
 package com.gtnewhorizons.CTF;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.procedures.AddFluids;
-import com.gtnewhorizons.CTF.procedures.AddItems;
-import com.gtnewhorizons.CTF.procedures.CheckTile;
 import com.gtnewhorizons.CTF.procedures.Procedure;
-import com.gtnewhorizons.CTF.procedures.RunTicks;
 import com.gtnewhorizons.CTF.tests.Test;
-import com.gtnewhorizons.CTF.utils.BlockTilePair;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.server.MinecraftServer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.GAMERULES;
-import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
-import static com.gtnewhorizons.CTF.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.MyMod.jsons;
 
 public class TickHandler {
@@ -37,7 +25,11 @@ public class TickHandler {
         Test test = MyMod.tests.get(0);
 
         if (!hasBuilt) {
-            test.buildStructure();
+
+            for (Test testBuild : MyMod.tests) {
+                testBuild.buildStructure();
+            }
+
             hasBuilt = true;
             return;
         }
@@ -65,110 +57,12 @@ public class TickHandler {
     public static void registerTests() {
 
         for (JsonObject json : jsons) {
-            Test testObj = new Test();
-            addGameruleInfo(json, testObj);
-            addStructureInfo(json, testObj);
-            addProcedureInfo(json, testObj);
 
-            MyMod.tests.add(testObj);
-        }
-    }
-
-    private static void addGameruleInfo(JsonObject json, Test testObj) {
-        if (json.has(GAMERULES)) {
-            JsonObject gamerules = json.get(GAMERULES).getAsJsonObject();
-
-            // Iterate over each entry in the "gamerules" entries of our json.
-            for (Map.Entry<String, JsonElement> entry : gamerules.entrySet()) {
-                String ruleName = entry.getKey();
-                String ruleValue = entry.getValue().getAsString();
-
-                testObj.registerGameRule(ruleName, ruleValue);
+            for(int i = 0; i < 15; i++) {
+                Test testObj = new Test(json);
+                MyMod.tests.add(testObj);
             }
         }
-
     }
 
-    private static void addProcedureInfo(JsonObject json, Test testObj) {
-        // Get the "instructions" array from the JSON object
-        JsonArray instructions = json.getAsJsonArray(INSTRUCTIONS);
-
-        // Loop through the instructions array
-        for (int i = 0; i < instructions.size(); i++) {
-            JsonObject instruction = instructions.get(i).getAsJsonObject();
-
-            // Determine the type of procedure
-            String type = instruction.get("type").getAsString();
-
-            // Create the appropriate procedure based on the type
-            if (type.equals("runTicks")) {
-                // Create a new RunTicks procedure and set its duration
-                RunTicks runTicks = new RunTicks();
-                runTicks.duration = instruction.get("duration").getAsInt();
-
-                // Add the RunTicks procedure to the queue
-                testObj.procedureList.add(runTicks);
-
-            } else if (type.equals("checkTile")) {
-                // Create a new CheckTile procedure and set its properties
-                CheckTile checkTile = new CheckTile();
-
-                if (instruction.has("optionalLabel")) {
-                    checkTile.optionalLabel = instruction.get("optionalLabel").getAsString();
-                }
-
-                checkTile.funcID = instruction.get("funcRegistry").getAsString();
-                checkTile.x = instruction.get("x").getAsInt();
-                checkTile.y = instruction.get("y").getAsInt();
-                checkTile.z = instruction.get("z").getAsInt();
-
-                // Add the CheckTile procedure to the queue
-                testObj.procedureList.add(checkTile);
-            }
-            else if (type.equals("addItems"))  {
-                testObj.procedureList.add(new AddItems(instruction));
-            }
-            else if (type.equals("addFluids"))  {
-                testObj.procedureList.add(new AddFluids(instruction));
-            }
-
-            // You can add more procedure types here if needed in the future
-        }
-    }
-
-
-    public static void addStructureInfo(JsonObject json, Test testObj) {
-        JsonObject structure = json.getAsJsonObject(STRUCTURE);
-        JsonObject keys = structure.getAsJsonObject("keys");
-        HashMap<String, BlockTilePair> keyMap = new HashMap<>();
-
-        buildKeyMap(keys, keyMap);
-
-        testObj.structure = structure;
-        testObj.keyMap = keyMap;
-    }
-
-    private static void buildKeyMap(JsonObject keys, HashMap<String, BlockTilePair> keyMap) {
-        for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
-            String key = entry.getKey();
-            JsonObject value = entry.getValue().getAsJsonObject();
-
-            // Extract block and meta from the JSON object
-            String block = value.get("block").getAsString();
-            int meta = value.get("meta").getAsInt();
-
-            // Safely handle tileEntity which might be null or JsonNull
-            JsonElement tileEntityElement = value.get("tileEntity");
-            JsonObject tileEntity = null;
-            if (tileEntityElement != null && tileEntityElement.isJsonObject()) {
-                tileEntity = tileEntityElement.getAsJsonObject();
-            }
-
-            // Create a new BlockTilePair object
-            BlockTilePair blockTilePair = new BlockTilePair(block, meta, tileEntity);
-
-            // Put the key and BlockTilePair in the keyMap
-            keyMap.put(key, blockTilePair);
-        }
-    }
 }

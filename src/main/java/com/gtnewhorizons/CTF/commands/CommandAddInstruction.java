@@ -1,17 +1,14 @@
 package com.gtnewhorizons.CTF.commands;
 
 import com.google.gson.JsonArray;
-import com.gtnewhorizons.CTF.commands.instructions.AddItemInstructions;
-import com.gtnewhorizons.CTF.commands.instructions.CheckTileInstructions;
 import com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction;
-import com.gtnewhorizons.CTF.commands.instructions.RunTicksInstruction;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import java.util.HashMap;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction.execute;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;

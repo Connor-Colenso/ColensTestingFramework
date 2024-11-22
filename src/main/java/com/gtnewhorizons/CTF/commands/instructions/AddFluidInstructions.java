@@ -1,8 +1,6 @@
 package com.gtnewhorizons.CTF.commands.instructions;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.items.CTFAddFluidsTag;
 import com.gtnewhorizons.CTF.items.RegisterItems;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -11,8 +9,8 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.FLUID_AMOUNT;
-import static com.gtnewhorizons.CTF.CommonTestFields.STORED_FLUIDS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
 public class AddFluidInstructions {

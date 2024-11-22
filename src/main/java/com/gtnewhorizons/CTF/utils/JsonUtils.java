@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.TEST_NAME;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 
 public class JsonUtils {
 

@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.gtnewhorizons.CTF.CommonTestFields.ENCODED_NBT;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 
