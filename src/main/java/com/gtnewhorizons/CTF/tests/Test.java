@@ -180,38 +180,12 @@ public class Test {
             String type = instruction.get("type").getAsString();
 
             // Create the appropriate procedure based on the type
-            if (type.equals("runTicks")) {
-                // Create a new RunTicks procedure and set its duration
-                RunTicks runTicks = new RunTicks();
-                runTicks.duration = instruction.get("duration").getAsInt();
-
-                // Add the RunTicks procedure to the queue
-                procedureList.add(runTicks);
-
-            } else if (type.equals("checkTile")) {
-                // Create a new CheckTile procedure and set its properties
-                CheckTile checkTile = new CheckTile();
-
-                if (instruction.has("optionalLabel")) {
-                    checkTile.optionalLabel = instruction.get("optionalLabel").getAsString();
-                }
-
-                checkTile.funcID = instruction.get("funcRegistry").getAsString();
-                checkTile.x = instruction.get("x").getAsInt();
-                checkTile.y = instruction.get("y").getAsInt();
-                checkTile.z = instruction.get("z").getAsInt();
-
-                // Add the CheckTile procedure to the queue
-                procedureList.add(checkTile);
+            switch (type) {
+                case "runTicks" -> procedureList.add(new RunTicks(instruction));
+                case "checkTile" -> procedureList.add(new CheckTile(instruction));
+                case "addItems" -> procedureList.add(new AddItems(instruction));
+                case "addFluids" -> procedureList.add(new AddFluids(instruction));
             }
-            else if (type.equals("addItems"))  {
-                procedureList.add(new AddItems(instruction));
-            }
-            else if (type.equals("addFluids"))  {
-                procedureList.add(new AddFluids(instruction));
-            }
-
-            // You can add more procedure types here if needed in the future
         }
     }
 
@@ -238,8 +212,6 @@ public class Test {
 
         // Ensure the build array is not empty to prevent errors
         if (yLength == 0) {
-            xLength = 0;
-            zLength = 0;
             return;
         }
 
@@ -247,15 +219,13 @@ public class Test {
         JsonArray firstLayer = build.get(0).getAsJsonArray();
         zLength = firstLayer.size();
 
-        // Ensure the first layer is not empty to prevent errors
-        if (zLength == 0) {
-            xLength = 0;
-            return;
-        }
-
         // Determine the xLength based on the length of the first row in the first layer
         String firstRowData = firstLayer.get(0).getAsString();
         xLength = firstRowData.length();
+
+        if (xLength == 0 || yLength == 0 || zLength == 0) {
+            throw new RuntimeException("Structure for test had no volume.");
+        }
     }
 
 

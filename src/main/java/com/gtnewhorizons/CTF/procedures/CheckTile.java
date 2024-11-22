@@ -1,5 +1,6 @@
 package com.gtnewhorizons.CTF.procedures;
 
+import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.conditionals.registry.ConditionalFunction;
 import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
@@ -16,6 +17,19 @@ public class CheckTile extends Procedure {
     public int x;
     public int y;
     public int z;
+
+    public CheckTile(JsonObject instruction) {
+        super();
+
+        if (instruction.has("optionalLabel")) {
+            optionalLabel = instruction.get("optionalLabel").getAsString();
+        }
+
+        funcID = instruction.get("funcRegistry").getAsString();
+        x = instruction.get("x").getAsInt();
+        y = instruction.get("y").getAsInt();
+        z = instruction.get("z").getAsInt();
+    }
 
     public void handleEventCustom(Test test) {
         ConditionalFunction f = RegisterConditionals.getFunc(funcID);
