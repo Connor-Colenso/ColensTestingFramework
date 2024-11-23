@@ -1,21 +1,18 @@
 package com.gtnewhorizons.CTF;
 
-import static com.gtnewhorizons.CTF.MyMod.jsons;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-import com.gtnewhorizons.CTF.tests.TestSettings;
-import com.gtnewhorizons.CTF.utils.Json;
 import net.minecraft.server.MinecraftServer;
 
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.tests.Test;
+import com.gtnewhorizons.CTF.tests.TestSettings;
+import com.gtnewhorizons.CTF.utils.Json;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class TickHandler {
 
@@ -30,7 +27,9 @@ public class TickHandler {
 
         if (testsMap.isEmpty()) return;
 
-        TestSettings currentSettings = testsMap.keySet().iterator().next();
+        TestSettings currentSettings = testsMap.keySet()
+            .iterator()
+            .next();
         ArrayList<Test> currentTests = testsMap.get(currentSettings);
 
         // Build the test, if we are in the first tick of their run time.
@@ -72,7 +71,8 @@ public class TickHandler {
             for (int i = 0; i < 4; i++) {
                 Test testObj = new Test(json);
                 testsMap.putIfAbsent(testObj.getTestSettings(), new ArrayList<>());
-                testsMap.get(testObj.getTestSettings()).add(testObj);
+                testsMap.get(testObj.getTestSettings())
+                    .add(testObj);
             }
         }
     }

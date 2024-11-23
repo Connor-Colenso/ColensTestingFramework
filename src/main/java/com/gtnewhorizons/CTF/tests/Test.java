@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import com.gtnewhorizons.CTF.utils.RandomNums;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -28,6 +27,7 @@ import com.gtnewhorizons.CTF.procedures.CheckTile;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.procedures.RunTicks;
 import com.gtnewhorizons.CTF.utils.BlockTilePair;
+import com.gtnewhorizons.CTF.utils.RandomNums;
 
 public class Test {
 
@@ -44,7 +44,6 @@ public class Test {
 
     public int bufferZone;
     public boolean failed = false;
-
 
     public JsonObject structure;
     public HashMap<String, BlockTilePair> keyMap = new HashMap<>();

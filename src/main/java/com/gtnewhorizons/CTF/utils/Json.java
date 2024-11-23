@@ -1,9 +1,5 @@
 package com.gtnewhorizons.CTF.utils;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import cpw.mods.fml.common.Loader;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -11,6 +7,11 @@ import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import cpw.mods.fml.common.Loader;
 
 public class Json {
 
@@ -32,7 +33,7 @@ public class Json {
         for (File json : jsonFiles) {
             // Load each JSON file
             try (InputStream inputStream = Files.newInputStream(json.toPath());
-                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 
                 JsonObject jsonObject = jsonParser.parse(reader)
                     .getAsJsonObject();

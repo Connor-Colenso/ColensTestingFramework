@@ -3,6 +3,7 @@ package com.gtnewhorizons.CTF.utils;
 import java.util.Random;
 
 public class RandomNums {
+
     private static final Random RAND = new Random();
 
     public static int getRandomIntInRange(int min, int max) {
