@@ -3,6 +3,7 @@ package com.gtnewhorizons.CTF;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.gtnewhorizons.CTF.utils.PrintUtils;
 import net.minecraft.server.MinecraftServer;
 
 import com.google.gson.JsonObject;
@@ -60,6 +61,7 @@ public class TickHandler {
             for (Test test : currentTests) {
                 test.printAllMessages();
             }
+            PrintUtils.printSeparator();
 
             // Remove this set of tests, so we can move onto the next set, if there is one.
             testsMap.remove(currentSettings);

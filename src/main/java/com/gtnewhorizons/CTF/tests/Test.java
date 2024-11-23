@@ -270,7 +270,7 @@ public class Test {
     }
 
     public void printAllMessages() {
-        System.out.println("------------------------------------------------------------------");
+        PrintUtils.printSeparator();
 
         for (String message : messageList) {
             System.out.println(message);

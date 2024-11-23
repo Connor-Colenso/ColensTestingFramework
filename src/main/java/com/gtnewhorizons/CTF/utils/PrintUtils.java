@@ -24,4 +24,8 @@ public class PrintUtils {
     public static void notifyPlayer(ICommandSender player, String message) {
         player.addChatMessage(new ChatComponentText(message));
     }
+
+    public static void printSeparator() {
+        System.out.println("------------------------------------------------------------------");
+    }
 }
