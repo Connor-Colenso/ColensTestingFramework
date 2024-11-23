@@ -69,7 +69,6 @@ public class TickHandler {
             // Reset so we can build more tests.
             hasBuilt = false;
         }
-
     }
 
     private static final HashMap<TestSettings, ArrayList<Test>> testsMap = new HashMap<>();
