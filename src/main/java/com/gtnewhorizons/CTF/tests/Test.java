@@ -46,7 +46,7 @@ public class Test {
         while (!isPositionValid) {
             // Generate random coordinates
             startX = RandomNums.getRandomIntInRange(-16, 16);
-            startY = RandomNums.getRandomIntInRange(4, 32);
+            startY = RandomNums.getRandomIntInRange(4, 128);
             startZ = RandomNums.getRandomIntInRange(-16, 16);
 
             // Create the bounding box
