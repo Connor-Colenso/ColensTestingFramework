@@ -2,10 +2,20 @@ package com.gtnewhorizons.CTF.utils;
 
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
+import com.google.gson.JsonParser;
+import cpw.mods.fml.common.Loader;
 import net.minecraft.client.Minecraft;
 
 import com.google.gson.Gson;
@@ -45,6 +55,33 @@ public class JsonUtils {
         } catch (IOException e) {
             System.err.println("Error writing Json to file: " + e.getMessage());
         }
+    }
+
+    public static List<JsonObject> loadAll() {
+        final JsonParser jsonParser = new JsonParser();
+        List<JsonObject> jsonList = new ArrayList<>();
+        String directoryPath = "CTF/";
+
+        // Get the path to the directory where JSON files are located
+        File directory = new File(Loader.instance().getConfigDir(), directoryPath);
+
+        try (Stream<Path> paths = Files.walk(directory.toPath())) {
+            paths.filter(Files::isRegularFile)
+                .filter(path -> path.toString().endsWith(".json"))
+                .forEach(path -> {
+                    try (BufferedReader reader = Files.newBufferedReader(path)) {
+                        JsonObject jsonObject = jsonParser.parse(reader).getAsJsonObject();
+                        jsonList.add(jsonObject); // Add the parsed JSON object to the list
+                    } catch (Exception e) {
+                        System.err.println("Error reading JSON file: " + path.getFileName());
+                        e.printStackTrace();
+                    }
+                });
+        } catch (IOException e) {
+            throw new RuntimeException("Error accessing JSON files in directory: " + directoryPath, e);
+        }
+
+        return jsonList; // Return the list of JSON objects
     }
 
 }

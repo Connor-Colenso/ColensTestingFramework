@@ -61,9 +61,9 @@ public class Test {
 
         while (!isPositionValid) {
             // Generate random coordinates
-            startX = RandomNums.getRandomIntInRange(-16, 16);
-            startY = RandomNums.getRandomIntInRange(4, 128);
-            startZ = RandomNums.getRandomIntInRange(-16, 16);
+            startX = RandomNums.getRandomIntInRange(-32, 32);
+            startY = RandomNums.getRandomIntInRange(4, 200);
+            startZ = RandomNums.getRandomIntInRange(-32, 32);
 
             // Create the bounding box
             testBounds = AxisAlignedBB.getBoundingBox(
@@ -86,60 +86,6 @@ public class Test {
 
         // Add the valid bounding box to the list
         existingTests.add(testBounds);
-    }
-
-    public void buildStructure() {
-
-        final World world = MinecraftServer.getServer()
-            .getEntityWorld();
-
-        JsonArray build = structure.getAsJsonArray("build");
-
-        // Loop through the build array
-        for (int layer = 0; layer < build.size(); layer++) {
-            JsonArray layerArray = build.get(layer)
-                .getAsJsonArray();
-            for (int row = 0; row < layerArray.size(); row++) {
-                String rowData = layerArray.get(row)
-                    .getAsString();
-                for (int col = 0; col < rowData.length(); col++) {
-                    char key = rowData.charAt(col);
-                    BlockTilePair pair = keyMap.get(String.valueOf(key));
-
-                    // If a corresponding BlockTilePair exists for the key
-                    if (pair != null) {
-                        // Calculate the position in the world
-                        int x = startX + col;
-                        int y = startY + layer;
-                        int z = startZ + row;
-
-                        // Place the block in the world at the calculated position
-                        placeBlockInWorld(world, x, y, z, pair);
-                    }
-                }
-            }
-        }
-    }
-
-    // Method to place a block in the world at the specified coordinates
-    private void placeBlockInWorld(World world, int x, int y, int z, BlockTilePair pair) {
-        // Set the block in the world
-        world.setBlock(x, y, z, Blocks.air, 0, 2);
-        world.setBlock(x, y, z, pair.block, pair.meta, 2);
-
-        // If there's a TileEntity, create it and add it to the world
-        if (pair.tile != null) {
-            NBTTagCompound copy = (NBTTagCompound) pair.tile.copy();
-            copy.setInteger("x", x);
-            copy.setInteger("y", y);
-            copy.setInteger("z", z);
-
-            TileEntity te = world.getTileEntity(x, y, z);
-            te.readFromNBT(copy);
-        }
-
-        // Not sure why this needs setting twice, but it does.
-        world.setBlockMetadataWithNotify(x, y, z, pair.meta, 2);
     }
 
     // Setup info.

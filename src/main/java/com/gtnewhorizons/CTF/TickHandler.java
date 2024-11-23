@@ -3,17 +3,19 @@ package com.gtnewhorizons.CTF;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.gtnewhorizons.CTF.utils.JsonUtils;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
 import net.minecraft.server.MinecraftServer;
 
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.tests.TestSettings;
-import com.gtnewhorizons.CTF.utils.Json;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+
+import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
 
 public class TickHandler {
 
@@ -37,7 +39,7 @@ public class TickHandler {
         if (!hasBuilt) {
 
             for (Test test : currentTests) {
-                test.buildStructure();
+                buildStructure(test);
             }
 
             hasBuilt = true;
@@ -75,11 +77,12 @@ public class TickHandler {
 
     public static void registerTests() {
 
-        for (JsonObject json : Json.loadAll()) {
+        for (JsonObject json : JsonUtils.loadAll()) {
             for (int i = 0; i < 4; i++) {
                 Test testObj = new Test(json);
-                testsMap.putIfAbsent(testObj.getTestSettings(), new ArrayList<>());
-                testsMap.get(testObj.getTestSettings()).add(testObj);
+
+                testsMap.computeIfAbsent(testObj.getTestSettings(), k -> new ArrayList<>())
+                    .add(testObj);
             }
         }
     }

@@ -7,7 +7,9 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gtnewhorizons.CTF.tests.Test;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -112,6 +114,61 @@ public class Structure {
         structureJson.add("build", buildArray);
         structureJson.add("keys", keysObject);
         return structureJson;
+    }
+
+
+    public static void buildStructure(Test test) {
+
+        final World world = MinecraftServer.getServer()
+            .getEntityWorld();
+
+        JsonArray build = test.structure.getAsJsonArray("build");
+
+        // Loop through the build array
+        for (int layer = 0; layer < build.size(); layer++) {
+            JsonArray layerArray = build.get(layer)
+                .getAsJsonArray();
+            for (int row = 0; row < layerArray.size(); row++) {
+                String rowData = layerArray.get(row)
+                    .getAsString();
+                for (int col = 0; col < rowData.length(); col++) {
+                    char key = rowData.charAt(col);
+                    BlockTilePair pair = test.keyMap.get(String.valueOf(key));
+
+                    // If a corresponding BlockTilePair exists for the key
+                    if (pair != null) {
+                        // Calculate the position in the world
+                        int x = test.startX + col;
+                        int y = test.startY + layer;
+                        int z = test.startZ + row;
+
+                        // Place the block in the world at the calculated position
+                        placeBlockInWorld(world, x, y, z, pair);
+                    }
+                }
+            }
+        }
+    }
+
+    // Method to place a block in the world at the specified coordinates
+    private static void placeBlockInWorld(World world, int x, int y, int z, BlockTilePair pair) {
+        // Set the block in the world
+        world.setBlock(x, y, z, Blocks.air, 0, 2);
+        world.setBlock(x, y, z, pair.block, pair.meta, 2);
+
+        // If there's a TileEntity, create it and add it to the world
+        if (pair.tile != null) {
+            NBTTagCompound copy = (NBTTagCompound) pair.tile.copy();
+            copy.setInteger("x", x);
+            copy.setInteger("y", y);
+            copy.setInteger("z", z);
+
+            TileEntity te = world.getTileEntity(x, y, z);
+            te.readFromNBT(copy);
+        }
+
+        // Not sure why this needs setting twice, but it does.
+        world.setBlockMetadataWithNotify(x, y, z, pair.meta, 2);
     }
 
 }
