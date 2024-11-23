@@ -1,6 +1,5 @@
 package com.gtnewhorizons.CTF.tests;
 
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
@@ -19,7 +18,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -34,9 +32,26 @@ import com.gtnewhorizons.CTF.utils.BlockTilePair;
 public class Test {
 
     private static final List<AxisAlignedBB> existingTests = new ArrayList<>();
+    private final TestSettings testSettings = new TestSettings();
+
+    public int startX;
+    public int startY;
+    public int startZ;
+
+    private int xLength;
+    private int yLength;
+    private int zLength;
+
+    public int bufferZone;
+    public boolean failed = false;
+
+
+    public JsonObject structure;
+    public HashMap<String, BlockTilePair> keyMap = new HashMap<>();
+    public Queue<Procedure> procedureList = new LinkedList<>();
 
     public Test(JsonObject json) {
-        addGameruleInfo(json);
+        testSettings.addGameruleInfo(json);
         addStructureInfo(json);
         addProcedureInfo(json);
 
@@ -71,25 +86,6 @@ public class Test {
         // Add the valid bounding box to the list
         existingTests.add(testBounds);
     }
-
-    private TestSettings testSettings = new TestSettings();
-
-    public int startX;
-    public int startY;
-    public int startZ;
-
-    private int xLength;
-    private int yLength;
-    private int zLength;
-
-    public int bufferZone;
-    public boolean failed = false;
-
-    private final HashMap<String, String> gameruleMap = new HashMap<>();
-
-    public JsonObject structure;
-    public HashMap<String, BlockTilePair> keyMap = new HashMap<>();
-    public Queue<Procedure> procedureList = new LinkedList<>();
 
     public void buildStructure() {
 
@@ -145,36 +141,7 @@ public class Test {
         world.setBlockMetadataWithNotify(x, y, z, pair.meta, 2);
     }
 
-    public void registerGameRule(String rule, String state) {
-        String doesExist = gameruleMap.putIfAbsent(rule, state);
-        if (doesExist != null) throw new RuntimeException("Duplicate gamerule: " + rule);
-    }
-
-    public void initGameRulesWorldLoad(WorldServer world) {
-        for (Map.Entry<String, String> entry : gameruleMap.entrySet()) {
-            world.getGameRules()
-                .setOrCreateGameRule(entry.getKey(), entry.getValue());
-        }
-    }
-
     // Setup info.
-
-    private void addGameruleInfo(JsonObject json) {
-        if (json.has(GAMERULES)) {
-            JsonObject gamerules = json.get(GAMERULES)
-                .getAsJsonObject();
-
-            // Iterate over each entry in the "gamerules" entries of our json.
-            for (Map.Entry<String, JsonElement> entry : gamerules.entrySet()) {
-                String ruleName = entry.getKey();
-                String ruleValue = entry.getValue()
-                    .getAsString();
-
-                registerGameRule(ruleName, ruleValue);
-            }
-        }
-
-    }
 
     private void addProcedureInfo(JsonObject json) {
         // Get the "instructions" array from the JSON object
@@ -291,5 +258,13 @@ public class Test {
 
             procedure.handleEvent(this);
         }
+    }
+
+    public TestSettings getTestSettings() {
+        return testSettings;
+    }
+
+    public boolean isDone() {
+        return procedureList.isEmpty();
     }
 }

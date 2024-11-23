@@ -2,12 +2,6 @@ package com.gtnewhorizons.CTF;
 
 import static com.gtnewhorizons.CTF.TickHandler.registerTests;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -16,7 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.gtnewhorizons.CTF.commands.CommandAddInstruction;
 import com.gtnewhorizons.CTF.commands.CommandCompleteTest;
 import com.gtnewhorizons.CTF.commands.CommandGetTileEntity;
@@ -34,10 +27,8 @@ import com.gtnewhorizons.CTF.events.CTFWandEventHandler;
 import com.gtnewhorizons.CTF.items.RegisterItems;
 import com.gtnewhorizons.CTF.rendering.RenderCTFRegionInfo;
 import com.gtnewhorizons.CTF.rendering.RenderCTFWandFrame;
-import com.gtnewhorizons.CTF.tests.Test;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -93,12 +84,10 @@ public class MyMod {
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-        jsons = loadAllJson();
         registerTests();
     }
 
     public static List<JsonObject> jsons;
-    public static List<Test> tests = new ArrayList<>();
 
     @Mod.EventHandler
     // register server commands in this event handler (Remove if not needed)
@@ -110,46 +99,6 @@ public class MyMod {
         event.registerServerCommand(new CommandAddInstruction());
         event.registerServerCommand(new CommandCompleteTest());
         event.registerServerCommand(new CommandResetTest());
-
-        // Set relevant gamerules.
-        tests.get(0)
-            .initGameRulesWorldLoad(
-                event.getServer()
-                    .worldServerForDimension(0));
     }
-
-    private JsonParser jsonParser = new JsonParser();
-
-    public List<JsonObject> loadAllJson() {
-        List<JsonObject> jsonList = new ArrayList<>();
-        String directoryPath = "CTF/";
-
-        // Get the path to the directory where JSON files are located
-        File directory = new File(
-            Loader.instance()
-                .getConfigDir(),
-            directoryPath);
-        File[] jsonFiles = directory.listFiles((dir, name) -> name.endsWith(".json"));
-
-        if (jsonFiles == null) return null;
-
-        for (File json : jsonFiles) {
-            // Load each JSON file
-            try (InputStream inputStream = Files.newInputStream(json.toPath());
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-
-                JsonObject jsonObject = jsonParser.parse(reader)
-                    .getAsJsonObject();
-                jsonList.add(jsonObject); // Add the parsed JSON object to the list
-            } catch (Exception e) {
-                System.err.println("Error reading JSON file: " + json.getName());
-                e.printStackTrace();
-            }
-        }
-
-        return jsonList; // Return the list of JSON objects
-    }
-
-    // Registering server start event
 
 }
