@@ -53,7 +53,7 @@ public class CTFAddItemTag extends Item {
             return true;
         }
 
-        if (!RegionUtils.isWithinRegion(x, y, z)) {
+        if (RegionUtils.isOutsideRegion(x, y, z)) {
             handleInventoryAbsorption(stack, player, world, x, y, z);
             return true;
         }

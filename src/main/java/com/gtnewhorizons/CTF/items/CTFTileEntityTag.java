@@ -44,7 +44,7 @@ public class CTFTileEntityTag extends Item {
             return true;
         }
 
-        if (!RegionUtils.isWithinRegion(x, y, z)) {
+        if (RegionUtils.isOutsideRegion(x, y, z)) {
             notifyPlayer(player, "You must use this on a block within the selected CTF region.");
             return true;
         }

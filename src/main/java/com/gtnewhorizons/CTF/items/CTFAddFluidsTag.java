@@ -55,7 +55,7 @@ public class CTFAddFluidsTag extends Item {
             return true;
         }
 
-        if (!RegionUtils.isWithinRegion(x, y, z)) {
+        if (RegionUtils.isOutsideRegion(x, y, z)) {
             handleFluidAbsorption(stack, player, world, x, y, z, ForgeDirection.getOrientation(side));
             return true;
         }
