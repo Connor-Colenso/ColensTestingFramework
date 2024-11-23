@@ -16,25 +16,24 @@ public class TickHandler {
     private static boolean hasBuilt;
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
+    @SuppressWarnings("unused")
     public void onWorldTick(TickEvent.ServerTickEvent event) {
         if (event.side.isClient() || event.phase == TickEvent.Phase.START) return;
         if (MinecraftServer.getServer()
             .getTickCounter() == 1) return;
 
-        Test test = MyMod.tests.get(0);
-
         if (!hasBuilt) {
 
-            for (Test testBuild : MyMod.tests) {
-                testBuild.buildStructure();
+            for (Test test : MyMod.tests) {
+                test.buildStructure();
             }
 
             hasBuilt = true;
             return;
         }
 
-        for (Test testBuild : MyMod.tests) {
-            testBuild.runProcedures();
+        for (Test test : MyMod.tests) {
+            test.runProcedures();
         }
     }
 

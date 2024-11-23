@@ -11,8 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Random;
 
+import com.gtnewhorizons.CTF.utils.RandomNums;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -33,7 +33,7 @@ import com.gtnewhorizons.CTF.utils.BlockTilePair;
 
 public class Test {
 
-    private static List<AxisAlignedBB> existingTests = new ArrayList<>();
+    private static final List<AxisAlignedBB> existingTests = new ArrayList<>();
 
     public Test(JsonObject json) {
         addGameruleInfo(json);
@@ -45,9 +45,9 @@ public class Test {
 
         while (!isPositionValid) {
             // Generate random coordinates
-            startX = rand.nextInt(65) - 32; // Range -32 to 32
-            startY = rand.nextInt(21) + 4; // Range 4 to 24
-            startZ = rand.nextInt(65) - 32; // Range -32 to 32
+            startX = RandomNums.getRandomIntInRange(-16, 16);
+            startY = RandomNums.getRandomIntInRange(4, 32);
+            startZ = RandomNums.getRandomIntInRange(-16, 16);
 
             // Create the bounding box
             testBounds = AxisAlignedBB.getBoundingBox(
@@ -74,7 +74,6 @@ public class Test {
 
     private TestSettings testSettings = new TestSettings();
 
-    private static final Random rand = new Random();
     public int startX;
     public int startY;
     public int startZ;
