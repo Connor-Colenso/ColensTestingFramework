@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import com.gtnewhorizons.CTF.utils.PrintUtils;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
@@ -33,6 +34,7 @@ public class Test {
 
     private static final List<AxisAlignedBB> existingTests = new ArrayList<>();
     private final TestSettings testSettings = new TestSettings();
+    private final List<String> messageList = new ArrayList<>();
 
     public int startX;
     public int startY;
@@ -261,6 +263,18 @@ public class Test {
 
     public TestSettings getTestSettings() {
         return testSettings;
+    }
+
+    public void addMessage(String colourCode, String message) {
+        messageList.add(PrintUtils.colourConsole(colourCode, message));
+    }
+
+    public void printAllMessages() {
+        System.out.println("------------------------------------------------------------------");
+
+        for (String message : messageList) {
+            System.out.println(message);
+        }
     }
 
     public boolean isDone() {

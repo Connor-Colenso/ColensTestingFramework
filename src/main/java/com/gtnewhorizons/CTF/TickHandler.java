@@ -55,6 +55,13 @@ public class TickHandler {
 
         // Test done, throw away those tests. Move on.
         if (hasCompletedAllTests) {
+
+            // Print all messages collected for each test.
+            for (Test test : currentTests) {
+                test.printAllMessages();
+            }
+
+            // Remove this set of tests, so we can move onto the next set, if there is one.
             testsMap.remove(currentSettings);
 
             // Reset so we can build more tests.
@@ -71,8 +78,7 @@ public class TickHandler {
             for (int i = 0; i < 4; i++) {
                 Test testObj = new Test(json);
                 testsMap.putIfAbsent(testObj.getTestSettings(), new ArrayList<>());
-                testsMap.get(testObj.getTestSettings())
-                    .add(testObj);
+                testsMap.get(testObj.getTestSettings()).add(testObj);
             }
         }
     }

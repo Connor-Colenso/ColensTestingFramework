@@ -3,6 +3,7 @@ package com.gtnewhorizons.CTF.procedures;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_NAME;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.RED;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,9 +61,9 @@ public class AddFluids extends Procedure {
     public void handleEventCustom(Test test) {
         // Retrieve the WorldServer instance and TileEntity at specified coordinates
         WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
-        TileEntity te = worldServer.getTileEntity(test.startX + x, test.startY + y, test.startZ + z);
+        TileEntity tileEntity = worldServer.getTileEntity(test.startX + x, test.startY + y, test.startZ + z);
 
-        if (te == null) {
+        if (tileEntity == null) {
             System.out.println(
                 "Could not add fluid(s) at (" + (test.startX + x)
                     + ", "
@@ -74,7 +75,7 @@ public class AddFluids extends Procedure {
         }
 
         // Check if the TileEntity is a fluid handler
-        if (te instanceof IFluidHandler fluidHandler) {
+        if (tileEntity instanceof IFluidHandler fluidHandler) {
             // Iterate over fluids and add them to the fluid handler
             for (FluidStack fluidStack : fluidsToAdd) {
                 // Try to fill the fluid handler with the current fluid
@@ -82,12 +83,15 @@ public class AddFluids extends Procedure {
 
                 // If the fluid handler couldn’t fill the entire amount, print a message
                 if (amountFilled < fluidStack.amount) {
-                    System.out.println(
-                        "Warning: Only " + amountFilled
+                    if (amountFilled == 0) {
+                        test.addMessage(RED, "Error: Could not add fluid " + fluidStack.getFluid().getName() + ".");
+                    } else {
+                        test.addMessage(RED, "Warning: Only " + amountFilled
                             + "mB of "
                             + fluidStack.getFluid()
-                                .getName()
+                            .getName()
                             + " could be added.");
+                    }
                 }
             }
         }

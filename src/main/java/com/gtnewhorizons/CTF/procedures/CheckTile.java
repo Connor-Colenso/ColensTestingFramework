@@ -48,18 +48,18 @@ public class CheckTile extends Procedure {
                 test.failed = true;
 
                 if (optionalLabel != null) {
-                    PrintUtils.printColourConsole(RED, optionalLabel + " FAILED");
+                    test.addMessage(RED, optionalLabel + " FAILED");
                 } else {
-                    PrintUtils.printColourConsole(RED, "FAILED");
+                    test.addMessage(RED, "FAILED");
                 }
 
             } else {
-                PrintUtils.printColourConsole(GREEN, optionalLabel + " PASSED");
+                test.addMessage(GREEN, optionalLabel + " PASSED");
             }
-        } catch (Exception e) {
+        } catch (Exception exception) {
             test.failed = true;
-            PrintUtils.printColourConsole(RED, "Test " + optionalLabel + " threw exception, which was caught by CTF.");
-            e.printStackTrace();
+            test.addMessage(RED, "Test " + optionalLabel + " threw exception, which was caught by CTF.");
+            test.addMessage(RED, exception.toString());
         }
     }
 }

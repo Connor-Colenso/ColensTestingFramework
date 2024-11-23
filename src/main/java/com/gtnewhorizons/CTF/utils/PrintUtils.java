@@ -17,8 +17,8 @@ public class PrintUtils {
     public static final String CYAN = "\u001B[36m";
     public static final String WHITE = "\u001B[37m";
 
-    public static void printColourConsole(final String colourCode, String string) {
-        System.out.println(colourCode + string + RESET);
+    public static String colourConsole(final String colourCode, String string) {
+        return colourCode + string + RESET;
     }
 
     public static void notifyPlayer(ICommandSender player, String message) {

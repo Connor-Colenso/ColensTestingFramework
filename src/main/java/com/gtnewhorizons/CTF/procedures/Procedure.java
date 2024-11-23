@@ -16,7 +16,7 @@ public abstract class Procedure {
             int tickCounter = MinecraftServer.getServer()
                 .getTickCounter();
             if (optionalLabel != null) {
-                PrintUtils.printColourConsole(
+                test.addMessage(
                     PrintUtils.BLUE,
                     "Procedure " + this.getClass()
                         .getSimpleName()
@@ -26,7 +26,7 @@ public abstract class Procedure {
                         + tickCounter
                         + " on the server thread.");
             } else {
-                PrintUtils.printColourConsole(
+                test.addMessage(
                     PrintUtils.BLUE,
                     "Procedure " + this.getClass()
                         .getSimpleName() + " processed in tick " + tickCounter + " on the server thread.");
