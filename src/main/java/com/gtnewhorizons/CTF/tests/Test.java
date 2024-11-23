@@ -255,4 +255,26 @@ public class Test {
             keyMap.put(key, blockTilePair);
         }
     }
+
+    public void runProcedures() {
+        // Process immediate-duration procedures.
+        List<Procedure> toProcess = new ArrayList<>();
+        while (procedureList.peek() != null) {
+            Procedure currentProcedure = procedureList.peek();
+            if (currentProcedure.duration == 0) {
+                toProcess.add(procedureList.poll());
+            } else {
+                // Keep the procedure in the queue for later.
+                toProcess.add(currentProcedure);
+                break;
+            }
+        }
+
+        // Execute each procedure
+        for (Procedure procedure : toProcess) {
+            if (procedure.duration-- > 0) return;
+
+            procedure.handleEvent(this);
+        }
+    }
 }

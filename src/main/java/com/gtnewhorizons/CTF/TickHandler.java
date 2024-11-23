@@ -34,31 +34,15 @@ public class TickHandler {
             return;
         }
 
-        // Process immediate-duration procedures
-        List<Procedure> toProcess = new ArrayList<>();
-        while (test.procedureList.peek() != null) {
-            Procedure currentProcedure = test.procedureList.peek();
-            if (currentProcedure.duration == 0) {
-                toProcess.add(test.procedureList.poll());
-            } else {
-                // Keep the procedure in the queue for later
-                toProcess.add(currentProcedure);
-                break;
-            }
-        }
-
-        // Execute each procedure
-        for (Procedure procedure : toProcess) {
-            if (procedure.duration-- > 0) return;
-
-            procedure.handleEvent(test);
+        for (Test testBuild : MyMod.tests) {
+            testBuild.runProcedures();
         }
     }
     public static void registerTests() {
 
         for (JsonObject json : jsons) {
 
-            for(int i = 0; i < 15; i++) {
+            for(int i = 0; i < 60; i++) {
                 Test testObj = new Test(json);
                 MyMod.tests.add(testObj);
             }

@@ -2,6 +2,7 @@ package com.gtnewhorizons.CTF.utils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
@@ -95,8 +96,7 @@ public class Structure {
                     // Append the character representing this block to the row
                     rowString.append(blockToKeyMap.get(uniqueBlockId));
                 }
-
-                layerArray.add(rowString.toString());
+                layerArray.add(new JsonPrimitive(rowString.toString()));
             }
 
             buildArray.add(layerArray);

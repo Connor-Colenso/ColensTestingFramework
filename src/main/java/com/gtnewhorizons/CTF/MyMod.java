@@ -105,7 +105,7 @@ public class MyMod {
         tests.get(0).initGameRulesWorldLoad(event.getServer().worldServerForDimension(0));
     }
 
-
+    private JsonParser jsonParser = new JsonParser();
     public List<JsonObject> loadAllJson() {
         List<JsonObject> jsonList = new ArrayList<>();
         String directoryPath = "CTF/";
@@ -121,7 +121,7 @@ public class MyMod {
             try (InputStream inputStream = Files.newInputStream(json.toPath());
                  BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
 
-                JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
+                JsonObject jsonObject = jsonParser.parse(reader).getAsJsonObject();
                 jsonList.add(jsonObject); // Add the parsed JSON object to the list
             } catch (Exception e) {
                 System.err.println("Error reading JSON file: " + json.getName());
