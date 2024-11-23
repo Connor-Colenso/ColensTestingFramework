@@ -1,13 +1,15 @@
 package com.gtnewhorizons.CTF.utils;
 
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 
 public class BlockTilePair {
+
     public Block block;
     public NBTTagCompound tile;
     public int meta;
@@ -23,10 +25,15 @@ public class BlockTilePair {
         if (jsonElement != null && !jsonElement.isJsonNull()) {
 
             // This will usually be encoded data, but if none then just make a blank tile entity and use that.
-            String data = jsonElement.get(ENCODED_NBT).getAsString();
-            if (data.toLowerCase().equals("default")) {
+            String data = jsonElement.get(ENCODED_NBT)
+                .getAsString();
+            if (data.toLowerCase()
+                .equals("default")) {
                 NBTTagCompound tag = new NBTTagCompound();
-                tag.setString("id", jsonElement.get("mappingForDefault").getAsString());
+                tag.setString(
+                    "id",
+                    jsonElement.get("mappingForDefault")
+                        .getAsString());
                 this.tile = tag;
                 return;
             }

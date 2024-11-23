@@ -1,13 +1,14 @@
 package com.gtnewhorizons.CTF.commands.instructions;
 
-import com.google.gson.JsonArray;
-import com.gtnewhorizons.CTF.items.RegisterItems;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import com.google.gson.JsonArray;
+import com.gtnewhorizons.CTF.items.RegisterItems;
 
 public class AddItemInstructions {
 
@@ -29,7 +30,7 @@ public class AddItemInstructions {
         // Store held item information into an NBT list
         NBTTagList storedItems = new NBTTagList();
         NBTTagCompound heldItemNBT = new NBTTagCompound();
-        heldItemStack.writeToNBT(heldItemNBT);  // Serialise the held item to NBT
+        heldItemStack.writeToNBT(heldItemNBT); // Serialise the held item to NBT
         storedItems.appendTag(heldItemNBT);
 
         // Add the storedItems list to itemStack's NBT data
@@ -38,7 +39,7 @@ public class AddItemInstructions {
 
         // Add the new item to the player's inventory
         if (player.inventory.addItemStackToInventory(itemStack)) {
-            notifyPlayer(player,"Item saved: " + heldItemStack.getDisplayName());
+            notifyPlayer(player, "Item saved: " + heldItemStack.getDisplayName());
         } else {
             notifyPlayer(player, "Inventory full. Could not save item.");
         }

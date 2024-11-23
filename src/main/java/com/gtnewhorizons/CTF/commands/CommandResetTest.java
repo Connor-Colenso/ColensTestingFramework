@@ -1,15 +1,16 @@
 package com.gtnewhorizons.CTF.commands;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommandSender;
-
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
-public class CommandResetTest  extends CommandBase {
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+
+public class CommandResetTest extends CommandBase {
+
     @Override
     public String getCommandName() {
         return "resettest";

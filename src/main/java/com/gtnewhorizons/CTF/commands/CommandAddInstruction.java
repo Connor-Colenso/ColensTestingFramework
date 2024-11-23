@@ -1,19 +1,20 @@
 package com.gtnewhorizons.CTF.commands;
 
-import com.google.gson.JsonArray;
-import com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction;
+import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
+import static com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction.execute;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
+
+import java.util.HashMap;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import java.util.HashMap;
-
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
-import static com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction.execute;
-import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
+import com.google.gson.JsonArray;
+import com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction;
 
 public class CommandAddInstruction extends CommandBase {
 
@@ -21,7 +22,9 @@ public class CommandAddInstruction extends CommandBase {
 
     static {
         instructionsMap.put("runTicks X", "This instruction will run the test for X ticks.");
-        instructionsMap.put("checkTile name", "To use this, you must register a function with the name label. It will then return a true/false confirming if this check passed or failed.");
+        instructionsMap.put(
+            "checkTile name",
+            "To use this, you must register a function with the name label. It will then return a true/false confirming if this check passed or failed.");
     }
 
     @Override
@@ -45,14 +48,16 @@ public class CommandAddInstruction extends CommandBase {
             }
 
             if (isTestNotStarted()) {
-                notifyPlayer(player, "This cannot be used if no test has been initialised. Use /inittest with a valid region selected.");
+                notifyPlayer(
+                    player,
+                    "This cannot be used if no test has been initialised. Use /inittest with a valid region selected.");
                 return;
             }
 
             // Check if no arguments were provided
             if (args.length == 0) {
                 // Print out the list of instructions and their descriptions
-                notifyPlayer(player,"Valid instructions are:");
+                notifyPlayer(player, "Valid instructions are:");
                 RegisterInstruction.informPlayerOfOptions(player);
                 return; // Exit after listing instructions
             }
@@ -65,7 +70,9 @@ public class CommandAddInstruction extends CommandBase {
             if (execute(command, player, args, instructionArray)) {
                 notifyPlayer(player, "Success.");
             } else {
-                notifyPlayer(player, "Unknown instruction " + command + ". Use 'addinstruction' to list valid instructions.");
+                notifyPlayer(
+                    player,
+                    "Unknown instruction " + command + ". Use 'addinstruction' to list valid instructions.");
             }
         }
     }

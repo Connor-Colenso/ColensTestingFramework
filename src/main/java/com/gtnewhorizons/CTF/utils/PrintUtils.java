@@ -1,10 +1,10 @@
 package com.gtnewhorizons.CTF.utils;
 
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 
 public class PrintUtils {
+
     public static final String RESET = "\u001B[0m";
 
     // Regular Colors

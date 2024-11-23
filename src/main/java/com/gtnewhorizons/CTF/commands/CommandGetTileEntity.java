@@ -1,6 +1,7 @@
 package com.gtnewhorizons.CTF.commands;
 
-import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -10,7 +11,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
-import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 
 public class CommandGetTileEntity extends CommandBase {
 
@@ -31,14 +32,18 @@ public class CommandGetTileEntity extends CommandBase {
             World world = player.getEntityWorld();
 
             // Get player's eye position (height offset included)
-            Vec3 playerPosition = player.getPosition(1.0F).addVector(0, player.getEyeHeight(), 0);
+            Vec3 playerPosition = player.getPosition(1.0F)
+                .addVector(0, player.getEyeHeight(), 0);
 
             // Get the direction the player is looking at
             Vec3 lookVector = player.getLookVec();
 
             // Extend the reach vector to a reasonable distance (e.g., 200 blocks)
             double reachDistance = 200.0;
-            Vec3 reachVector = playerPosition.addVector(lookVector.xCoord * reachDistance, lookVector.yCoord * reachDistance, lookVector.zCoord * reachDistance);
+            Vec3 reachVector = playerPosition.addVector(
+                lookVector.xCoord * reachDistance,
+                lookVector.yCoord * reachDistance,
+                lookVector.zCoord * reachDistance);
 
             // Perform the ray trace
             MovingObjectPosition mop = world.rayTraceBlocks(playerPosition, reachVector);
@@ -59,7 +64,7 @@ public class CommandGetTileEntity extends CommandBase {
                     notifyPlayer(player, "Encoded: " + encodedNBT);
 
                     System.out.println("Metadata: " + tileEntity.blockMetadata);
-                    notifyPlayer(player,"Metadata: " + tileEntity.blockMetadata);
+                    notifyPlayer(player, "Metadata: " + tileEntity.blockMetadata);
                 } else {
                     notifyPlayer(player, "No TileEntity at the specified location.");
                 }

@@ -1,8 +1,15 @@
 package com.gtnewhorizons.CTF.items;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.utils.RegionUtils;
+import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
+
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,25 +18,20 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
-import java.util.List;
-
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
-import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
-import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
-import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.utils.RegionUtils;
 
 public class CTFTileEntityTag extends Item {
 
     CTFTileEntityTag() {
         this.setUnlocalizedName("CTFTileEntityTag");
         this.setTextureName("minecraft:name_tag");
-        this.setMaxStackSize(1);  // Only one wand can be held in a stack
+        this.setMaxStackSize(1); // Only one wand can be held in a stack
     }
 
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
+        float hitX, float hitY, float hitZ) {
         if (world.isRemote) return false;
         if (!player.isSneaking()) return false;
         if (isTestNotStarted()) {
@@ -43,7 +45,7 @@ public class CTFTileEntityTag extends Item {
         }
 
         if (!RegionUtils.isWithinRegion(x, y, z)) {
-            notifyPlayer(player,"You must use this on a block within the selected CTF region.");
+            notifyPlayer(player, "You must use this on a block within the selected CTF region.");
             return true;
         }
 
@@ -56,7 +58,7 @@ public class CTFTileEntityTag extends Item {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (tileEntity == null) {
             // Warn the player if there's no tile entity
-            notifyPlayer(player,"Warning: The clicked block has no tile entity. Click again to confirm.");
+            notifyPlayer(player, "Warning: The clicked block has no tile entity. Click again to confirm.");
 
             NBTTagCompound tag = stack.getTagCompound();
 
@@ -72,17 +74,16 @@ public class CTFTileEntityTag extends Item {
             } else {
                 // Set the tile entity if the player has already been warned
                 setInstructionInTest(player, relativeX, relativeY, relativeZ, stack.getTagCompound());
-                notifyPlayer(player,"Tile entity has been set at the clicked block.");
+                notifyPlayer(player, "Tile entity has been set at the clicked block.");
             }
         } else {
             // The block already has a tile entity, set instruction
             setInstructionInTest(player, relativeX, relativeY, relativeZ, stack.getTagCompound());
-            notifyPlayer(player,"Tile entity has been set at the clicked block.");
+            notifyPlayer(player, "Tile entity has been set at the clicked block.");
         }
 
         return true;
     }
-
 
     private void setInstructionInTest(EntityPlayer player, int relX, int relY, int relZ, NBTTagCompound tagNBT) {
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
@@ -100,7 +101,9 @@ public class CTFTileEntityTag extends Item {
         if (tagNBT.hasKey("funcRegistry")) {
             instruction.addProperty("funcRegistry", tagNBT.getString("funcRegistry"));
         } else {
-            notifyPlayer(player,"This tag has not been initialised properly; it may have been spawned in. Please get a new one.");
+            notifyPlayer(
+                player,
+                "This tag has not been initialised properly; it may have been spawned in. Please get a new one.");
             return;
         }
 
@@ -118,7 +121,9 @@ public class CTFTileEntityTag extends Item {
                 String funcRegistry = tag.getString("funcRegistry");
                 tooltip.add(EnumChatFormatting.GRAY + "Func Registry: " + funcRegistry); // Grey color
             } else {
-                tooltip.add(EnumChatFormatting.RED + "This is an error, do NOT spawn me in! I am issued by /addinstruction checktile.");
+                tooltip.add(
+                    EnumChatFormatting.RED
+                        + "This is an error, do NOT spawn me in! I am issued by /addinstruction checktile.");
             }
 
             // Display the optionalLabel if it exists
@@ -127,7 +132,9 @@ public class CTFTileEntityTag extends Item {
                 tooltip.add(EnumChatFormatting.GRAY + "Optional Label: " + optionalLabel); // Grey color
             }
         } else {
-            tooltip.add(EnumChatFormatting.RED + "This is an error, do NOT spawn me in! I am issued by /addinstruction checktile.");
+            tooltip.add(
+                EnumChatFormatting.RED
+                    + "This is an error, do NOT spawn me in! I am issued by /addinstruction checktile.");
         }
 
         // Call super to add any additional information

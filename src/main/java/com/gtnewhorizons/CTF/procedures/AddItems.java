@@ -1,10 +1,10 @@
 package com.gtnewhorizons.CTF.procedures;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
-import com.gtnewhorizons.CTF.tests.Test;
-import cpw.mods.fml.common.registry.GameRegistry;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,12 +13,15 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.Test;
+import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 public class AddItems extends Procedure {
+
     public List<ItemStack> itemsToAdd = new ArrayList<>();
     public int x;
     public int y;
@@ -26,19 +29,26 @@ public class AddItems extends Procedure {
 
     public AddItems(JsonObject instruction) {
 
-        x = instruction.get("x").getAsInt();
-        y = instruction.get("y").getAsInt();
-        z = instruction.get("z").getAsInt();
+        x = instruction.get("x")
+            .getAsInt();
+        y = instruction.get("y")
+            .getAsInt();
+        z = instruction.get("z")
+            .getAsInt();
 
         // Parse each item from the "items" array
         JsonArray itemsArray = instruction.getAsJsonArray("items");
         for (int itemIndex = 0; itemIndex < itemsArray.size(); itemIndex++) {
-            JsonObject itemObj = itemsArray.get(itemIndex).getAsJsonObject();
+            JsonObject itemObj = itemsArray.get(itemIndex)
+                .getAsJsonObject();
 
             // Get the registry name, stack size, and metadata.
-            String registryName = itemObj.get("registryName").getAsString();
-            int stackSize = itemObj.get("stackSize").getAsInt();
-            int metadata = itemObj.get("metadata").getAsInt();
+            String registryName = itemObj.get("registryName")
+                .getAsString();
+            int stackSize = itemObj.get("stackSize")
+                .getAsInt();
+            int metadata = itemObj.get("metadata")
+                .getAsInt();
 
             // Decode the NBT data, if provided
             String[] splitReg = registryName.split(":");
@@ -49,7 +59,8 @@ public class AddItems extends Procedure {
 
                 // Check if "encodedNBT" is provided and decode it
                 if (itemObj.has(ENCODED_NBT)) {
-                    String encodedNBT = itemObj.get(ENCODED_NBT).getAsString();
+                    String encodedNBT = itemObj.get(ENCODED_NBT)
+                        .getAsString();
                     NBTTagCompound nbtTagCompound = NBTConverter.decodeFromString(encodedNBT);
                     itemStack.setTagCompound(nbtTagCompound);
                 }
@@ -66,7 +77,13 @@ public class AddItems extends Procedure {
         WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
         TileEntity te = worldServer.getTileEntity(test.startX + x, test.startY + y, test.startZ + z);
 
-        if (te == null) System.out.println("Could not add item(s) at (" + (test.startX + x) + ", " + (test.startY + y) + ", " + (test.startZ + z) + ") as tile entity was null.");
+        if (te == null) System.out.println(
+            "Could not add item(s) at (" + (test.startX + x)
+                + ", "
+                + (test.startY + y)
+                + ", "
+                + (test.startZ + z)
+                + ") as tile entity was null.");
 
         // Ensure the TileEntity is not null and is an instance of IInventory
         if (te instanceof IInventory inventory) {
@@ -86,15 +103,16 @@ public class AddItems extends Procedure {
                         break;
                     }
                     // If the slot contains the same item and has space, merge stacks
-                    else if (existingStack.isItemEqual(itemStack) && existingStack.stackSize < existingStack.getMaxStackSize()) {
-                        int spaceLeft = existingStack.getMaxStackSize() - existingStack.stackSize;
-                        int amountToAdd = Math.min(itemStack.stackSize, spaceLeft);
-                        existingStack.stackSize += amountToAdd;
-                        itemStack.stackSize -= amountToAdd;
+                    else if (existingStack.isItemEqual(itemStack)
+                        && existingStack.stackSize < existingStack.getMaxStackSize()) {
+                            int spaceLeft = existingStack.getMaxStackSize() - existingStack.stackSize;
+                            int amountToAdd = Math.min(itemStack.stackSize, spaceLeft);
+                            existingStack.stackSize += amountToAdd;
+                            itemStack.stackSize -= amountToAdd;
 
-                        // Stop if we've added the entire stack
-                        if (itemStack.stackSize <= 0) break;
-                    }
+                            // Stop if we've added the entire stack
+                            if (itemStack.stackSize <= 0) break;
+                        }
                 }
             }
 

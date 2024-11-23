@@ -1,13 +1,15 @@
 package com.gtnewhorizons.CTF.commands.instructions;
 
-import com.google.gson.JsonArray;
-import net.minecraft.entity.player.EntityPlayerMP;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
 import java.util.HashMap;
 
-import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+
+import com.google.gson.JsonArray;
 
 public class RegisterInstruction {
+
     private static final HashMap<String, InstructionHandler> instructions = new HashMap<>();
 
     public static void register(String name, InstructionHandler handler) {

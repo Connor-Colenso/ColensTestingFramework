@@ -1,18 +1,20 @@
 package com.gtnewhorizons.CTF.procedures;
 
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.tests.Test;
-import com.gtnewhorizons.CTF.conditionals.registry.ConditionalFunction;
-import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
-import com.gtnewhorizons.CTF.utils.PrintUtils;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.GREEN;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.RED;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.WorldServer;
 
-import static com.gtnewhorizons.CTF.utils.PrintUtils.GREEN;
-import static com.gtnewhorizons.CTF.utils.PrintUtils.RED;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.conditionals.registry.ConditionalFunction;
+import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
+import com.gtnewhorizons.CTF.tests.Test;
+import com.gtnewhorizons.CTF.utils.PrintUtils;
 
 public class CheckTile extends Procedure {
+
     public String funcID;
     public int x;
     public int y;
@@ -22,13 +24,18 @@ public class CheckTile extends Procedure {
         super();
 
         if (instruction.has("optionalLabel")) {
-            optionalLabel = instruction.get("optionalLabel").getAsString();
+            optionalLabel = instruction.get("optionalLabel")
+                .getAsString();
         }
 
-        funcID = instruction.get("funcRegistry").getAsString();
-        x = instruction.get("x").getAsInt();
-        y = instruction.get("y").getAsInt();
-        z = instruction.get("z").getAsInt();
+        funcID = instruction.get("funcRegistry")
+            .getAsString();
+        x = instruction.get("x")
+            .getAsInt();
+        y = instruction.get("y")
+            .getAsInt();
+        z = instruction.get("z")
+            .getAsInt();
     }
 
     public void handleEventCustom(Test test) {

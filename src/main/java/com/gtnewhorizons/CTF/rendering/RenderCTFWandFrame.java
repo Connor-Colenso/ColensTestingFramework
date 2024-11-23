@@ -1,15 +1,17 @@
 package com.gtnewhorizons.CTF.rendering;
 
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import org.lwjgl.opengl.GL11;
-
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 // Client side only rendering.
 public class RenderCTFWandFrame {
@@ -51,22 +53,34 @@ public class RenderCTFWandFrame {
         GL11.glBegin(GL11.GL_LINES);
 
         // Bottom face
-        GL11.glVertex3d(xMin, yMin, zMin); GL11.glVertex3d(xMax, yMin, zMin);
-        GL11.glVertex3d(xMax, yMin, zMin); GL11.glVertex3d(xMax, yMin, zMax);
-        GL11.glVertex3d(xMax, yMin, zMax); GL11.glVertex3d(xMin, yMin, zMax);
-        GL11.glVertex3d(xMin, yMin, zMax); GL11.glVertex3d(xMin, yMin, zMin);
+        GL11.glVertex3d(xMin, yMin, zMin);
+        GL11.glVertex3d(xMax, yMin, zMin);
+        GL11.glVertex3d(xMax, yMin, zMin);
+        GL11.glVertex3d(xMax, yMin, zMax);
+        GL11.glVertex3d(xMax, yMin, zMax);
+        GL11.glVertex3d(xMin, yMin, zMax);
+        GL11.glVertex3d(xMin, yMin, zMax);
+        GL11.glVertex3d(xMin, yMin, zMin);
 
         // Top face
-        GL11.glVertex3d(xMin, yMax, zMin); GL11.glVertex3d(xMax, yMax, zMin);
-        GL11.glVertex3d(xMax, yMax, zMin); GL11.glVertex3d(xMax, yMax, zMax);
-        GL11.glVertex3d(xMax, yMax, zMax); GL11.glVertex3d(xMin, yMax, zMax);
-        GL11.glVertex3d(xMin, yMax, zMax); GL11.glVertex3d(xMin, yMax, zMin);
+        GL11.glVertex3d(xMin, yMax, zMin);
+        GL11.glVertex3d(xMax, yMax, zMin);
+        GL11.glVertex3d(xMax, yMax, zMin);
+        GL11.glVertex3d(xMax, yMax, zMax);
+        GL11.glVertex3d(xMax, yMax, zMax);
+        GL11.glVertex3d(xMin, yMax, zMax);
+        GL11.glVertex3d(xMin, yMax, zMax);
+        GL11.glVertex3d(xMin, yMax, zMin);
 
         // Vertical edges
-        GL11.glVertex3d(xMin, yMin, zMin); GL11.glVertex3d(xMin, yMax, zMin);
-        GL11.glVertex3d(xMax, yMin, zMin); GL11.glVertex3d(xMax, yMax, zMin);
-        GL11.glVertex3d(xMax, yMin, zMax); GL11.glVertex3d(xMax, yMax, zMax);
-        GL11.glVertex3d(xMin, yMin, zMax); GL11.glVertex3d(xMin, yMax, zMax);
+        GL11.glVertex3d(xMin, yMin, zMin);
+        GL11.glVertex3d(xMin, yMax, zMin);
+        GL11.glVertex3d(xMax, yMin, zMin);
+        GL11.glVertex3d(xMax, yMax, zMin);
+        GL11.glVertex3d(xMax, yMin, zMax);
+        GL11.glVertex3d(xMax, yMax, zMax);
+        GL11.glVertex3d(xMin, yMin, zMax);
+        GL11.glVertex3d(xMin, yMax, zMax);
 
         GL11.glEnd();
 

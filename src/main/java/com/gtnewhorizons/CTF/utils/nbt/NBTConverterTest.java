@@ -1,5 +1,7 @@
 package com.gtnewhorizons.CTF.utils.nbt;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import net.minecraft.nbt.NBTTagByteArray;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
@@ -7,9 +9,8 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
 
 class NBTConverterTest {
 
@@ -35,8 +36,8 @@ class NBTConverterTest {
         // Test with strings, byte arrays, and int arrays
         NBTTagCompound compound = new NBTTagCompound();
         compound.setString("stringValue", "Test String");
-        compound.setTag("byteArray", new NBTTagByteArray(new byte[] {1, 2, 3, 4, 5}));
-        compound.setTag("intArray", new NBTTagIntArray(new int[] {10, 20, 30, 40, 50}));
+        compound.setTag("byteArray", new NBTTagByteArray(new byte[] { 1, 2, 3, 4, 5 }));
+        compound.setTag("intArray", new NBTTagIntArray(new int[] { 10, 20, 30, 40, 50 }));
 
         String encoded = NBTConverter.encodeToString(compound);
         NBTTagCompound decoded = NBTConverter.decodeFromString(encoded);
@@ -105,10 +106,10 @@ class NBTConverterTest {
         root.setString("description", "Deeply Nested Arrays");
 
         NBTTagCompound level1 = new NBTTagCompound();
-        level1.setTag("byteArray", new NBTTagByteArray(new byte[] {1, 2, 3}));
+        level1.setTag("byteArray", new NBTTagByteArray(new byte[] { 1, 2, 3 }));
 
         NBTTagCompound level2 = new NBTTagCompound();
-        level2.setTag("intArray", new NBTTagIntArray(new int[] {10, 20, 30}));
+        level2.setTag("intArray", new NBTTagIntArray(new int[] { 10, 20, 30 }));
 
         NBTTagCompound level3 = new NBTTagCompound();
         level3.setString("level3String", "DeepValue");

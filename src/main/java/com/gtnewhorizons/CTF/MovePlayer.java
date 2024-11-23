@@ -1,10 +1,11 @@
 package com.gtnewhorizons.CTF;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 
 public class MovePlayer {
 
@@ -17,7 +18,9 @@ public class MovePlayer {
 
     public MovePlayer() {
         // Register this class to listen for player tick events
-        FMLCommonHandler.instance().bus().register(this);
+        FMLCommonHandler.instance()
+            .bus()
+            .register(this);
     }
 
     @SubscribeEvent
@@ -28,7 +31,7 @@ public class MovePlayer {
         // Check if we are on the server side and if the player hasn't been teleported yet
         if (!world.isRemote && !hasTeleported) {
             teleportPlayer(player, targetX, targetY, targetZ);
-            hasTeleported = true;  // Ensure teleport happens only once
+            hasTeleported = true; // Ensure teleport happens only once
         }
     }
 

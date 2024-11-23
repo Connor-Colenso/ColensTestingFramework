@@ -1,21 +1,23 @@
 package com.gtnewhorizons.CTF.utils;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
+import net.minecraft.client.Minecraft;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 public class JsonUtils {
 
     public static void saveJsonToFile(JsonObject overallJson) {
         // Create a pretty-printing Gson instance
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting()
+            .create();
 
         try {
             // Define the file path in the CTF folder inside the config directory
@@ -29,7 +31,10 @@ public class JsonUtils {
             }
 
             // Specify the output file path within the CTF folder
-            File outputFile = new File(ctfConfigDir, overallJson.get(TEST_NAME).getAsString() + ".json");
+            File outputFile = new File(
+                ctfConfigDir,
+                overallJson.get(TEST_NAME)
+                    .getAsString() + ".json");
 
             // Write the JSON content to the file with pretty printing (provided by Gson).
             try (FileWriter fileWriter = new FileWriter(outputFile)) {

@@ -5,7 +5,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-
 public class TestConditional {
 
     public static boolean isChestContainingStone(TileEntity tile, World world) {
@@ -13,7 +12,9 @@ public class TestConditional {
     }
 
     public static boolean checkStructure(TileEntity tile, World world) {
-        System.out.println("Ticks complete: " + MinecraftServer.getServer().getTickCounter());
+        System.out.println(
+            "Ticks complete: " + MinecraftServer.getServer()
+                .getTickCounter());
         if (tile == null) {
             System.out.println("Tile is null");
             return false;

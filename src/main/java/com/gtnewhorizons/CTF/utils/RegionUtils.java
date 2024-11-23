@@ -5,6 +5,7 @@ import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 
 public class RegionUtils {
+
     public static boolean isWithinRegion(int x, int y, int z) {
 
         if (isRegionNotDefined()) return false;
@@ -18,9 +19,7 @@ public class RegionUtils {
         int maxZ = Math.max(firstPosition[2], secondPosition[2]);
 
         // Check if the block coordinates are within these bounds
-        return (x >= minX && x <= maxX) &&
-            (y >= minY && y <= maxY) &&
-            (z >= minZ && z <= maxZ);
+        return (x >= minX && x <= maxX) && (y >= minY && y <= maxY) && (z >= minZ && z <= maxZ);
     }
 
     public static boolean isRegionNotDefined() {

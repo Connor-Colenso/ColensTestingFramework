@@ -1,8 +1,18 @@
 package com.gtnewhorizons.CTF.items;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.utils.RegionUtils;
+import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_NAME;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
+
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,18 +26,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 
-import java.util.List;
-
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_NAME;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
-import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
-import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
-import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.utils.RegionUtils;
 
 public class CTFAddFluidsTag extends Item {
 
@@ -38,7 +39,8 @@ public class CTFAddFluidsTag extends Item {
     }
 
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side,
+        float hitX, float hitY, float hitZ) {
         if (world.isRemote) return false;
         if (!player.isSneaking()) return false;
         if (isTestNotStarted()) {
@@ -47,7 +49,9 @@ public class CTFAddFluidsTag extends Item {
         }
 
         if (isRegionNotDefined()) {
-            notifyPlayer(player, EnumChatFormatting.RED + "Region is not yet defined. Use the CTF wand to select a valid region.");
+            notifyPlayer(
+                player,
+                EnumChatFormatting.RED + "Region is not yet defined. Use the CTF wand to select a valid region.");
             return true;
         }
 
@@ -60,10 +64,13 @@ public class CTFAddFluidsTag extends Item {
         return true;
     }
 
-    private void handleFluidAbsorption(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, ForgeDirection forgeDirection) {
+    private void handleFluidAbsorption(ItemStack stack, EntityPlayer player, World world, int x, int y, int z,
+        ForgeDirection forgeDirection) {
         TileEntity tileEntity = world.getTileEntity(x, y, z);
         if (!(tileEntity instanceof IFluidHandler)) {
-            notifyPlayer(player, EnumChatFormatting.RED + "You must use this on a fluid tank outside the selected region.");
+            notifyPlayer(
+                player,
+                EnumChatFormatting.RED + "You must use this on a fluid tank outside the selected region.");
             return;
         }
 
@@ -74,7 +81,8 @@ public class CTFAddFluidsTag extends Item {
             stack.setTagCompound(nbtData);
         }
 
-        NBTTagList storedFluids = nbtData.hasKey(STORED_FLUIDS) ? nbtData.getTagList(STORED_FLUIDS, 10) : new NBTTagList();
+        NBTTagList storedFluids = nbtData.hasKey(STORED_FLUIDS) ? nbtData.getTagList(STORED_FLUIDS, 10)
+            : new NBTTagList();
         absorbFluids(fluidHandler, storedFluids, forgeDirection);
         if (storedFluids.tagCount() > 0) {
             nbtData.setTag(STORED_FLUIDS, storedFluids);
@@ -107,7 +115,15 @@ public class CTFAddFluidsTag extends Item {
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
         instructionsArray.add(instruction);
 
-        notifyPlayer(player, EnumChatFormatting.GREEN + "Fluid instructions added for tank at (" + relativeX + ", " + relativeY + ", " + relativeZ + ").");
+        notifyPlayer(
+            player,
+            EnumChatFormatting.GREEN + "Fluid instructions added for tank at ("
+                + relativeX
+                + ", "
+                + relativeY
+                + ", "
+                + relativeZ
+                + ").");
     }
 
     private JsonObject createInstructionJson(int x, int y, int z, ItemStack stack) {
@@ -134,7 +150,10 @@ public class CTFAddFluidsTag extends Item {
     private JsonObject createFluidDataJson(NBTTagCompound fluidNBT) {
         FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(fluidNBT);
         JsonObject fluidData = new JsonObject();
-        fluidData.addProperty(FLUID_NAME, fluidStack.getFluid().getName());
+        fluidData.addProperty(
+            FLUID_NAME,
+            fluidStack.getFluid()
+                .getName());
         fluidData.addProperty(FLUID_AMOUNT, fluidStack.amount);
 
         return fluidData;
@@ -143,14 +162,19 @@ public class CTFAddFluidsTag extends Item {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
         if (stack.hasTagCompound()) {
-            NBTTagList storedFluids = stack.getTagCompound().getTagList(STORED_FLUIDS, 10);
+            NBTTagList storedFluids = stack.getTagCompound()
+                .getTagList(STORED_FLUIDS, 10);
             for (int i = 0; i < storedFluids.tagCount(); i++) {
                 NBTTagCompound fluidNBT = storedFluids.getCompoundTagAt(i);
                 FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(fluidNBT);
                 if (fluidStack == null) {
                     tooltip.add(EnumChatFormatting.RED + "ERROR FLUID! Something has gone wrong.");
                 } else {
-                    tooltip.add(fluidStack.getFluid().getName() + " x " + fluidStack.amount + "mB");
+                    tooltip.add(
+                        fluidStack.getFluid()
+                            .getName() + " x "
+                            + fluidStack.amount
+                            + "mB");
                 }
             }
             super.addInformation(stack, player, tooltip, advanced);

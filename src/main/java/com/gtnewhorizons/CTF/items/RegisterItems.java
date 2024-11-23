@@ -1,9 +1,11 @@
 package com.gtnewhorizons.CTF.items;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+
 public class RegisterItems {
+
     public static final Item CTFWand = new CTFWand();
     public static final Item CTFTileEntityTag = new CTFTileEntityTag();
 

@@ -1,9 +1,12 @@
 package com.gtnewhorizons.CTF.utils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,17 +14,16 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
-import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
-import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 
 public class Structure {
 
     public static JsonObject captureStructureJson() {
-        World world = MinecraftServer.getServer().getEntityWorld();
+        World world = MinecraftServer.getServer()
+            .getEntityWorld();
         JsonObject structureJson = new JsonObject();
         JsonArray buildArray = new JsonArray();
         JsonObject keysObject = new JsonObject();
@@ -49,7 +51,8 @@ public class Structure {
                     TileEntity tileEntity = world.getTileEntity(x, y, z);
 
                     // Create a unique key for each block type, metadata, and NBT combination
-                    String blockId = Block.blockRegistry.getNameForObject(block).toString() + ":" + meta;
+                    String blockId = Block.blockRegistry.getNameForObject(block)
+                        .toString() + ":" + meta;
                     String nbtData = "";
 
                     NBTTagCompound tileTag = new NBTTagCompound();
@@ -76,7 +79,10 @@ public class Structure {
                             keyData.addProperty("displayName", "Air");
                         }
 
-                        keyData.addProperty("block", Block.blockRegistry.getNameForObject(block).toString());
+                        keyData.addProperty(
+                            "block",
+                            Block.blockRegistry.getNameForObject(block)
+                                .toString());
                         keyData.addProperty("meta", meta);
 
                         // If there's a tile entity, serialize its data to JSON

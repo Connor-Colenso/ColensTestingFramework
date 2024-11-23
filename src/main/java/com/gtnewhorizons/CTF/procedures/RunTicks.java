@@ -8,7 +8,8 @@ public class RunTicks extends Procedure {
     public RunTicks(JsonObject instruction) {
         shouldPrintInfo = false;
 
-        duration = instruction.get("duration").getAsInt();
+        duration = instruction.get("duration")
+            .getAsInt();
     }
 
     @Override

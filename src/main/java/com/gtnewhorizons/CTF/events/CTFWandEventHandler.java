@@ -1,14 +1,15 @@
 package com.gtnewhorizons.CTF.events;
 
-import com.gtnewhorizons.CTF.items.CTFWand;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+
+import com.gtnewhorizons.CTF.items.CTFWand;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 public class CTFWandEventHandler {
 
@@ -27,7 +28,9 @@ public class CTFWandEventHandler {
             // Record the right-click action
 
             if (currentTest != null) {
-                notifyPlayer(player, "Test is already in progress. Complete it or reset the region to change the bounds.");
+                notifyPlayer(
+                    player,
+                    "Test is already in progress. Complete it or reset the region to change the bounds.");
                 event.setCanceled(true);
                 return;
             }

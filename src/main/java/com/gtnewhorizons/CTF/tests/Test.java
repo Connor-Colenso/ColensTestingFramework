@@ -1,21 +1,9 @@
 package com.gtnewhorizons.CTF.tests;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.procedures.AddFluids;
-import com.gtnewhorizons.CTF.procedures.AddItems;
-import com.gtnewhorizons.CTF.procedures.CheckTile;
-import com.gtnewhorizons.CTF.procedures.Procedure;
-import com.gtnewhorizons.CTF.procedures.RunTicks;
-import com.gtnewhorizons.CTF.utils.BlockTilePair;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,10 +13,23 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
+import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.procedures.AddFluids;
+import com.gtnewhorizons.CTF.procedures.AddItems;
+import com.gtnewhorizons.CTF.procedures.CheckTile;
+import com.gtnewhorizons.CTF.procedures.Procedure;
+import com.gtnewhorizons.CTF.procedures.RunTicks;
+import com.gtnewhorizons.CTF.utils.BlockTilePair;
 
 public class Test {
 
@@ -44,18 +45,21 @@ public class Test {
 
         while (!isPositionValid) {
             // Generate random coordinates
-            startX = rand.nextInt(65) - 32;  // Range -32 to 32
-            startY = rand.nextInt(21) + 4;   // Range 4 to 24
-            startZ = rand.nextInt(65) - 32;  // Range -32 to 32
+            startX = rand.nextInt(65) - 32; // Range -32 to 32
+            startY = rand.nextInt(21) + 4; // Range 4 to 24
+            startZ = rand.nextInt(65) - 32; // Range -32 to 32
 
             // Create the bounding box
             testBounds = AxisAlignedBB.getBoundingBox(
-                startX - bufferZone, startY - bufferZone, startZ - bufferZone,
-                startX + xLength + bufferZone, startY + yLength + bufferZone, startZ + zLength + bufferZone
-            );
+                startX - bufferZone,
+                startY - bufferZone,
+                startZ - bufferZone,
+                startX + xLength + bufferZone,
+                startY + yLength + bufferZone,
+                startZ + zLength + bufferZone);
 
             // Check for intersection
-            isPositionValid = true;  // Assume no intersection
+            isPositionValid = true; // Assume no intersection
             for (AxisAlignedBB existingTest : existingTests) {
                 if (existingTest.intersectsWith(testBounds)) {
                     isPositionValid = false; // Found an intersection, regenerate coordinates
@@ -90,15 +94,18 @@ public class Test {
 
     public void buildStructure() {
 
-        final World world = MinecraftServer.getServer().getEntityWorld();
+        final World world = MinecraftServer.getServer()
+            .getEntityWorld();
 
         JsonArray build = structure.getAsJsonArray("build");
 
         // Loop through the build array
         for (int layer = 0; layer < build.size(); layer++) {
-            JsonArray layerArray = build.get(layer).getAsJsonArray();
+            JsonArray layerArray = build.get(layer)
+                .getAsJsonArray();
             for (int row = 0; row < layerArray.size(); row++) {
-                String rowData = layerArray.get(row).getAsString();
+                String rowData = layerArray.get(row)
+                    .getAsString();
                 for (int col = 0; col < rowData.length(); col++) {
                     char key = rowData.charAt(col);
                     BlockTilePair pair = keyMap.get(String.valueOf(key));
@@ -131,7 +138,7 @@ public class Test {
             copy.setInteger("y", y);
             copy.setInteger("z", z);
 
-            TileEntity te = world.getTileEntity(x,y,z);
+            TileEntity te = world.getTileEntity(x, y, z);
             te.readFromNBT(copy);
         }
 
@@ -140,27 +147,29 @@ public class Test {
     }
 
     public void registerGameRule(String rule, String state) {
-        String  doesExist = gameruleMap.putIfAbsent(rule, state);
+        String doesExist = gameruleMap.putIfAbsent(rule, state);
         if (doesExist != null) throw new RuntimeException("Duplicate gamerule: " + rule);
     }
 
     public void initGameRulesWorldLoad(WorldServer world) {
         for (Map.Entry<String, String> entry : gameruleMap.entrySet()) {
-            world.getGameRules().setOrCreateGameRule(entry.getKey(), entry.getValue());
+            world.getGameRules()
+                .setOrCreateGameRule(entry.getKey(), entry.getValue());
         }
     }
-
 
     // Setup info.
 
     private void addGameruleInfo(JsonObject json) {
         if (json.has(GAMERULES)) {
-            JsonObject gamerules = json.get(GAMERULES).getAsJsonObject();
+            JsonObject gamerules = json.get(GAMERULES)
+                .getAsJsonObject();
 
             // Iterate over each entry in the "gamerules" entries of our json.
             for (Map.Entry<String, JsonElement> entry : gamerules.entrySet()) {
                 String ruleName = entry.getKey();
-                String ruleValue = entry.getValue().getAsString();
+                String ruleValue = entry.getValue()
+                    .getAsString();
 
                 registerGameRule(ruleName, ruleValue);
             }
@@ -174,10 +183,12 @@ public class Test {
 
         // Loop through the instructions array
         for (int i = 0; i < instructions.size(); i++) {
-            JsonObject instruction = instructions.get(i).getAsJsonObject();
+            JsonObject instruction = instructions.get(i)
+                .getAsJsonObject();
 
             // Determine the type of procedure
-            String type = instruction.get("type").getAsString();
+            String type = instruction.get("type")
+                .getAsString();
 
             // Create the appropriate procedure based on the type
             switch (type) {
@@ -198,7 +209,8 @@ public class Test {
         if (json.has(TEST_CONFIG)) {
             JsonObject testConfig = json.getAsJsonObject(TEST_CONFIG);
             if (testConfig.has("bufferZone")) {
-                bufferZone = testConfig.get("bufferZone").getAsInt();
+                bufferZone = testConfig.get("bufferZone")
+                    .getAsInt();
             }
         }
     }
@@ -216,11 +228,13 @@ public class Test {
         }
 
         // Determine the zLength based on the number of rows in the first layer
-        JsonArray firstLayer = build.get(0).getAsJsonArray();
+        JsonArray firstLayer = build.get(0)
+            .getAsJsonArray();
         zLength = firstLayer.size();
 
         // Determine the xLength based on the length of the first row in the first layer
-        String firstRowData = firstLayer.get(0).getAsString();
+        String firstRowData = firstLayer.get(0)
+            .getAsString();
         xLength = firstRowData.length();
 
         if (xLength == 0 || yLength == 0 || zLength == 0) {
@@ -228,18 +242,20 @@ public class Test {
         }
     }
 
-
     private void buildKeyMap() {
 
         final JsonObject keys = structure.getAsJsonObject("keys");
 
         for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
             String key = entry.getKey();
-            JsonObject value = entry.getValue().getAsJsonObject();
+            JsonObject value = entry.getValue()
+                .getAsJsonObject();
 
             // Extract block and meta from the JSON object
-            String block = value.get("block").getAsString();
-            int meta = value.get("meta").getAsInt();
+            String block = value.get("block")
+                .getAsString();
+            int meta = value.get("meta")
+                .getAsInt();
 
             // Safely handle tileEntity which might be null or JsonNull
             JsonElement tileEntityElement = value.get("tileEntity");

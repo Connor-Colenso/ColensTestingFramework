@@ -1,12 +1,13 @@
 package com.gtnewhorizons.CTF.commands.instructions;
 
-import com.google.gson.JsonArray;
-import com.gtnewhorizons.CTF.items.RegisterItems;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import com.google.gson.JsonArray;
+import com.gtnewhorizons.CTF.items.RegisterItems;
 
 public class CheckTileInstructions {
 
@@ -38,11 +39,13 @@ public class CheckTileInstructions {
 
         // Give the stick to the player
         if (!player.inventory.addItemStackToInventory(stick)) {
-            notifyPlayer(player,"Inventory full. Could not issue tile entity tag.");
+            notifyPlayer(player, "Inventory full. Could not issue tile entity tag.");
             return; // Exit the method if the item couldn't be added
         }
 
         // Notify the player that they received the item
-        notifyPlayer(player,"You have been given a tile entity tag. Please select the block you wish to associate with this test.");
+        notifyPlayer(
+            player,
+            "You have been given a tile entity tag. Please select the block you wish to associate with this test.");
     }
 }

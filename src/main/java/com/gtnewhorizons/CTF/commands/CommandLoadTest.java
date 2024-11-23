@@ -17,7 +17,7 @@ public class CommandLoadTest extends CommandBase {
 
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
-//        Test test = MyMod.tests.get(0);
-//        test.buildStructure();
+        // Test test = MyMod.tests.get(0);
+        // test.buildStructure();
     }
 }

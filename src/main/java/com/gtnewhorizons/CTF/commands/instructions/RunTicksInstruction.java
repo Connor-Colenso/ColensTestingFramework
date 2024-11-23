@@ -1,12 +1,11 @@
 package com.gtnewhorizons.CTF.commands.instructions;
 
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.ChatComponentText;
-
-import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
 public class RunTicksInstruction {
 

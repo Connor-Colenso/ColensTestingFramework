@@ -1,14 +1,15 @@
 package com.gtnewhorizons.CTF.commands;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommandSender;
-
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 public class CommandInitTest extends CommandBase {
 
@@ -32,7 +33,7 @@ public class CommandInitTest extends CommandBase {
         }
 
         if (isRegionNotDefined()) {
-            notifyPlayer(player,"You have not selected a valid region using the CTF wand.");
+            notifyPlayer(player, "You have not selected a valid region using the CTF wand.");
             return;
         }
 
@@ -42,7 +43,5 @@ public class CommandInitTest extends CommandBase {
         // Structure is saved at the end.
         currentTest.add(INSTRUCTIONS, new JsonArray());
     }
-
-
 
 }
