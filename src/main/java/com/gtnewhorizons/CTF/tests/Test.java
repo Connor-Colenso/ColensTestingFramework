@@ -3,6 +3,8 @@ package com.gtnewhorizons.CTF.tests;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.GREEN;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.RESET;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +14,7 @@ import java.util.Map;
 import java.util.Queue;
 
 import com.gtnewhorizons.CTF.utils.PrintUtils;
-import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -47,14 +44,16 @@ public class Test {
     public int bufferZone;
     public boolean failed = false;
 
-    public JsonObject structure;
+    public JsonObject json;
     public HashMap<String, BlockTilePair> keyMap = new HashMap<>();
     public Queue<Procedure> procedureList = new LinkedList<>();
 
     public Test(JsonObject json) {
+        this.json = json;
+
         testSettings.addGameruleInfo(json);
-        addStructureInfo(json);
-        addProcedureInfo(json);
+        processStructureInfo(json);
+        processProcedureInfo(json);
 
         boolean isPositionValid = false;
         AxisAlignedBB testBounds = null;
@@ -88,9 +87,13 @@ public class Test {
         existingTests.add(testBounds);
     }
 
+    public JsonObject getStructure() {
+        return json.getAsJsonObject(STRUCTURE);
+    }
+
     // Setup info.
 
-    private void addProcedureInfo(JsonObject json) {
+    private void processProcedureInfo(JsonObject json) {
         // Get the "instructions" array from the JSON object
         JsonArray instructions = json.getAsJsonArray(INSTRUCTIONS);
 
@@ -113,8 +116,7 @@ public class Test {
         }
     }
 
-    private void addStructureInfo(JsonObject json) {
-        structure = json.getAsJsonObject(STRUCTURE);
+    private void processStructureInfo(JsonObject json) {
 
         buildKeyMap();
         getSizes();
@@ -130,7 +132,7 @@ public class Test {
 
     private void getSizes() {
         // Get the "build" array from the structure JSON.
-        JsonArray build = structure.getAsJsonArray("build");
+        JsonArray build = getStructure().getAsJsonArray("build");
 
         // Determine the yLength based on the number of layers (height)
         yLength = build.size();
@@ -157,7 +159,7 @@ public class Test {
 
     private void buildKeyMap() {
 
-        final JsonObject keys = structure.getAsJsonObject("keys");
+        final JsonObject keys = getStructure().getAsJsonObject("keys");
 
         for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
             String key = entry.getKey();
@@ -217,10 +219,15 @@ public class Test {
 
     public void printAllMessages() {
         PrintUtils.printSeparator();
+        System.out.println(GREEN + getTestName() + RESET);
 
         for (String message : messageList) {
             System.out.println(message);
         }
+    }
+
+    private String getTestName() {
+        return json.get("testName").getAsString();
     }
 
     public boolean isDone() {

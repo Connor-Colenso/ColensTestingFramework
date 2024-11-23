@@ -61,6 +61,7 @@ public class MyMod {
         FMLCommonHandler.instance()
             .bus()
             .register(new TickHandler());
+
         RegisterConditionals.conditionalRegister("ebfOutputCheck", TestConditional::isChestContainingStone);
         RegisterConditionals.conditionalRegister("func", TestConditional::isChestContainingStone);
         RegisterConditionals.conditionalRegister("checkStructure", TestConditional::checkStructure);
@@ -86,8 +87,6 @@ public class MyMod {
         proxy.postInit(event);
         registerTests();
     }
-
-    public static List<JsonObject> jsons;
 
     @Mod.EventHandler
     // register server commands in this event handler (Remove if not needed)

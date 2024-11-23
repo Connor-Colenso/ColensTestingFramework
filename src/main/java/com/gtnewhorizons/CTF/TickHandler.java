@@ -79,10 +79,10 @@ public class TickHandler {
 
         for (JsonObject json : JsonUtils.loadAll()) {
             for (int i = 0; i < 4; i++) {
-                Test testObj = new Test(json);
+                Test test = new Test(json);
 
-                testsMap.computeIfAbsent(testObj.getTestSettings(), k -> new ArrayList<>())
-                    .add(testObj);
+                testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>())
+                    .add(test);
             }
         }
     }

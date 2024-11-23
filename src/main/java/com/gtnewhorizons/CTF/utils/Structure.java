@@ -122,7 +122,7 @@ public class Structure {
         final World world = MinecraftServer.getServer()
             .getEntityWorld();
 
-        JsonArray build = test.structure.getAsJsonArray("build");
+        JsonArray build = test.getStructure().getAsJsonArray("build");
 
         // Loop through the build array
         for (int layer = 0; layer < build.size(); layer++) {
