@@ -5,22 +5,20 @@ import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.github.skjolber.packing.api.Container;
 import com.github.skjolber.packing.api.ContainerItem;
 import com.github.skjolber.packing.api.PackagerResult;
 import com.github.skjolber.packing.api.StackPlacement;
-import com.github.skjolber.packing.api.Stackable;
 import com.github.skjolber.packing.api.StackableItem;
 import com.github.skjolber.packing.packer.plain.PlainPackager;
+import com.gtnewhorizons.CTF.utils.PrintUtils;
 import net.minecraft.server.MinecraftServer;
 
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.tests.TestSettings;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
-import com.gtnewhorizons.CTF.utils.PrintUtils;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -28,7 +26,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 
 public class TickHandler {
 
-    private static boolean hasBuilt;
+    private static boolean firstTickOfTest;
 
     public static boolean AllTestsDone() {
         return testsMap.isEmpty();
@@ -49,13 +47,14 @@ public class TickHandler {
         ArrayList<Test> currentTests = testsMap.get(currentSettings);
 
         // Build the test, if we are in the first tick of their run time.
-        if (!hasBuilt) {
+        if (!firstTickOfTest) {
 
             for (Test test : currentTests) {
+                test.startTimer();
                 buildStructure(test);
             }
 
-            hasBuilt = true;
+            firstTickOfTest = true;
             return;
         }
 
@@ -74,14 +73,23 @@ public class TickHandler {
 
             // Print all messages collected for each test.
             for (Test test : currentTests) {
+                test.recordEndTime();
                 test.printAllMessages();
+                test.handleFinalConclusion();
             }
 
             // Remove this set of tests, so we can move onto the next set, if there is one.
             testsMap.remove(currentSettings);
 
+            if (testsMap.isEmpty()) {
+                // We are done now, all tests are complete.
+                PrintUtils.printSeparator();
+                Test.printTotalTestsPassedInfo();
+                PrintUtils.printSeparator();
+            }
+
             // Reset so we can build more tests.
-            hasBuilt = false;
+            firstTickOfTest = false;
         }
     }
 
@@ -112,7 +120,7 @@ public class TickHandler {
 
         // Define packager
         PlainPackager packager = PlainPackager.newBuilder().build();
-        boolean success = false;
+        boolean success;
         Container sortedContainer = null;
 
         do {
@@ -153,13 +161,9 @@ public class TickHandler {
             test.setPlacement(placement);
         }
 
-
         long endTime = System.currentTimeMillis(); // Capture end time
         long duration = endTime - startTimeForTestPacking; // Calculate elapsed time
 
         System.out.println("Execution time for CTF test packing: " + duration + " ms");
-
     }
-
-
 }

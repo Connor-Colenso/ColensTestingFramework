@@ -17,7 +17,6 @@ import java.util.UUID;
 import com.github.skjolber.packing.api.Box;
 import com.github.skjolber.packing.api.StackPlacement;
 import com.github.skjolber.packing.api.StackableItem;
-import net.minecraft.util.AxisAlignedBB;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -60,7 +59,10 @@ public class Test {
         processStructureInfo(json);
         processProcedureInfo(json);
 
+        // This will handle the sorting of our tests into a compact format in world.
         testBounds = new StackableItem(Box.newBuilder().withSize(xLength + bufferZone * 2, yLength + bufferZone * 2, zLength + bufferZone * 2).withWeight(1).withId(uuid).build(), 1);
+
+        totalTests++;
     }
 
     public JsonObject getStructure() {
@@ -164,6 +166,10 @@ public class Test {
     }
 
     public void runProcedures() {
+        if (procedureList.isEmpty()) return;
+
+        tickCounter++;
+
         // Process immediate-duration procedures.
         List<Procedure> toProcess = new ArrayList<>();
         while (procedureList.peek() != null) {
@@ -215,5 +221,30 @@ public class Test {
         startX = placement.getAbsoluteX() + bufferZone;
         startY = placement.getAbsoluteY() + bufferZone;
         startZ = placement.getAbsoluteZ() + bufferZone;
+    }
+
+    long testStartTime = 0;
+    int tickCounter = 1; // Set to one, because we skip the first tick when constructing the test in world.
+
+    public void startTimer() {
+        testStartTime = System.currentTimeMillis();
+    }
+
+    private static int totalTests;
+    private static int testsPassed;
+    public void handleFinalConclusion() {
+        if (!failed) {
+            testsPassed++;
+        }
+    }
+    
+    public static void printTotalTestsPassedInfo() {
+        double percentage = (double) testsPassed / totalTests * 100;
+        System.out.printf("Total tests passed: %d/%d (%.2f%%)%n", testsPassed, totalTests, percentage);
+    }
+
+    public void recordEndTime() {
+        messageList.add("Time taken: " + (System.currentTimeMillis() - testStartTime) + "ms");
+        messageList.add("Ticks taken: " + tickCounter);
     }
 }
