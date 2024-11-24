@@ -3,6 +3,7 @@ package com.gtnewhorizons.CTF.utils;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
+@SuppressWarnings("unused")
 public class PrintUtils {
 
     public static final String RESET = "\u001B[0m";
