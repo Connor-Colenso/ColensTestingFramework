@@ -84,13 +84,18 @@ public class AddFluids extends Procedure {
                 // If the fluid handler couldn’t fill the entire amount, print a message
                 if (amountFilled < fluidStack.amount) {
                     if (amountFilled == 0) {
-                        test.addMessage(RED, "Error: Could not add fluid " + fluidStack.getFluid().getName() + ".");
+                        test.addMessage(
+                            RED,
+                            "Error: Could not add fluid " + fluidStack.getFluid()
+                                .getName() + ".");
                     } else {
-                        test.addMessage(RED, "Warning: Only " + amountFilled
-                            + "mB of "
-                            + fluidStack.getFluid()
-                            .getName()
-                            + " could be added.");
+                        test.addMessage(
+                            RED,
+                            "Warning: Only " + amountFilled
+                                + "mB of "
+                                + fluidStack.getFluid()
+                                    .getName()
+                                + " could be added.");
                     }
                 }
             }

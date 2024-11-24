@@ -2,14 +2,11 @@ package com.gtnewhorizons.CTF;
 
 import static com.gtnewhorizons.CTF.TickHandler.registerTests;
 
-import java.util.List;
-
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.commands.CommandAddInstruction;
 import com.gtnewhorizons.CTF.commands.CommandCompleteTest;
 import com.gtnewhorizons.CTF.commands.CommandGetTileEntity;

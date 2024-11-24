@@ -7,7 +7,6 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.gtnewhorizons.CTF.tests.Test;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -19,6 +18,7 @@ import net.minecraft.world.World;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 
 public class Structure {
@@ -116,13 +116,13 @@ public class Structure {
         return structureJson;
     }
 
-
     public static void buildStructure(Test test) {
 
         final World world = MinecraftServer.getServer()
             .getEntityWorld();
 
-        JsonArray build = test.getStructure().getAsJsonArray("build");
+        JsonArray build = test.getStructure()
+            .getAsJsonArray("build");
 
         // Loop through the build array
         for (int layer = 0; layer < build.size(); layer++) {

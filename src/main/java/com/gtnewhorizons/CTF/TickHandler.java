@@ -1,25 +1,29 @@
 package com.gtnewhorizons.CTF;
 
+import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.gtnewhorizons.CTF.utils.JsonUtils;
-import com.gtnewhorizons.CTF.utils.PrintUtils;
 import net.minecraft.server.MinecraftServer;
 
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.tests.TestSettings;
+import com.gtnewhorizons.CTF.utils.JsonUtils;
+import com.gtnewhorizons.CTF.utils.PrintUtils;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 
-import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
-
 public class TickHandler {
 
     private static boolean hasBuilt;
+
+    public static boolean AllTestsDone() {
+        return testsMap.isEmpty();
+    }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     @SuppressWarnings("unused")
@@ -51,19 +55,18 @@ public class TickHandler {
             test.runProcedures();
         }
 
-        boolean hasCompletedAllTests = true;
+        boolean hasCompletedAllCurrentTests = true;
         for (Test test : currentTests) {
-            hasCompletedAllTests &= test.isDone();
+            hasCompletedAllCurrentTests &= test.isDone();
         }
 
         // Test done, throw away those tests. Move on.
-        if (hasCompletedAllTests) {
+        if (hasCompletedAllCurrentTests) {
 
             // Print all messages collected for each test.
             for (Test test : currentTests) {
                 test.printAllMessages();
             }
-            PrintUtils.printSeparator();
 
             // Remove this set of tests, so we can move onto the next set, if there is one.
             testsMap.remove(currentSettings);
@@ -73,7 +76,7 @@ public class TickHandler {
         }
     }
 
-    private static final HashMap<TestSettings, ArrayList<Test>> testsMap = new HashMap<>();
+    public static final HashMap<TestSettings, ArrayList<Test>> testsMap = new HashMap<>();
 
     public static void registerTests() {
 

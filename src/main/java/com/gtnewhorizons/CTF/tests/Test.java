@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import com.gtnewhorizons.CTF.utils.PrintUtils;
 import net.minecraft.util.AxisAlignedBB;
 
 import com.google.gson.JsonArray;
@@ -25,6 +24,7 @@ import com.gtnewhorizons.CTF.procedures.CheckTile;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.procedures.RunTicks;
 import com.gtnewhorizons.CTF.utils.BlockTilePair;
+import com.gtnewhorizons.CTF.utils.PrintUtils;
 import com.gtnewhorizons.CTF.utils.RandomNums;
 
 public class Test {
@@ -227,7 +227,8 @@ public class Test {
     }
 
     private String getTestName() {
-        return json.get("testName").getAsString();
+        return json.get("testName")
+            .getAsString();
     }
 
     public boolean isDone() {
