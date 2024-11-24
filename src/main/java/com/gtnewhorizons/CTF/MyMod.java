@@ -23,7 +23,7 @@ import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
 import com.gtnewhorizons.CTF.events.CTFWandEventHandler;
 import com.gtnewhorizons.CTF.items.RegisterItems;
 import com.gtnewhorizons.CTF.rendering.RenderCTFRegionInfo;
-import com.gtnewhorizons.CTF.rendering.RenderCTFWandFrame;
+import com.gtnewhorizons.CTF.rendering.RenderCTFFrames;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -70,7 +70,7 @@ public class MyMod {
 
         if (event.getSide()
             .isClient()) {
-            MinecraftForge.EVENT_BUS.register(new RenderCTFWandFrame());
+            MinecraftForge.EVENT_BUS.register(new RenderCTFFrames());
             MinecraftForge.EVENT_BUS.register(new RenderCTFRegionInfo());
         }
         MinecraftForge.EVENT_BUS.register(new CTFWandEventHandler());

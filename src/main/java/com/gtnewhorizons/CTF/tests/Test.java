@@ -237,7 +237,7 @@ public class Test {
             testsPassed++;
         }
     }
-    
+
     public static void printTotalTestsPassedInfo() {
         double percentage = (double) testsPassed / totalTests * 100;
         System.out.printf("Total tests passed: %d/%d (%.2f%%)%n", testsPassed, totalTests, percentage);

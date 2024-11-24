@@ -95,7 +95,7 @@ public class TickHandler {
 
     public static final HashMap<TestSettings, ArrayList<Test>> testsMap = new HashMap<>();
 
-    public static HashMap<String, Test> tmpTestsStorage = new HashMap<>();
+    public static HashMap<String, Test> uuidTestsMapping = new HashMap<>();
 
     public static void registerTests() {
 
@@ -107,7 +107,7 @@ public class TickHandler {
             for (int i = 0; i < 30; i++) {
                 Test test = new Test(json);
                 testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>()).add(test);
-                tmpTestsStorage.put(test.uuid, test);
+                uuidTestsMapping.put(test.uuid, test);
                 allTests.add(test.testBounds);
             }
         }
@@ -157,7 +157,7 @@ public class TickHandler {
         // Process the successful result
         List<StackPlacement> placements = sortedContainer.getStack().getPlacements();
         for (StackPlacement placement : placements) {
-            Test test = tmpTestsStorage.get(placement.getStackable().getId());
+            Test test = uuidTestsMapping.get(placement.getStackable().getId());
             test.setPlacement(placement);
         }
 
