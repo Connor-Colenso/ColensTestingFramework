@@ -1,9 +1,11 @@
 package com.gtnewhorizons.CTF.rendering;
 
+import static com.gtnewhorizons.CTF.TickHandler.tmpTestsStorage;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
+import com.gtnewhorizons.CTF.tests.Test;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -27,6 +29,9 @@ public class RenderCTFWandFrame {
         double interpZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.partialTicks;
 
 
+        for(Test test : tmpTestsStorage.values()) {
+            renderBox(test.startX - test.bufferZone, test.startY - test.bufferZone, test.startZ - test.bufferZone, test.startX + test.xLength + test.bufferZone * 2-1, test.startY + test.yLength + test.bufferZone * 2-1, test.startZ + test.zLength + test.bufferZone * 2-1, interpX, interpY, interpZ);
+        }
 
 
         if (isCTFWandRegionNotDefined()) {

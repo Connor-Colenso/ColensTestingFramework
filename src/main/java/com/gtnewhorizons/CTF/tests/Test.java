@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.UUID;
 
 import com.github.skjolber.packing.api.Box;
 import com.github.skjolber.packing.api.StackPlacement;
@@ -33,6 +34,7 @@ public class Test {
 
     private final TestSettings testSettings = new TestSettings();
     private final List<String> messageList = new ArrayList<>();
+    public final String uuid = UUID.randomUUID().toString();
 
     public StackableItem testBounds;
 
@@ -40,9 +42,9 @@ public class Test {
     public int startY;
     public int startZ;
 
-    private int xLength;
-    private int yLength;
-    private int zLength;
+    public int xLength;
+    public int yLength;
+    public int zLength;
 
     public int bufferZone;
     public boolean failed = false;
@@ -58,7 +60,7 @@ public class Test {
         processStructureInfo(json);
         processProcedureInfo(json);
 
-        testBounds = new StackableItem(Box.newBuilder().withSize(xLength + bufferZone * 2, yLength + bufferZone * 2, zLength + bufferZone * 2).withWeight(1).build(), 1);
+        testBounds = new StackableItem(Box.newBuilder().withSize(xLength + bufferZone * 2, yLength + bufferZone * 2, zLength + bufferZone * 2).withWeight(1).withId(uuid).build(), 1);
     }
 
     public JsonObject getStructure() {
@@ -210,8 +212,8 @@ public class Test {
     }
 
     public void setPlacement(StackPlacement placement) {
-        startX = placement.getAbsoluteX();
-        startY = placement.getAbsoluteY();
-        startZ = placement.getAbsoluteZ();
+        startX = placement.getAbsoluteX() + bufferZone;
+        startY = placement.getAbsoluteY() + bufferZone;
+        startZ = placement.getAbsoluteZ() + bufferZone;
     }
 }
