@@ -3,7 +3,6 @@ package com.gtnewhorizons.CTF.rendering;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
-import static com.gtnewhorizons.CTF.tests.Test.getTotalTestAreaBounds;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_NAME;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
@@ -49,9 +48,6 @@ public class RenderCTFRegionInfo {
     }
 
     private void renderTotalLoadedTestArea() {
-        AxisAlignedBB axisAlignedBB = getTotalTestAreaBounds();
-
-
 
     }
 

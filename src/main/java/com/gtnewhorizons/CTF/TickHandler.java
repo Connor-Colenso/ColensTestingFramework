@@ -4,7 +4,15 @@ import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import com.github.skjolber.packing.api.Container;
+import com.github.skjolber.packing.api.ContainerItem;
+import com.github.skjolber.packing.api.PackagerResult;
+import com.github.skjolber.packing.api.StackPlacement;
+import com.github.skjolber.packing.api.StackableItem;
+import com.github.skjolber.packing.packer.plain.PlainPackager;
 import net.minecraft.server.MinecraftServer;
 
 import com.google.gson.JsonObject;
@@ -79,15 +87,69 @@ public class TickHandler {
     public static final HashMap<TestSettings, ArrayList<Test>> testsMap = new HashMap<>();
 
     public static void registerTests() {
+        List<Test> tmpTestsStorage = new ArrayList<>();
 
+        // Load tests from JSON and add them to the list
         for (JsonObject json : JsonUtils.loadAll()) {
-            for (int i = 0; i < 40; i++) {
+            for (int i = 0; i < 2; i++) {
                 Test test = new Test(json);
+                testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>()).add(test);
+                tmpTestsStorage.add(test);
+            }
+        }
 
-                testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>())
-                    .add(test);
+        // Define container and packager setup
+        Container container = Container.newBuilder()
+            .withDescription("Total test area")
+            .withSize(50, 256, 50)
+            .withEmptyWeight(1)
+            .withMaxLoadWeight(Integer.MAX_VALUE)
+            .build();
+
+        List<ContainerItem> containerItems = ContainerItem.newListBuilder()
+            .withContainer(container)
+            .build();
+
+        PlainPackager packager = PlainPackager.newBuilder().build();
+
+        // Convert tests to stackable items
+        List<StackableItem> allTests = new ArrayList<>();
+        for (Test test : tmpTestsStorage) {
+            allTests.add(test.testBounds); // Assuming `testBounds` implements StackableItem
+        }
+
+        // Run the packager
+        PackagerResult result = packager.newResultBuilder()
+            .withContainers(containerItems)
+            .withStackables(allTests)
+            .build();
+
+        if (result.isSuccess()) {
+            Container sortedContainer = result.get(0);
+            List<StackPlacement> placements = sortedContainer.getStack().getPlacements();
+
+            // Create a map to link each test to its corresponding placement
+            Map<StackableItem, StackPlacement> testToPlacementMap = new HashMap<>();
+
+            // Assuming the items in `allTests` correspond one-to-one with placements in `sortedContainer`
+            for (int i = 0; i < placements.size(); i++) {
+                StackPlacement placement = placements.get(i);
+                StackableItem stackableItem = allTests.get(i);
+
+                // Add the mapping of the stackable item to the placement
+                testToPlacementMap.put(stackableItem, placement);
+            }
+
+            // Now, map each test to its placement
+            for (Test test : tmpTestsStorage) {
+                StackPlacement placement = testToPlacementMap.get(test.testBounds);
+                if (placement != null) {
+                    // Link the test to the placement
+                    test.setPlacement(placement); // Assuming `setPlacement` is a method in Test
+                }
             }
         }
     }
+
 
 }

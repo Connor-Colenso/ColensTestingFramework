@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
-import com.gtnewhorizons.CTF.utils.RegionUtils;
+import com.github.skjolber.packing.api.Box;
+import com.github.skjolber.packing.api.StackPlacement;
+import com.github.skjolber.packing.api.StackableItem;
 import net.minecraft.util.AxisAlignedBB;
 
 import com.google.gson.JsonArray;
@@ -26,19 +28,13 @@ import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.procedures.RunTicks;
 import com.gtnewhorizons.CTF.utils.BlockTilePair;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
-import com.gtnewhorizons.CTF.utils.RandomNums;
 
 public class Test {
 
-    private static final List<AxisAlignedBB> existingTests = new ArrayList<>();
     private final TestSettings testSettings = new TestSettings();
     private final List<String> messageList = new ArrayList<>();
 
-    // Start with one chunk, expand from there, if needed.
-    private static AxisAlignedBB totalTestAreaBounds = AxisAlignedBB.getBoundingBox(0,0,0, 15, 255, 15);
-
-    // Amount of times we had to try fit this test into the framework.
-    private int totalTestFitRetries;
+    public StackableItem testBounds;
 
     public int startX;
     public int startY;
@@ -62,72 +58,7 @@ public class Test {
         processStructureInfo(json);
         processProcedureInfo(json);
 
-        boolean isPositionValid = false;
-        AxisAlignedBB testBounds = null;
-
-        while (!isPositionValid) {
-            // Generate random coordinates
-            startX = RandomNums.getRandomIntInRange(totalTestAreaBounds.minX, totalTestAreaBounds.maxX);
-            startY = RandomNums.getRandomIntInRange(totalTestAreaBounds.minY, totalTestAreaBounds.maxY);
-            startZ = RandomNums.getRandomIntInRange(totalTestAreaBounds.minZ, totalTestAreaBounds.maxZ);
-
-            // Increment attempt counter.
-            totalTestFitRetries++;
-
-            // Create the bounding box
-            testBounds = AxisAlignedBB.getBoundingBox(
-                startX - bufferZone,
-                startY - bufferZone,
-                startZ - bufferZone,
-                startX + xLength + bufferZone,
-                startY + yLength + bufferZone,
-                startZ + zLength + bufferZone);
-
-            // Check for intersection
-            isPositionValid = true; // Assume no intersection
-            for (AxisAlignedBB existingTest : existingTests) {
-                if (existingTest.intersectsWith(testBounds)) {
-                    isPositionValid = false; // Found an intersection, regenerate coordinates
-                    break;
-                }
-            }
-
-            // Check to ensure the entire test can fit within the actual world bounds, we don't want it trying to generate at y:250 if the test is 20 blocks tall...
-            if (!RegionUtils.isFullyContained(totalTestAreaBounds, testBounds)) {
-                isPositionValid = false;
-            }
-
-            // Todo: config?
-            if (totalTestFitRetries > 5) {
-                // Try again, but lets resize the area to be bigger.
-                totalTestFitRetries = 0;
-
-                // Actual resizing. This will increase the area by one chunk. in each positive direction.
-                // E.g.
-                // Original area:
-                // X
-                // New area:
-                // XX
-                // XX
-                // Then again:
-                // XXX
-                // XXX
-                // XXX
-                // etc.
-
-                totalTestAreaBounds = AxisAlignedBB.getBoundingBox(
-                    totalTestAreaBounds.minX,
-                    totalTestAreaBounds.minY,
-                    totalTestAreaBounds.minZ,
-                    totalTestAreaBounds.maxX + 16,
-                    totalTestAreaBounds.maxY,
-                    totalTestAreaBounds.maxZ + 16
-                );
-            }
-        }
-
-        // Add the valid bounding box to the list
-        existingTests.add(testBounds);
+        testBounds = new StackableItem(Box.newBuilder().withSize(xLength + bufferZone * 2, yLength + bufferZone * 2, zLength + bufferZone * 2).withWeight(1).build(), 1);
     }
 
     public JsonObject getStructure() {
@@ -278,7 +209,9 @@ public class Test {
         return procedureList.isEmpty();
     }
 
-    public static AxisAlignedBB getTotalTestAreaBounds() {
-        return totalTestAreaBounds;
+    public void setPlacement(StackPlacement placement) {
+        startX = placement.getAbsoluteX();
+        startY = placement.getAbsoluteY();
+        startZ = placement.getAbsoluteZ();
     }
 }

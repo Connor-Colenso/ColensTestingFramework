@@ -2,7 +2,6 @@ package com.gtnewhorizons.CTF.rendering;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
-import static com.gtnewhorizons.CTF.tests.Test.getTotalTestAreaBounds;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
 import net.minecraft.client.Minecraft;
@@ -28,11 +27,7 @@ public class RenderCTFWandFrame {
         double interpZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.partialTicks;
 
 
-        // Render the total tests bounds area.
-        GL11.glPushMatrix();
-        AxisAlignedBB axisAlignedBB = getTotalTestAreaBounds();
-        renderBox(axisAlignedBB.minX, axisAlignedBB.minY, axisAlignedBB.minZ, axisAlignedBB.maxX, axisAlignedBB.maxY, axisAlignedBB.maxZ, interpX, interpY, interpZ);
-        GL11.glPopMatrix();
+
 
         if (isCTFWandRegionNotDefined()) {
             return; // Skip rendering if positions are not set
