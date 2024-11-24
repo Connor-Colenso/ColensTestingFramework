@@ -3,7 +3,7 @@ package com.gtnewhorizons.CTF.commands;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -32,7 +32,7 @@ public class CommandInitTest extends CommandBase {
             return;
         }
 
-        if (isRegionNotDefined()) {
+        if (isCTFWandRegionNotDefined()) {
             notifyPlayer(player, "You have not selected a valid region using the CTF wand.");
             return;
         }

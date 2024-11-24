@@ -2,10 +2,12 @@ package com.gtnewhorizons.CTF.rendering;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.tests.Test.getTotalTestAreaBounds;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import org.lwjgl.opengl.GL11;
@@ -18,7 +20,21 @@ public class RenderCTFWandFrame {
 
     @SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        if (isRegionNotDefined()) {
+
+        // Interpolate player position for smoother rendering
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        double interpX = player.prevPosX + (player.posX - player.prevPosX) * event.partialTicks;
+        double interpY = player.prevPosY + (player.posY - player.prevPosY) * event.partialTicks;
+        double interpZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.partialTicks;
+
+
+        // Render the total tests bounds area.
+        GL11.glPushMatrix();
+        AxisAlignedBB axisAlignedBB = getTotalTestAreaBounds();
+        renderBox(axisAlignedBB.minX, axisAlignedBB.minY, axisAlignedBB.minZ, axisAlignedBB.maxX, axisAlignedBB.maxY, axisAlignedBB.maxZ, interpX, interpY, interpZ);
+        GL11.glPopMatrix();
+
+        if (isCTFWandRegionNotDefined()) {
             return; // Skip rendering if positions are not set
         }
 
@@ -30,16 +46,26 @@ public class RenderCTFWandFrame {
         double yMax = Math.max(firstPosition[1], secondPosition[1]) + 1.0;
         double zMax = Math.max(firstPosition[2], secondPosition[2]) + 1.0;
 
-        // Interpolate player position for smoother rendering
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-        double interpX = player.prevPosX + (player.posX - player.prevPosX) * event.partialTicks;
-        double interpY = player.prevPosY + (player.posY - player.prevPosY) * event.partialTicks;
-        double interpZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.partialTicks;
+        // Render the CTF frame.
+        renderBox(xMin, yMin, zMin, xMax, yMax, zMax, interpX, interpY, interpZ);
+    }
 
-        // Push OpenGL state to prevent rendering conflicts
+    /**
+     * Renders a box with the given coordinates, applying player position interpolation.
+     *
+     * @param xMin     Minimum x-coordinate
+     * @param yMin     Minimum y-coordinate
+     * @param zMin     Minimum z-coordinate
+     * @param xMax     Maximum x-coordinate
+     * @param yMax     Maximum y-coordinate
+     * @param zMax     Maximum z-coordinate
+     * @param interpX  Interpolated player x-position
+     * @param interpY  Interpolated player y-position
+     * @param interpZ  Interpolated player z-position
+     */
+    private void renderBox(double xMin, double yMin, double zMin, double xMax, double yMax, double zMax,
+                           double interpX, double interpY, double interpZ) {
         GL11.glPushMatrix();
-
-        // Translate to the correct player-relative position
         GL11.glTranslated(-interpX, -interpY, -interpZ);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
@@ -47,8 +73,7 @@ public class RenderCTFWandFrame {
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glLineWidth(2.0f);
 
-        // Set color (e.g., white)
-        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+        GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Set color (e.g., white)
 
         GL11.glBegin(GL11.GL_LINES);
 

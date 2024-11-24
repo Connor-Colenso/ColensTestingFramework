@@ -81,7 +81,7 @@ public class TickHandler {
     public static void registerTests() {
 
         for (JsonObject json : JsonUtils.loadAll()) {
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 40; i++) {
                 Test test = new Test(json);
 
                 testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>())

@@ -8,7 +8,7 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_NAME;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class CTFAddFluidsTag extends Item {
             return false;
         }
 
-        if (isRegionNotDefined()) {
+        if (isCTFWandRegionNotDefined()) {
             notifyPlayer(
                 player,
                 EnumChatFormatting.RED + "Region is not yet defined. Use the CTF wand to select a valid region.");

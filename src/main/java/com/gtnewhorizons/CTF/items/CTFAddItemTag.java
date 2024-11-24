@@ -6,7 +6,7 @@ import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public class CTFAddItemTag extends Item {
             return false;
         }
 
-        if (isRegionNotDefined()) {
+        if (isCTFWandRegionNotDefined()) {
             notifyPlayer(
                 player,
                 EnumChatFormatting.RED + "Region is not yet defined. Use the CTF wand to select a valid region.");

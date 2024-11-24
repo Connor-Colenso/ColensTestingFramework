@@ -4,7 +4,7 @@ import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction.execute;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class CommandAddInstruction extends CommandBase {
 
         if (sender instanceof EntityPlayerMP player) {
 
-            if (isRegionNotDefined()) {
+            if (isCTFWandRegionNotDefined()) {
                 notifyPlayer(player, "No region has been selected.");
                 return;
             }

@@ -13,4 +13,8 @@ public class RandomNums {
         return RAND.nextInt((max - min) + 1) + min;
     }
 
+    public static int getRandomIntInRange(double min, double max) {
+        return getRandomIntInRange((int) min, (int) max);
+    }
+
 }

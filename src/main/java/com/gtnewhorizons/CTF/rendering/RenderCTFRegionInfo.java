@@ -3,12 +3,13 @@ package com.gtnewhorizons.CTF.rendering;
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.tests.Test.getTotalTestAreaBounds;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_NAME;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isRegionNotDefined;
+import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.rendering.RegionRendering.renderFloatingText;
 
@@ -17,6 +18,7 @@ import java.util.List;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
 import com.google.gson.JsonArray;
@@ -31,7 +33,7 @@ public class RenderCTFRegionInfo {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        if (isRegionNotDefined()) return;
+        if (isCTFWandRegionNotDefined()) return;
         if (isTestNotStarted()) return;
 
         double minX = Math.min(firstPosition[0], secondPosition[0]);
@@ -40,9 +42,17 @@ public class RenderCTFRegionInfo {
 
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
 
+        renderTotalLoadedTestArea();
         renderRegionLabel(instructionsArray);
         renderTileEntityTagPoints(instructionsArray, minX, minY, minZ);
         renderAddItemPoints(instructionsArray, minX, minY, minZ);
+    }
+
+    private void renderTotalLoadedTestArea() {
+        AxisAlignedBB axisAlignedBB = getTotalTestAreaBounds();
+
+
+
     }
 
     private void renderAddItemPoints(JsonArray instructionsArray, double minX, double minY, double minZ) {

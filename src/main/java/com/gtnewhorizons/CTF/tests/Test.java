@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
+import com.gtnewhorizons.CTF.utils.RegionUtils;
 import net.minecraft.util.AxisAlignedBB;
 
 import com.google.gson.JsonArray;
@@ -32,6 +33,12 @@ public class Test {
     private static final List<AxisAlignedBB> existingTests = new ArrayList<>();
     private final TestSettings testSettings = new TestSettings();
     private final List<String> messageList = new ArrayList<>();
+
+    // Start with one chunk, expand from there, if needed.
+    private static AxisAlignedBB totalTestAreaBounds = AxisAlignedBB.getBoundingBox(0,0,0, 15, 255, 15);
+
+    // Amount of times we had to try fit this test into the framework.
+    private int totalTestFitRetries;
 
     public int startX;
     public int startY;
@@ -60,9 +67,12 @@ public class Test {
 
         while (!isPositionValid) {
             // Generate random coordinates
-            startX = RandomNums.getRandomIntInRange(-32, 32);
-            startY = RandomNums.getRandomIntInRange(4, 200);
-            startZ = RandomNums.getRandomIntInRange(-32, 32);
+            startX = RandomNums.getRandomIntInRange(totalTestAreaBounds.minX, totalTestAreaBounds.maxX);
+            startY = RandomNums.getRandomIntInRange(totalTestAreaBounds.minY, totalTestAreaBounds.maxY);
+            startZ = RandomNums.getRandomIntInRange(totalTestAreaBounds.minZ, totalTestAreaBounds.maxZ);
+
+            // Increment attempt counter.
+            totalTestFitRetries++;
 
             // Create the bounding box
             testBounds = AxisAlignedBB.getBoundingBox(
@@ -80,6 +90,39 @@ public class Test {
                     isPositionValid = false; // Found an intersection, regenerate coordinates
                     break;
                 }
+            }
+
+            // Check to ensure the entire test can fit within the actual world bounds, we don't want it trying to generate at y:250 if the test is 20 blocks tall...
+            if (!RegionUtils.isFullyContained(totalTestAreaBounds, testBounds)) {
+                isPositionValid = false;
+            }
+
+            // Todo: config?
+            if (totalTestFitRetries > 5) {
+                // Try again, but lets resize the area to be bigger.
+                totalTestFitRetries = 0;
+
+                // Actual resizing. This will increase the area by one chunk. in each positive direction.
+                // E.g.
+                // Original area:
+                // X
+                // New area:
+                // XX
+                // XX
+                // Then again:
+                // XXX
+                // XXX
+                // XXX
+                // etc.
+
+                totalTestAreaBounds = AxisAlignedBB.getBoundingBox(
+                    totalTestAreaBounds.minX,
+                    totalTestAreaBounds.minY,
+                    totalTestAreaBounds.minZ,
+                    totalTestAreaBounds.maxX + 16,
+                    totalTestAreaBounds.maxY,
+                    totalTestAreaBounds.maxZ + 16
+                );
             }
         }
 
@@ -233,5 +276,9 @@ public class Test {
 
     public boolean isDone() {
         return procedureList.isEmpty();
+    }
+
+    public static AxisAlignedBB getTotalTestAreaBounds() {
+        return totalTestAreaBounds;
     }
 }
