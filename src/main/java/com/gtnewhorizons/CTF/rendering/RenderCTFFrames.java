@@ -104,7 +104,7 @@ public class RenderCTFFrames {
                     .render();
             }
 
-
+            // Horrific! But right now, it is the best I've got for detecting intersections for debugging. Sorry for those with weak CPUs :p
             for(AxisAlignedBB bounds : allTestBounds) {
                 for(AxisAlignedBB bounds2 : allTestBounds) {
                     if ((bounds2 != bounds) && bounds.intersectsWith(bounds2)) {
