@@ -104,7 +104,7 @@ public class TickHandler {
 
         // Load tests from JSON and add them to the list
         for (JsonObject json : JsonUtils.loadAll()) {
-            for (int i = 0; i < 30; i++) {
+            for (int i = 0; i < 40; i++) {
                 Test test = new Test(json);
                 testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>()).add(test);
                 uuidTestsMapping.put(test.uuid, test);
@@ -121,7 +121,7 @@ public class TickHandler {
         // Define packager
         PlainPackager packager = PlainPackager.newBuilder().build();
         boolean success;
-        Container sortedContainer = null;
+        List<StackPlacement> placements = null;
 
         do {
             // Define container with expanding size
@@ -145,7 +145,7 @@ public class TickHandler {
             success = result.isSuccess();
 
             if (success) {
-                sortedContainer = result.get(0);
+                placements = result.get(0).getStack().getPlacements();
             } else {
                 // Expand width and depth for the next iteration
                 initialWidth += 16;
@@ -155,7 +155,6 @@ public class TickHandler {
         } while (!success);
 
         // Process the successful result
-        List<StackPlacement> placements = sortedContainer.getStack().getPlacements();
         for (StackPlacement placement : placements) {
             Test test = uuidTestsMapping.get(placement.getStackable().getId());
             test.setPlacement(placement);
