@@ -2,6 +2,7 @@ package com.gtnewhorizons.CTF;
 
 import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.github.skjolber.packing.api.StackableItem;
 import com.github.skjolber.packing.packer.plain.PlainPackager;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
+import com.gtnewhorizons.CTF.utils.visualizer.packaging.src.test.java.com.github.skjolber.packing.visualizer.packaging.AbstractPackagerTest;
 import net.minecraft.server.MinecraftServer;
 
 import com.gtnewhorizons.CTF.tests.Test;
@@ -147,6 +149,24 @@ public class TickHandler {
             success = result.isSuccess();
 
             if (success) {
+
+                try {
+                    // Create an instance of AbstractPackagerTest
+                    AbstractPackagerTest abstractPackagerTest = new AbstractPackagerTest();
+
+                    // Get the write method from the AbstractPackagerTest class
+                    Method writeMethod = AbstractPackagerTest.class.getDeclaredMethod("write", PackagerResult.class);
+
+                    // Make the method accessible if it's private or protected (optional if the method is public)
+                    writeMethod.setAccessible(true);
+
+                    // Invoke the write method on the abstractPackagerTest instance
+                    writeMethod.invoke(abstractPackagerTest, result);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 placements = result.get(0).getStack().getPlacements();
             } else {
                 // Expand width and depth for the next iteration
