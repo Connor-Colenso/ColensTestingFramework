@@ -17,6 +17,9 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.ArrayList;
+import java.util.List;
+
 // Client side only rendering.
 public class RenderCTFFrames {
 
@@ -53,25 +56,42 @@ public class RenderCTFFrames {
 
             // Render the box if the player intersects or is looking at a block inside the test zone.
             if (doesPlayerIntersectTestBounds || playerLookingAtBlockInTestBounds) {
+
+                // s -> Structure X length.
+                // b -> Buffer zone x length.
+
+                List<String> xText = new ArrayList<>();
+                xText.add("sX: " + (test.getEndStructureX() - test.getStartStructureX()));
+                xText.add("bX: " + (test.getBufferEndX() - test.getBufferStartX()));
+                xText.add("pX: " + (test.sp.getAbsoluteEndX() - test.sp.getAbsoluteX()));
+
+                List<String> yText = new ArrayList<>();
+                yText.add("sY: " + (test.getEndStructureY() - test.getStartStructureY()));
+                yText.add("bY: " + (test.getBufferEndY() - test.getBufferStartY()));
+                yText.add("pY: " + (test.sp.getAbsoluteEndY() - test.sp.getAbsoluteY()));
+
+                List<String> zText = new ArrayList<>();
+                zText.add("sZ: " + (test.getEndStructureZ() - test.getStartStructureZ()));
+                zText.add("bZ: " + (test.getBufferEndZ() - test.getBufferStartZ()));
+                zText.add("pZ: " + (test.sp.getAbsoluteEndZ() - test.sp.getAbsoluteZ()));
+
+                // Actually render in world.
                 (new RenderFrameBuilder())
                     .setInterpolation(player, event)
                     .setFrame(testRenderFrameWithBuffer)
                     .setColourAccordingToCoords()
                     .addCentralText(test.relevantDebugInfo())
-                    .addText(
-                        "X: " + (test.getEndStructureX() - test.getStartStructureX()),
+                    .addText(xText,
                         (test.getBufferEndX() + test.getBufferStartX()) / 2.0,
                         test.getBufferStartY(),
                         test.getBufferStartZ()
                     )
-                    .addText(
-                        "Y: " + (test.getEndStructureY() - test.getStartStructureY()),
+                    .addText(yText,
                         test.getBufferStartX(),
                         (test.getBufferEndY() + test.getBufferStartY()) / 2.0,
                         test.getBufferStartZ()
                     )
-                    .addText(
-                        "Z: " + (test.getEndStructureZ() - test.getStartStructureZ()),
+                    .addText(zText,
                         test.getBufferStartX(),
                         test.getBufferStartY(),
                         (test.getBufferEndZ() + test.getBufferStartZ()) / 2.0
