@@ -247,4 +247,37 @@ public class Test {
         messageList.add("Time taken: " + (System.currentTimeMillis() - testStartTime) + "ms");
         messageList.add("Ticks taken: " + tickCounter);
     }
+
+    public List<String> relevantDebugInfo() {
+        List<String> debugInfo = new ArrayList<>();
+
+        // Add test name and UUID for identification
+        debugInfo.add("Test Name: " + getTestName());
+        debugInfo.add("UUID: " + uuid);
+
+        // Add information about structure dimensions and buffer zone
+        debugInfo.add("Structure Dimensions: " + xLength + " x " + yLength + " x " + zLength);
+        debugInfo.add("Buffer Zone: " + bufferZone);
+
+        // Add the current position of the test in the world
+        debugInfo.add("Test Position: (" + startX + ", " + startY + ", " + startZ + ")");
+
+        // Add information about procedures
+        debugInfo.add("Procedures Remaining: " + procedureList.size());
+
+        // Add information about test status and time
+        debugInfo.add("Failed: " + failed);
+        debugInfo.add("Ticks Taken: " + tickCounter);
+        debugInfo.add("Time Taken: " + (System.currentTimeMillis() - testStartTime) + " ms");
+
+        // Add the total number of tests and passed tests
+        debugInfo.add("Total Tests: " + totalTests);
+        debugInfo.add("Tests Passed: " + testsPassed);
+
+        // Add messages collected during the test
+        debugInfo.add("Messages: ");
+        debugInfo.addAll(messageList);
+
+        return debugInfo;
+    }
 }

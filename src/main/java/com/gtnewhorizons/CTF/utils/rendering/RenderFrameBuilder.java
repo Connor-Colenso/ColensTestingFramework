@@ -6,6 +6,11 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.gtnewhorizons.CTF.utils.rendering.RegionRendering.renderFloatingText;
+
 public class RenderFrameBuilder {
 
     // Default white
@@ -25,40 +30,62 @@ public class RenderFrameBuilder {
     double yMax;
     double zMax;
 
-    public void setColour(double red, double green, double blue, double alpha) {
+    List<String> frameText = new ArrayList<>();
+
+    public RenderFrameBuilder addText(List<String> text) {
+        frameText.addAll(text);
+        return this;
+    }
+
+    public RenderFrameBuilder addText(String text) {
+        frameText.add(text);
+        return this;
+    }
+
+    public RenderFrameBuilder setColour(double red, double green, double blue, double alpha) {
         this.red = red;
         this.green = green;
         this.blue = blue;
         this.alpha = alpha;
+        return this;
     }
 
-    public void setColour(int red, int green, int blue) {
-        setColour(red, green, blue, 1);
-    }
-
-    public void setInterpolation(EntityPlayer entityPlayer, RenderWorldLastEvent event) {
+    public RenderFrameBuilder setInterpolation(EntityPlayer entityPlayer, RenderWorldLastEvent event) {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         interpX = player.prevPosX + (player.posX - player.prevPosX) * event.partialTicks;
         interpY = player.prevPosY + (player.posY - player.prevPosY) * event.partialTicks;
         interpZ = player.prevPosZ + (player.posZ - player.prevPosZ) * event.partialTicks;
+        return this;
     }
 
-    public void setFrame(AxisAlignedBB aabb) {
+    public RenderFrameBuilder setFrame(AxisAlignedBB aabb) {
         xMin = aabb.minX;
         yMin = aabb.minY;
         zMin = aabb.minZ;
         xMax = aabb.maxX;
         yMax = aabb.maxY;
         zMax = aabb.maxZ;
+        return this;
     }
 
-    public void setFrame(double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
+    public RenderFrameBuilder setFrame(double xMin, double yMin, double zMin, double xMax, double yMax, double zMax) {
         this.xMin = xMin;
         this.yMin = yMin;
         this.zMin = zMin;
         this.xMax = xMax;
         this.yMax = yMax;
         this.zMax = zMax;
+        return this;
+    }
+
+
+    public RenderFrameBuilder setColourAccordingToCoords() {
+        // Ensure that each color component is within the 0-1 range. Some magic idk, found it online. Works though. Primes?
+        red = (xMin * 31 + yMin * 17 + zMin * 13) % 256 / 255.0;
+        green = (xMax * 7 + yMax * 3 + zMax * 5) % 256 / 255.0;
+        blue = ((xMin + yMin + zMin + xMax + yMax + zMax) * 13) % 256 / 255.0;
+
+        return this;
     }
 
     public void render() {
@@ -112,12 +139,10 @@ public class RenderFrameBuilder {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glPopMatrix();
+
+        if (!frameText.isEmpty()) {
+            renderFloatingText(frameText, (xMin + xMax)/2.0, (yMin + yMax)/2.0, (zMin + zMax)/2.0);
+        }
     }
 
-    public void setColourAccordingToCoords() {
-        // Ensure that each color component is within the 0-1 range.
-        red = (xMin * 31 + yMin * 17 + zMin * 13) % 256 / 255.0;
-        green = (xMax * 7 + yMax * 3 + zMax * 5) % 256 / 255.0;
-        blue = ((xMin + yMin + zMin + xMax + yMax + zMax) * 13) % 256 / 255.0;
-    }
 }

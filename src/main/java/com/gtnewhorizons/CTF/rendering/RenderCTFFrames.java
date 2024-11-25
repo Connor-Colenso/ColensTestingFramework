@@ -53,11 +53,12 @@ public class RenderCTFFrames {
 
             // Render the box if the player intersects or is looking at a block inside the test zone.
             if (doesPlayerIntersectTestBounds || playerLookingAtBlockInTestBounds) {
-                RenderFrameBuilder renderFrameBuilder = new RenderFrameBuilder();
-                renderFrameBuilder.setInterpolation(player, event);
-                renderFrameBuilder.setFrame(testRenderFrameWithBuffer);
-                renderFrameBuilder.setColourAccordingToCoords();
-                renderFrameBuilder.render();
+                (new RenderFrameBuilder())
+                    .setInterpolation(player, event)
+                    .setFrame(testRenderFrameWithBuffer)
+                    .setColourAccordingToCoords()
+                    .addText(test.relevantDebugInfo())
+                    .render();
             }
         }
 
@@ -78,10 +79,10 @@ public class RenderCTFFrames {
         double zMax = Math.max(firstPosition[2], secondPosition[2]) + 1.0;
 
         // Render the CTF wand frame.
-        RenderFrameBuilder renderFrameBuilder = new RenderFrameBuilder();
-        renderFrameBuilder.setInterpolation(player, event);
-        renderFrameBuilder.setFrame(xMin, yMin, zMin, xMax, yMax, zMax);
-        renderFrameBuilder.render();
+        (new RenderFrameBuilder())
+        .setInterpolation(player, event)
+        .setFrame(xMin, yMin, zMin, xMax, yMax, zMax)
+        .render();
     }
 
 
