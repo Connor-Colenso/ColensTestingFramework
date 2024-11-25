@@ -18,6 +18,8 @@ import com.github.skjolber.packing.api.Box;
 import com.github.skjolber.packing.api.StackPlacement;
 import com.github.skjolber.packing.api.StackableItem;
 
+import com.github.skjolber.packing.api.StackableSurface;
+import com.github.skjolber.packing.api.Surface;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -61,7 +63,10 @@ public class Test {
         processProcedureInfo(json);
 
         // This will handle the sorting of our tests into a compact format in world.
-        testBounds = new StackableItem(Box.newBuilder().withSize(xStructureLength + testBufferZone * 2, yStructureLength + testBufferZone * 2, zStructureLength + testBufferZone * 2).withWeight(1).withId(uuid).build(), 1);
+        StackableSurface stackableSurface = StackableSurface.newBuilder()
+            .withSide(new Surface(Surface.Label.TOP), false)
+            .build();
+        testBounds = new StackableItem(Box.newBuilder().withStackableSurface(stackableSurface).withSize(xStructureLength + testBufferZone * 2, yStructureLength + testBufferZone * 2, zStructureLength + testBufferZone * 2).withWeight(1).withId(uuid).build(), 1);
 
         totalTests++;
     }
