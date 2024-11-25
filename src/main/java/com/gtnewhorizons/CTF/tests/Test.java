@@ -225,7 +225,7 @@ public class Test {
         sp = placement;
     }
 
-    StackPlacement sp;
+    public StackPlacement sp;
 
     long testStartTime = 0;
     int tickCounter = 1; // Set to one, because we skip the first tick when constructing the test in world.
