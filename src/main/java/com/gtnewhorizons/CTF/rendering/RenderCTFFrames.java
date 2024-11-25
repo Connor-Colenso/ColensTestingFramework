@@ -36,6 +36,9 @@ public class RenderCTFFrames {
             blockPlayerLookingAtVec = Vec3.createVectorHelper(mop.blockX + 0.5, mop.blockY + 0.5, mop.blockZ + 0.5);
         }
 
+        // This is a horrible way of checking but right now, not much choice.
+        List<AxisAlignedBB> allTestBounds = new ArrayList<>();
+
         // Iterate over all maps, and render ones which the player is either looking at a block within, or the player is within.
         for (Test test : uuidTestsMapping.values()) {
             // Define the bounding box for the test zone with buffer zone.
@@ -47,6 +50,8 @@ public class RenderCTFFrames {
                 test.getBufferEndY(),
                 test.getBufferEndZ()
             );
+
+            allTestBounds.add(testRenderFrameWithBuffer);
 
             // Check if the player intersects with the bounding box.
             boolean doesPlayerIntersectTestBounds = player.boundingBox.intersectsWith(testRenderFrameWithBuffer);
@@ -98,6 +103,26 @@ public class RenderCTFFrames {
                     )
                     .render();
             }
+
+
+            for(AxisAlignedBB bounds : allTestBounds) {
+                for(AxisAlignedBB bounds2 : allTestBounds) {
+                    if ((bounds2 != bounds) && bounds.intersectsWith(bounds2)) {
+                        (new RenderFrameBuilder())
+                            .setInterpolation(player, event)
+                            .setFrame(bounds)
+                            .setColour(1,0,0)
+                            .render();
+
+                        (new RenderFrameBuilder())
+                            .setInterpolation(player, event)
+                            .setFrame(bounds2)
+                            .setColour(1,0,0)
+                            .render();
+                    }
+                }
+            }
+
         }
 
         // ----------------------------------------------------

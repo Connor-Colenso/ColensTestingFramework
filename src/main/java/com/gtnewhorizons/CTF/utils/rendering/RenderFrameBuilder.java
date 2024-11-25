@@ -104,6 +104,13 @@ public class RenderFrameBuilder {
         return this;
     }
 
+    public RenderFrameBuilder setColour(int red, int green, int blue) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+        return this;
+    }
+
     public void render() {
         GL11.glPushMatrix();
         GL11.glTranslated(-interpX, -interpY, -interpZ);
@@ -170,4 +177,5 @@ public class RenderFrameBuilder {
             }
         }
     }
+
 }
