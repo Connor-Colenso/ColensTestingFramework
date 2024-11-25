@@ -37,12 +37,12 @@ public class RenderCTFFrames {
         for (Test test : uuidTestsMapping.values()) {
             // Define the bounding box for the test zone with buffer zone.
             AxisAlignedBB testRenderFrameWithBuffer = AxisAlignedBB.getBoundingBox(
-                test.startX - test.bufferZone,
-                test.startY - test.bufferZone,
-                test.startZ - test.bufferZone,
-                test.startX + test.xLength + test.bufferZone * 2 - 1,
-                test.startY + test.yLength + test.bufferZone * 2 - 1,
-                test.startZ + test.zLength + test.bufferZone * 2 - 1
+                test.getBufferStartX(),
+                test.getBufferStartY(),
+                test.getBufferStartZ(),
+                test.getBufferEndX(),
+                test.getBufferEndY(),
+                test.getBufferEndZ()
             );
 
             // Check if the player intersects with the bounding box.
@@ -57,7 +57,25 @@ public class RenderCTFFrames {
                     .setInterpolation(player, event)
                     .setFrame(testRenderFrameWithBuffer)
                     .setColourAccordingToCoords()
-                    .addText(test.relevantDebugInfo())
+                    .addCentralText(test.relevantDebugInfo())
+                    .addText(
+                        "X: " + (test.getEndStructureX() - test.getStartStructureX()),
+                        (test.getBufferEndX() + test.getBufferStartX()) / 2.0,
+                        test.getBufferStartY(),
+                        test.getBufferStartZ()
+                    )
+                    .addText(
+                        "Y: " + (test.getEndStructureY() - test.getStartStructureY()),
+                        test.getBufferStartX(),
+                        (test.getBufferEndY() + test.getBufferStartY()) / 2.0,
+                        test.getBufferStartZ()
+                    )
+                    .addText(
+                        "Z: " + (test.getEndStructureZ() - test.getStartStructureZ()),
+                        test.getBufferStartX(),
+                        test.getBufferStartY(),
+                        (test.getBufferEndZ() + test.getBufferStartZ()) / 2.0
+                    )
                     .render();
             }
         }

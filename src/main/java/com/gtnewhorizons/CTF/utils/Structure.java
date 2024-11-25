@@ -138,9 +138,9 @@ public class Structure {
                     // If a corresponding BlockTilePair exists for the key
                     if (pair != null) {
                         // Calculate the position in the world
-                        int x = test.startX + col;
-                        int y = test.startY + layer;
-                        int z = test.startZ + row;
+                        int x = test.getStartStructureX() + col;
+                        int y = test.getStartStructureY() + layer;
+                        int z = test.getStartStructureZ() + row;
 
                         // Place the block in the world at the calculated position
                         placeBlockInWorld(world, x, y, z, pair);

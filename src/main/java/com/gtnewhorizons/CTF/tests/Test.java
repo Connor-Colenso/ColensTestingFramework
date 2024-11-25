@@ -37,15 +37,16 @@ public class Test {
 
     public StackableItem testBounds;
 
-    public int startX;
-    public int startY;
-    public int startZ;
+    private int structureStartX;
+    private int structureStartY;
+    private int structureStartZ;
 
-    public int xLength;
-    public int yLength;
-    public int zLength;
+    private int xStructureLength;
+    private int yStructureLength;
+    private int zStructureLength;
 
-    public int bufferZone;
+    private int testBufferZone;
+
     public boolean failed = false;
 
     public JsonObject json;
@@ -60,7 +61,7 @@ public class Test {
         processProcedureInfo(json);
 
         // This will handle the sorting of our tests into a compact format in world.
-        testBounds = new StackableItem(Box.newBuilder().withSize(xLength + bufferZone * 2, yLength + bufferZone * 2, zLength + bufferZone * 2).withWeight(1).withId(uuid).build(), 1);
+        testBounds = new StackableItem(Box.newBuilder().withSize(xStructureLength + testBufferZone * 2, yStructureLength + testBufferZone * 2, zStructureLength + testBufferZone * 2).withWeight(1).withId(uuid).build(), 1);
 
         totalTests++;
     }
@@ -102,7 +103,7 @@ public class Test {
         if (json.has(TEST_CONFIG)) {
             JsonObject testConfig = json.getAsJsonObject(TEST_CONFIG);
             if (testConfig.has("bufferZone")) {
-                bufferZone = testConfig.get("bufferZone")
+                testBufferZone = testConfig.get("bufferZone")
                     .getAsInt();
             }
         }
@@ -113,24 +114,24 @@ public class Test {
         JsonArray build = getStructure().getAsJsonArray("build");
 
         // Determine the yLength based on the number of layers (height)
-        yLength = build.size();
+        yStructureLength = build.size();
 
         // Ensure the build array is not empty to prevent errors
-        if (yLength == 0) {
+        if (yStructureLength == 0) {
             return;
         }
 
         // Determine the zLength based on the number of rows in the first layer
         JsonArray firstLayer = build.get(0)
             .getAsJsonArray();
-        zLength = firstLayer.size();
+        zStructureLength = firstLayer.size();
 
         // Determine the xLength based on the length of the first row in the first layer
         String firstRowData = firstLayer.get(0)
             .getAsString();
-        xLength = firstRowData.length();
+        xStructureLength = firstRowData.length();
 
-        if (xLength == 0 || yLength == 0 || zLength == 0) {
+        if (xStructureLength == 0 || yStructureLength == 0 || zStructureLength == 0) {
             throw new RuntimeException("Structure for test had no volume.");
         }
     }
@@ -218,10 +219,13 @@ public class Test {
     }
 
     public void setPlacement(StackPlacement placement) {
-        startX = placement.getAbsoluteX() + bufferZone;
-        startY = placement.getAbsoluteY() + bufferZone;
-        startZ = placement.getAbsoluteZ() + bufferZone;
+        structureStartX = placement.getAbsoluteX() + testBufferZone;
+        structureStartY = placement.getAbsoluteY() + testBufferZone;
+        structureStartZ = placement.getAbsoluteZ() + testBufferZone;
+        sp = placement;
     }
+
+    StackPlacement sp;
 
     long testStartTime = 0;
     int tickCounter = 1; // Set to one, because we skip the first tick when constructing the test in world.
@@ -256,11 +260,13 @@ public class Test {
         debugInfo.add("UUID: " + uuid);
 
         // Add information about structure dimensions and buffer zone
-        debugInfo.add("Structure Dimensions: " + xLength + " x " + yLength + " x " + zLength);
-        debugInfo.add("Buffer Zone: " + bufferZone);
+        debugInfo.add("Structure Dimensions: " + xStructureLength + " x " + yStructureLength + " x " + zStructureLength);
+        debugInfo.add("Buffer Zone: " + testBufferZone);
 
         // Add the current position of the test in the world
-        debugInfo.add("Test Position: (" + startX + ", " + startY + ", " + startZ + ")");
+        debugInfo.add("Test Position: (" + structureStartX + ", " + structureStartY + ", " + structureStartZ + ")");
+        debugInfo.add("Abs Position: (" + sp.getAbsoluteX() + ", " + sp.getAbsoluteY() + ", " + sp.getAbsoluteZ() + ")");
+        debugInfo.add("Abs End Position: (" + sp.getAbsoluteEndX() + ", " + sp.getAbsoluteEndY() + ", " + sp.getAbsoluteEndZ() + ")");
 
         // Add information about procedures
         debugInfo.add("Procedures Remaining: " + procedureList.size());
@@ -279,5 +285,53 @@ public class Test {
         debugInfo.addAll(messageList);
 
         return debugInfo;
+    }
+
+    public int getStartStructureX() {
+        return structureStartX;
+    }
+
+    public int getStartStructureY() {
+        return structureStartY;
+    }
+
+    public int getStartStructureZ() {
+        return structureStartZ;
+    }
+
+    public int getEndStructureX() {
+        return structureStartX + xStructureLength;
+    }
+
+    public int getEndStructureY() {
+        return structureStartY + yStructureLength;
+    }
+
+    public int getEndStructureZ() {
+        return structureStartZ + zStructureLength;
+    }
+
+    public int getBufferStartX() {
+        return structureStartX - testBufferZone;
+    }
+
+    public int getBufferStartY() {
+        return structureStartY - testBufferZone;
+    }
+
+    public int getBufferStartZ() {
+        return structureStartZ - testBufferZone;
+    }
+
+    public int getBufferEndX() {
+        return structureStartX + xStructureLength + testBufferZone;
+    }
+
+    public int getBufferEndY() {
+        return structureStartY + yStructureLength + testBufferZone;
+    }
+
+    public int getBufferEndZ() {
+        return structureStartZ + zStructureLength + testBufferZone;
     }
 }

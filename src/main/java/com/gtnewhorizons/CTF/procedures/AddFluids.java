@@ -61,15 +61,15 @@ public class AddFluids extends Procedure {
     public void handleEventCustom(Test test) {
         // Retrieve the WorldServer instance and TileEntity at specified coordinates
         WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
-        TileEntity tileEntity = worldServer.getTileEntity(test.startX + x, test.startY + y, test.startZ + z);
+        TileEntity tileEntity = worldServer.getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
         if (tileEntity == null) {
             System.out.println(
-                "Could not add fluid(s) at (" + (test.startX + x)
+                "Could not add fluid(s) at (" + (test.getStartStructureX() + x)
                     + ", "
-                    + (test.startY + y)
+                    + (test.getStartStructureY() + y)
                     + ", "
-                    + (test.startZ + z)
+                    + (test.getStartStructureZ() + z)
                     + ") as tile entity was null.");
             return;
         }

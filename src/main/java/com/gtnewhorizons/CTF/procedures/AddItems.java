@@ -75,14 +75,14 @@ public class AddItems extends Procedure {
 
         // Retrieve the WorldServer instance and TileEntity at specified coordinates
         WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
-        TileEntity te = worldServer.getTileEntity(test.startX + x, test.startY + y, test.startZ + z);
+        TileEntity te = worldServer.getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
         if (te == null) System.out.println(
-            "Could not add item(s) at (" + (test.startX + x)
+            "Could not add item(s) at (" + (test.getStartStructureX() + x)
                 + ", "
-                + (test.startY + y)
+                + (test.getStartStructureY() + y)
                 + ", "
-                + (test.startZ + z)
+                + (test.getStartStructureZ() + z)
                 + ") as tile entity was null.");
 
         // Ensure the TileEntity is not null and is an instance of IInventory

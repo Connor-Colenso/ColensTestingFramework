@@ -40,7 +40,7 @@ public class CheckTile extends Procedure {
     public void handleEventCustom(Test test) {
         ConditionalFunction f = RegisterConditionals.getFunc(funcID);
         WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
-        TileEntity te = worldServer.getTileEntity(test.startX + x, test.startY + y, test.startZ + z);
+        TileEntity te = worldServer.getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
         try {
             if (!f.checkCondition(te, worldServer)) {

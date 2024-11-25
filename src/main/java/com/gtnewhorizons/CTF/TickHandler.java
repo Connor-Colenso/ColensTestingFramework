@@ -111,6 +111,7 @@ public class TickHandler {
                 allTests.add(test.testBounds);
             }
         }
+
         long startTimeForTestPacking = System.currentTimeMillis(); // Capture start time, use this to measure how long all this sorting took.
 
         // Initial container dimensions
@@ -160,8 +161,7 @@ public class TickHandler {
             test.setPlacement(placement);
         }
 
-        long endTime = System.currentTimeMillis(); // Capture end time
-        long duration = endTime - startTimeForTestPacking; // Calculate elapsed time
+        long duration = System.currentTimeMillis() - startTimeForTestPacking; // Calculate elapsed time
 
         System.out.println("Execution time for CTF test packing: " + duration + " ms");
     }

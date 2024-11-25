@@ -7,13 +7,16 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.gtnewhorizons.CTF.utils.rendering.RegionRendering.renderFloatingText;
 
 public class RenderFrameBuilder {
 
-    // Default white
+    // Default white colour for frame.
     double red = 1.0f;
     double green = 1.0f;
     double blue = 1.0f;
@@ -30,25 +33,38 @@ public class RenderFrameBuilder {
     double yMax;
     double zMax;
 
-    List<String> frameText = new ArrayList<>();
+    // ----------------------------------------
+    // Text stuff.
+    // ----------------------------------------
 
-    public RenderFrameBuilder addText(List<String> text) {
-        frameText.addAll(text);
+    // Map to store text and its coordinates
+    private final Map<String, List<String>> textMap = new HashMap<>();
+
+    // Core method handling text addition
+    private RenderFrameBuilder addTextInternal(List<String> texts, double x, double y, double z) {
+        String key = x + "," + y + "," + z; // Unique key for each coordinate
+        textMap.computeIfAbsent(key, k -> new ArrayList<>()).addAll(texts);
         return this;
     }
 
-    public RenderFrameBuilder addText(String text) {
-        frameText.add(text);
-        return this;
+    // Public methods cascading to the core method
+    public RenderFrameBuilder addText(String text, double x, double y, double z) {
+        return addTextInternal(Collections.singletonList(text), x, y, z);
     }
 
-    public RenderFrameBuilder setColour(double red, double green, double blue, double alpha) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.alpha = alpha;
-        return this;
+    public RenderFrameBuilder addCentralText(String text) {
+        return addText(text, (xMin + xMax) / 2.0, (yMin + yMax) / 2.0, (zMin + zMax) / 2.0);
     }
+
+    public RenderFrameBuilder addText(List<String> texts, double x, double y, double z) {
+        return addTextInternal(texts, x, y, z);
+    }
+
+    public RenderFrameBuilder addCentralText(List<String> texts) {
+        return addText(texts, (xMin + xMax) / 2.0, (yMin + yMax) / 2.0, (zMin + zMax) / 2.0);
+    }
+
+    // ----------------------------------------
 
     public RenderFrameBuilder setInterpolation(EntityPlayer entityPlayer, RenderWorldLastEvent event) {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
@@ -140,9 +156,18 @@ public class RenderFrameBuilder {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glPopMatrix();
 
-        if (!frameText.isEmpty()) {
-            renderFloatingText(frameText, (xMin + xMax)/2.0, (yMin + yMax)/2.0, (zMin + zMax)/2.0);
+        // Iterate over map of text to render, and unpack the coordinates, then render to screen.
+        if (!textMap.isEmpty()) {
+            for (Map.Entry<String, List<String>> entry : textMap.entrySet()) {
+                // Extract x, y, and z from the key
+                String[] coords = entry.getKey().split(",");
+                double x = Double.parseDouble(coords[0]);
+                double y = Double.parseDouble(coords[1]);
+                double z = Double.parseDouble(coords[2]);
+
+                // Render the floating text at the specified coordinates
+                renderFloatingText(entry.getValue(), x, y, z);
+            }
         }
     }
-
 }
