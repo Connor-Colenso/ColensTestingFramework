@@ -1,5 +1,6 @@
 package com.gtnewhorizons.CTF.tests;
 
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
@@ -58,7 +59,12 @@ public class Test {
     public Test(JsonObject json) {
         this.json = json;
 
-        testSettings.addGameruleInfo(json);
+        if (json.has(TEST_CONFIG)) {
+            JsonObject testConfig = json.get(TEST_CONFIG).getAsJsonObject();
+
+            testSettings.addGameruleInfo(testConfig.get(GAMERULES).getAsJsonObject());
+        }
+
         processStructureInfo(json);
         processProcedureInfo(json);
 

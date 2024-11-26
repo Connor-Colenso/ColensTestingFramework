@@ -1,7 +1,5 @@
 package com.gtnewhorizons.CTF.tests;
 
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -20,28 +18,22 @@ public class TestSettings {
         if (doesExist != null) throw new RuntimeException("Duplicate gamerule: " + rule);
     }
 
-    public void initGameRulesWorldLoad(WorldServer world) {
+    public void initGameRules(WorldServer world) {
         for (Map.Entry<String, String> entry : gameruleMap.entrySet()) {
             world.getGameRules()
                 .setOrCreateGameRule(entry.getKey(), entry.getValue());
         }
     }
 
-    public void addGameruleInfo(JsonObject json) {
-        if (json.has(GAMERULES)) {
-            JsonObject gamerules = json.get(GAMERULES)
-                .getAsJsonObject();
+    public void addGameruleInfo(JsonObject gamerules) {
+        // Iterate over each entry in the "gamerules" entries of our json.
+        for (Map.Entry<String, JsonElement> entry : gamerules.entrySet()) {
+            String ruleName = entry.getKey();
+            String ruleValue = entry.getValue()
+                .getAsString();
 
-            // Iterate over each entry in the "gamerules" entries of our json.
-            for (Map.Entry<String, JsonElement> entry : gamerules.entrySet()) {
-                String ruleName = entry.getKey();
-                String ruleValue = entry.getValue()
-                    .getAsString();
-
-                registerGameRule(ruleName, ruleValue);
-            }
+            registerGameRule(ruleName, ruleValue);
         }
-
     }
 
     @Override
