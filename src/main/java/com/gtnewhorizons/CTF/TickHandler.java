@@ -1,5 +1,8 @@
 package com.gtnewhorizons.CTF;
 
+import static com.gtnewhorizons.CTF.tests.TestAreaChunkLoaderController.chunkMaxX;
+import static com.gtnewhorizons.CTF.tests.TestAreaChunkLoaderController.chunkMaxZ;
+import static com.gtnewhorizons.CTF.tests.TestAreaChunkLoaderController.loadAllRelevantChunks;
 import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
 
 import java.util.ArrayList;
@@ -14,6 +17,7 @@ import com.github.skjolber.packing.api.StackPlacement;
 import com.github.skjolber.packing.api.StackableItem;
 import com.github.skjolber.packing.packer.plain.PlainPackager;
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.TestAreaChunkLoaderController;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
 import net.minecraft.server.MinecraftServer;
 
@@ -37,8 +41,10 @@ public class TickHandler {
     @SuppressWarnings("unused")
     public void onWorldTick(TickEvent.ServerTickEvent event) {
         if (event.side.isClient() || event.phase == TickEvent.Phase.START) return;
-        if (MinecraftServer.getServer()
-            .getTickCounter() == 1) return;
+        if (MinecraftServer.getServer().getTickCounter() == 1) {
+            TestAreaChunkLoaderController.clearOutTestZone(MinecraftServer.getServer().worldServers[0], 3);
+            return;
+        };
 
         if (testsMap.isEmpty()) return;
 
@@ -54,6 +60,8 @@ public class TickHandler {
                 test.startTimer();
                 buildStructure(test);
             }
+
+            loadAllRelevantChunks(MinecraftServer.getServer().worldServers[0]);
 
             firstTickOfTest = true;
             return;
@@ -115,11 +123,6 @@ public class TickHandler {
 
         long startTimeForTestPacking = System.currentTimeMillis(); // Capture start time, use this to measure how long all this sorting took.
 
-        // Initial container dimensions
-        int initialWidth = 16;
-        int initialHeight = 50;
-        int initialDepth = 16;
-
         // Define packager
         PlainPackager packager = PlainPackager.newBuilder().build();
         boolean success;
@@ -129,7 +132,7 @@ public class TickHandler {
             // Define container with expanding size
             Container container = Container.newBuilder()
                 .withDescription("Total test area")
-                .withSize(initialWidth, initialHeight, initialDepth)
+                .withSize(chunkMaxX * 16, 255, chunkMaxZ * 16)
                 .withEmptyWeight(1)
                 .withMaxLoadWeight(Integer.MAX_VALUE)
                 .build();
@@ -150,8 +153,8 @@ public class TickHandler {
                 placements = result.get(0).getStack().getPlacements();
             } else {
                 // Expand width and depth for the next iteration
-                initialWidth += 16;
-                initialDepth += 16;
+                chunkMaxX++;
+                chunkMaxZ++;
             }
 
         } while (!success);
