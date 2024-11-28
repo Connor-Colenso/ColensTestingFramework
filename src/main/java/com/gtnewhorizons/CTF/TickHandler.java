@@ -22,6 +22,10 @@ public class TickHandler {
             return;
         }
 
+        if (MinecraftServer.getServer().getTickCounter() < 1000) {
+            return;
+        }
+
         TestManager.runTick(event);
     }
 
