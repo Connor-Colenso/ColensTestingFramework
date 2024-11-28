@@ -106,6 +106,7 @@ public class RenderCTFFrames {
                         test.getBufferStartY(),
                         (test.getBufferEndZ() + test.getBufferStartZ()) / 2.0);
 
+                // Override the colour to red, if it has failed.
                 if (test.failed) {
                     renderFrameBuilder.setColour(1, 0, 0);
                 }
