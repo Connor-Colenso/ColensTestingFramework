@@ -72,11 +72,20 @@ public final class Test {
         StackableSurface stackableSurface = StackableSurface.newBuilder()
             .withSide(new Surface(Surface.Label.TOP), false)
             .build();
-        testBounds = new StackableItem(Box.newBuilder().withStackableSurface(stackableSurface).withSize(
-            xStructureLength + testSettings.getBufferZoneInBlocks() * 2,
-            yStructureLength + testSettings.getBufferZoneInBlocks()  * 2,
-            zStructureLength + testSettings.getBufferZoneInBlocks()  * 2)
-            .withWeight(1).withId(uuid).build(), 1);
+        if (testSettings.isPreserveVertical()) {
+            testBounds = new StackableItem(Box.newBuilder().withStackableSurface(stackableSurface).withSize(
+                    xStructureLength + testSettings.getBufferZoneInBlocks() * 2,
+                    255,
+                    zStructureLength + testSettings.getBufferZoneInBlocks()  * 2)
+                .withWeight(1).withId(uuid).build(), 1);
+        } else {
+            testBounds = new StackableItem(Box.newBuilder().withStackableSurface(stackableSurface).withSize(
+                    xStructureLength + testSettings.getBufferZoneInBlocks() * 2,
+                    yStructureLength + testSettings.getBufferZoneInBlocks()  * 2,
+                    zStructureLength + testSettings.getBufferZoneInBlocks()  * 2)
+                .withWeight(1).withId(uuid).build(), 1);
+        }
+
 
         totalTests++;
     }
