@@ -71,17 +71,17 @@ public class RenderCTFFrames {
                 List<String> xText = new ArrayList<>();
                 xText.add("sX: " + (test.getEndStructureX() - test.getStartStructureX()));
                 xText.add("bX: " + (test.getBufferEndX() - test.getBufferStartX()));
-                xText.add("pX: " + (test.sp.getAbsoluteEndX() - test.sp.getAbsoluteX()));
+//                xText.add("pX: " + (test.sp.getAbsoluteEndX() - test.sp.getAbsoluteX()));
 
                 List<String> yText = new ArrayList<>();
                 yText.add("sY: " + (test.getEndStructureY() - test.getStartStructureY()));
                 yText.add("bY: " + (test.getBufferEndY() - test.getBufferStartY()));
-                yText.add("pY: " + (test.sp.getAbsoluteEndY() - test.sp.getAbsoluteY()));
+//                yText.add("pY: " + (test.sp.getAbsoluteEndY() - test.sp.getAbsoluteY()));
 
                 List<String> zText = new ArrayList<>();
                 zText.add("sZ: " + (test.getEndStructureZ() - test.getStartStructureZ()));
                 zText.add("bZ: " + (test.getBufferEndZ() - test.getBufferStartZ()));
-                zText.add("pZ: " + (test.sp.getAbsoluteEndZ() - test.sp.getAbsoluteZ()));
+//                zText.add("pZ: " + (test.sp.getAbsoluteEndZ() - test.sp.getAbsoluteZ()));
 
                 // Actually render in world.
                 RenderFrameBuilder renderFrameBuilder = new RenderFrameBuilder()
