@@ -3,6 +3,8 @@ package com.gtnewhorizons.CTF;
 import static com.gtnewhorizons.CTF.tests.TestAreaChunkLoaderController.chunkMaxX;
 import static com.gtnewhorizons.CTF.tests.TestAreaChunkLoaderController.chunkMaxZ;
 import static com.gtnewhorizons.CTF.tests.TestAreaChunkLoaderController.loadAllRelevantChunks;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.DUPLICATE_TEST;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
 import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
 
 import java.util.ArrayList;
@@ -113,7 +115,15 @@ public class TickHandler {
 
         // Load tests from JSON and add them to the list
         for (JsonObject json : JsonUtils.loadAll()) {
-            for (int i = 0; i < 40; i++) {
+            int duplicates = 1;
+            if (json.has(TEST_CONFIG)) {
+                JsonObject testConfig = json.get(TEST_CONFIG).getAsJsonObject();
+                if (testConfig.has(DUPLICATE_TEST)) {
+                    duplicates = testConfig.get(DUPLICATE_TEST).getAsInt();
+                }
+            }
+
+            for (int i = 0; i < duplicates; i++) {
                 Test test = new Test(json);
                 testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>()).add(test);
                 uuidTestsMapping.put(test.uuid, test);

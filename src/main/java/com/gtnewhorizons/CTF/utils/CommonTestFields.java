@@ -13,6 +13,7 @@ public class CommonTestFields {
     public static final String PRESERVE_VERTICAL = "preserveVertical";
     public static final String DIMENSION = "dimension";
     public static final String BUFFER_ZONE_IN_BLOCKS = "bufferZoneInBlocks";
+    public static final String DUPLICATE_TEST = "duplicateTest";
 
     // AddFluids - A lot of this is just using whatever FluidStack defines, considering we use that for saving/loading.
     public static final String FLUID_AMOUNT = "Amount";
