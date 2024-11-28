@@ -8,6 +8,11 @@ public class CommonTestFields {
     public static final String ENCODED_NBT = "encodedNBT";
     public static final String GAMERULES = "gamerules";
     public static final String TEST_CONFIG = "testConfig";
+    public static final String RUN_CONSOLE_COMMANDS = "runConsoleCommands";
+    public static final String FORCE_SEPARATE_RUNNING = "forceSeparateRunning";
+    public static final String PRESERVE_VERTICAL = "preserveVertical";
+    public static final String DIMENSION = "dimension";
+    public static final String BUFFER_ZONE_IN_BLOCKS = "bufferZoneInBlocks";
 
     // AddFluids - A lot of this is just using whatever FluidStack defines, considering we use that for saving/loading.
     public static final String FLUID_AMOUNT = "Amount";
