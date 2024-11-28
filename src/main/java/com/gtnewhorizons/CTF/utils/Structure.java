@@ -7,6 +7,7 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gtnewhorizons.CTF.tests.TestManager;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -118,8 +119,7 @@ public class Structure {
 
     public static void buildStructure(Test test) {
 
-        final World world = MinecraftServer.getServer()
-            .getEntityWorld();
+        final World world = TestManager.getWorldByDimensionId(test.getDimension());
 
         JsonArray build = test.getStructure()
             .getAsJsonArray("build");

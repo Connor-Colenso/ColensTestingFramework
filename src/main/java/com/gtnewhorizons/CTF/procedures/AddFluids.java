@@ -8,8 +8,10 @@ import static com.gtnewhorizons.CTF.utils.PrintUtils.RED;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gtnewhorizons.CTF.tests.TestManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
@@ -60,8 +62,8 @@ public class AddFluids extends Procedure {
 
     public void handleEventCustom(Test test) {
         // Retrieve the WorldServer instance and TileEntity at specified coordinates
-        WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
-        TileEntity tileEntity = worldServer.getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
+        World dimension = TestManager.getWorldByDimensionId(test.getDimension());
+        TileEntity tileEntity = dimension.getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
         if (tileEntity == null) {
             System.out.println(

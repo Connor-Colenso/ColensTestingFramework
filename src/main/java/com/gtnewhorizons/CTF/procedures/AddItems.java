@@ -5,12 +5,14 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gtnewhorizons.CTF.tests.TestManager;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 import com.google.gson.JsonArray;
@@ -74,8 +76,8 @@ public class AddItems extends Procedure {
     public void handleEventCustom(Test test) {
 
         // Retrieve the WorldServer instance and TileEntity at specified coordinates
-        WorldServer worldServer = MinecraftServer.getServer().worldServers[0];
-        TileEntity te = worldServer.getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
+        World dimension = TestManager.getWorldByDimensionId(test.getDimension());
+        TileEntity te = dimension.getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
         if (te == null) System.out.println(
             "Could not add item(s) at (" + (test.getStartStructureX() + x)

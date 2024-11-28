@@ -1,7 +1,7 @@
 package com.gtnewhorizons.CTF;
 
-import static com.gtnewhorizons.CTF.TickHandler.registerTests;
 
+import com.gtnewhorizons.CTF.tests.TestManager;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
@@ -82,7 +82,7 @@ public class MyMod {
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-        registerTests();
+        TestManager.registerTests();
     }
 
     @Mod.EventHandler

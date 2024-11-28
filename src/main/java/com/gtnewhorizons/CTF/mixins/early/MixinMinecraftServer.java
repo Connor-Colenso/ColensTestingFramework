@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.gtnewhorizons.CTF.TickHandler;
+import com.gtnewhorizons.CTF.tests.TestManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.network.ServerStatusResponse;
 import net.minecraft.server.MinecraftServer;
@@ -80,7 +81,7 @@ public abstract class MixinMinecraftServer {
                 // ------------------------------------------
                 // Simplified game loop for max speed.
                 while (this.serverRunning) {
-                    if (TickHandler.AllTestsDone()) {
+                    if (TestManager.AllTestsDone()) {
                         long j = getSystemTimeMillis();
                         long k = j - i;
 

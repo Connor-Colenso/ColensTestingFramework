@@ -1,8 +1,8 @@
 package com.gtnewhorizons.CTF.rendering;
 
-import static com.gtnewhorizons.CTF.TickHandler.uuidTestsMapping;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.tests.TestManager.uuidTestsMapping;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
 import com.gtnewhorizons.CTF.tests.Test;

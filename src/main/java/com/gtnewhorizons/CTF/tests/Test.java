@@ -1,6 +1,5 @@
 package com.gtnewhorizons.CTF.tests;
 
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
@@ -348,5 +347,9 @@ public final class Test {
 
     public int getBufferEndZ() {
         return structureStartZ + zStructureLength + testSettings.getBufferZoneInBlocks() ;
+    }
+
+    public int getDimension() {
+        return testSettings.getDimension();
     }
 }
