@@ -63,7 +63,7 @@ public class RenderCTFFrames {
             boolean playerLookingAtBlockInTestBounds = blockPlayerLookingAtVec != null && testRenderFrameWithBuffer.isVecInside(blockPlayerLookingAtVec);
 
             // Render the box if the player intersects or is looking at a block inside the test zone.
-            if (doesPlayerIntersectTestBounds || playerLookingAtBlockInTestBounds) {
+            if (doesPlayerIntersectTestBounds || playerLookingAtBlockInTestBounds || test.failed) {
 
                 // s -> Structure X length.
                 // b -> Buffer zone x length.
@@ -84,7 +84,7 @@ public class RenderCTFFrames {
                 zText.add("pZ: " + (test.sp.getAbsoluteEndZ() - test.sp.getAbsoluteZ()));
 
                 // Actually render in world.
-                (new RenderFrameBuilder())
+                RenderFrameBuilder renderFrameBuilder = new RenderFrameBuilder()
                     .setInterpolation(player, event)
                     .setFrame(testRenderFrameWithBuffer)
                     .setColourAccordingToCoords()
@@ -103,8 +103,13 @@ public class RenderCTFFrames {
                         test.getBufferStartX(),
                         test.getBufferStartY(),
                         (test.getBufferEndZ() + test.getBufferStartZ()) / 2.0
-                    )
-                    .render();
+                    );
+
+                if (test.failed) {
+                    renderFrameBuilder.setColour(1, 0, 0);
+                }
+
+                renderFrameBuilder.render();
             }
 
             // Horrific! But right now, it is the best I've got for detecting intersections for debugging. Sorry for those with weak CPUs :p
