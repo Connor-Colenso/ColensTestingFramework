@@ -1,11 +1,11 @@
 package com.gtnewhorizons.CTF.mixins.early;
 
+import static net.minecraft.server.MinecraftServer.getSystemTimeMillis;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.gtnewhorizons.CTF.TickHandler;
-import com.gtnewhorizons.CTF.tests.TestManager;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.network.ServerStatusResponse;
 import net.minecraft.server.MinecraftServer;
@@ -15,10 +15,10 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
+import com.gtnewhorizons.CTF.tests.TestManager;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.StartupQuery;
-
-import static net.minecraft.server.MinecraftServer.getSystemTimeMillis;
 
 @Mixin(MinecraftServer.class)
 public abstract class MixinMinecraftServer {
@@ -85,22 +85,19 @@ public abstract class MixinMinecraftServer {
                         long j = getSystemTimeMillis();
                         long k = j - i;
 
-                        if (k > 2000L && i - this.timeOfLastWarning >= 15000L)
-                        {
+                        if (k > 2000L && i - this.timeOfLastWarning >= 15000L) {
                             k = 2000L;
                             this.timeOfLastWarning = i;
                         }
 
-                        if (k < 0L)
-                        {
+                        if (k < 0L) {
                             k = 0L;
                         }
 
                         l += k;
                         i = j;
 
-                        while (l > 50L)
-                        {
+                        while (l > 50L) {
                             l -= 50L;
                             this.tick();
                         }

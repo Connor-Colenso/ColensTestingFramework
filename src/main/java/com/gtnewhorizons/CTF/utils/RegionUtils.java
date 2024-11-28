@@ -1,10 +1,10 @@
 package com.gtnewhorizons.CTF.utils;
 
-import net.minecraft.util.AxisAlignedBB;
-
 import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+
+import net.minecraft.util.AxisAlignedBB;
 
 public class RegionUtils {
 
@@ -40,11 +40,10 @@ public class RegionUtils {
      * @return true if the inner AABB is fully inside the outer AABB, including touching the edges.
      */
     public static boolean isFullyContained(AxisAlignedBB outer, AxisAlignedBB inner) {
-        return inner.minX >= outer.minX &&
-            inner.maxX <= outer.maxX &&
-            inner.minY >= outer.minY &&
-            inner.maxY <= outer.maxY &&
-            inner.minZ >= outer.minZ &&
-            inner.maxZ <= outer.maxZ;
+        return inner.minX >= outer.minX && inner.maxX <= outer.maxX
+            && inner.minY >= outer.minY
+            && inner.maxY <= outer.maxY
+            && inner.minZ >= outer.minZ
+            && inner.maxZ <= outer.maxZ;
     }
 }

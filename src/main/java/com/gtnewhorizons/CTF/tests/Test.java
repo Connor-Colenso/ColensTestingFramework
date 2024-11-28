@@ -14,10 +14,11 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 
+import net.minecraft.util.EnumChatFormatting;
+
 import com.github.skjolber.packing.api.Box;
 import com.github.skjolber.packing.api.StackPlacement;
 import com.github.skjolber.packing.api.StackableItem;
-
 import com.github.skjolber.packing.api.StackableSurface;
 import com.github.skjolber.packing.api.Surface;
 import com.google.gson.JsonArray;
@@ -30,13 +31,13 @@ import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.procedures.RunTicks;
 import com.gtnewhorizons.CTF.utils.BlockTilePair;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
-import net.minecraft.util.EnumChatFormatting;
 
 public final class Test {
 
     private final TestSettings testSettings;
     private final List<String> messageList = new ArrayList<>();
-    public final String uuid = UUID.randomUUID().toString();
+    public final String uuid = UUID.randomUUID()
+        .toString();
 
     public final StackableItem testBounds;
 
@@ -58,7 +59,8 @@ public final class Test {
         this.json = json;
 
         if (json.has(TEST_CONFIG)) {
-            JsonObject testConfig = json.get(TEST_CONFIG).getAsJsonObject();
+            JsonObject testConfig = json.get(TEST_CONFIG)
+                .getAsJsonObject();
 
             testSettings = new TestSettings(testConfig);
         } else {
@@ -73,19 +75,30 @@ public final class Test {
             .withSide(new Surface(Surface.Label.TOP), false)
             .build();
         if (testSettings.isPreserveVertical()) {
-            testBounds = new StackableItem(Box.newBuilder().withStackableSurface(stackableSurface).withSize(
-                    xStructureLength + testSettings.getBufferZoneInBlocks() * 2,
-                    255,
-                    zStructureLength + testSettings.getBufferZoneInBlocks()  * 2)
-                .withWeight(1).withId(uuid).build(), 1);
+            testBounds = new StackableItem(
+                Box.newBuilder()
+                    .withStackableSurface(stackableSurface)
+                    .withSize(
+                        xStructureLength + testSettings.getBufferZoneInBlocks() * 2,
+                        255,
+                        zStructureLength + testSettings.getBufferZoneInBlocks() * 2)
+                    .withWeight(1)
+                    .withId(uuid)
+                    .build(),
+                1);
         } else {
-            testBounds = new StackableItem(Box.newBuilder().withStackableSurface(stackableSurface).withSize(
-                    xStructureLength + testSettings.getBufferZoneInBlocks() * 2,
-                    yStructureLength + testSettings.getBufferZoneInBlocks()  * 2,
-                    zStructureLength + testSettings.getBufferZoneInBlocks()  * 2)
-                .withWeight(1).withId(uuid).build(), 1);
+            testBounds = new StackableItem(
+                Box.newBuilder()
+                    .withStackableSurface(stackableSurface)
+                    .withSize(
+                        xStructureLength + testSettings.getBufferZoneInBlocks() * 2,
+                        yStructureLength + testSettings.getBufferZoneInBlocks() * 2,
+                        zStructureLength + testSettings.getBufferZoneInBlocks() * 2)
+                    .withWeight(1)
+                    .withId(uuid)
+                    .build(),
+                1);
         }
-
 
         totalTests++;
     }
@@ -234,9 +247,9 @@ public final class Test {
     }
 
     public void setPlacement(StackPlacement placement) {
-        structureStartX = placement.getAbsoluteX() + testSettings.getBufferZoneInBlocks() ;
-        structureStartY = placement.getAbsoluteY() + testSettings.getBufferZoneInBlocks() ;
-        structureStartZ = placement.getAbsoluteZ() + testSettings.getBufferZoneInBlocks() ;
+        structureStartX = placement.getAbsoluteX() + testSettings.getBufferZoneInBlocks();
+        structureStartY = placement.getAbsoluteY() + testSettings.getBufferZoneInBlocks();
+        structureStartZ = placement.getAbsoluteZ() + testSettings.getBufferZoneInBlocks();
         sp = placement;
     }
 
@@ -251,6 +264,7 @@ public final class Test {
 
     private static int totalTests;
     private static int testsPassed;
+
     public void handleFinalConclusion() {
         if (!failed) {
             testsPassed++;
@@ -274,13 +288,17 @@ public final class Test {
         debugInfo.add("Test Name: " + getTestName());
 
         // Add information about structure dimensions and buffer zone
-        debugInfo.add("Structure Dimensions: (" + xStructureLength + "x, " + yStructureLength + "y, " + zStructureLength + "z).");
-        debugInfo.add("Buffer Zone: " + testSettings.getBufferZoneInBlocks() );
+        debugInfo.add(
+            "Structure Dimensions: (" + xStructureLength + "x, " + yStructureLength + "y, " + zStructureLength + "z).");
+        debugInfo.add("Buffer Zone: " + testSettings.getBufferZoneInBlocks());
 
         // Add the current position of the test in the world
         debugInfo.add("Test Position: (" + structureStartX + ", " + structureStartY + ", " + structureStartZ + ")");
-        debugInfo.add("Abs Position: (" + sp.getAbsoluteX() + ", " + sp.getAbsoluteY() + ", " + sp.getAbsoluteZ() + ")");
-        debugInfo.add("Abs End Position: (" + sp.getAbsoluteEndX() + ", " + sp.getAbsoluteEndY() + ", " + sp.getAbsoluteEndZ() + ")");
+        debugInfo
+            .add("Abs Position: (" + sp.getAbsoluteX() + ", " + sp.getAbsoluteY() + ", " + sp.getAbsoluteZ() + ")");
+        debugInfo.add(
+            "Abs End Position: (" + sp
+                .getAbsoluteEndX() + ", " + sp.getAbsoluteEndY() + ", " + sp.getAbsoluteEndZ() + ")");
 
         // Add information about procedures
         debugInfo.add("Procedures Remaining: " + procedureList.size());
@@ -324,27 +342,27 @@ public final class Test {
     }
 
     public int getBufferStartX() {
-        return structureStartX - testSettings.getBufferZoneInBlocks() ;
+        return structureStartX - testSettings.getBufferZoneInBlocks();
     }
 
     public int getBufferStartY() {
-        return structureStartY - testSettings.getBufferZoneInBlocks() ;
+        return structureStartY - testSettings.getBufferZoneInBlocks();
     }
 
     public int getBufferStartZ() {
-        return structureStartZ - testSettings.getBufferZoneInBlocks() ;
+        return structureStartZ - testSettings.getBufferZoneInBlocks();
     }
 
     public int getBufferEndX() {
-        return structureStartX + xStructureLength + testSettings.getBufferZoneInBlocks() ;
+        return structureStartX + xStructureLength + testSettings.getBufferZoneInBlocks();
     }
 
     public int getBufferEndY() {
-        return structureStartY + yStructureLength + testSettings.getBufferZoneInBlocks() ;
+        return structureStartY + yStructureLength + testSettings.getBufferZoneInBlocks();
     }
 
     public int getBufferEndZ() {
-        return structureStartZ + zStructureLength + testSettings.getBufferZoneInBlocks() ;
+        return structureStartZ + zStructureLength + testSettings.getBufferZoneInBlocks();
     }
 
     public int getDimension() {

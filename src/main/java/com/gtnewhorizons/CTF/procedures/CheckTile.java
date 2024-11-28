@@ -3,16 +3,14 @@ package com.gtnewhorizons.CTF.procedures;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.GREEN;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.RED;
 
-import com.gtnewhorizons.CTF.tests.TestManager;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.conditionals.registry.ConditionalFunction;
 import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
 import com.gtnewhorizons.CTF.tests.Test;
+import com.gtnewhorizons.CTF.tests.TestManager;
 
 public class CheckTile extends Procedure {
 
@@ -42,7 +40,8 @@ public class CheckTile extends Procedure {
     public void handleEventCustom(Test test) {
         ConditionalFunction f = RegisterConditionals.getFunc(funcID);
         World dimension = TestManager.getWorldByDimensionId(test.getDimension());
-        TileEntity te = dimension.getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
+        TileEntity te = dimension
+            .getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
         try {
             if (!f.checkCondition(te, dimension)) {

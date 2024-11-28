@@ -1,10 +1,6 @@
 package com.gtnewhorizons.CTF.utils.rendering;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import org.lwjgl.opengl.GL11;
+import static com.gtnewhorizons.CTF.utils.rendering.RegionRendering.renderFloatingText;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.gtnewhorizons.CTF.utils.rendering.RegionRendering.renderFloatingText;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+
+import org.lwjgl.opengl.GL11;
 
 public class RenderFrameBuilder {
 
@@ -43,7 +44,8 @@ public class RenderFrameBuilder {
     // Core method handling text addition
     private RenderFrameBuilder addTextInternal(List<String> texts, double x, double y, double z) {
         String key = x + "," + y + "," + z; // Unique key for each coordinate
-        textMap.computeIfAbsent(key, k -> new ArrayList<>()).addAll(texts);
+        textMap.computeIfAbsent(key, k -> new ArrayList<>())
+            .addAll(texts);
         return this;
     }
 
@@ -94,9 +96,9 @@ public class RenderFrameBuilder {
         return this;
     }
 
-
     public RenderFrameBuilder setColourAccordingToCoords() {
-        // Ensure that each color component is within the 0-1 range. Some magic idk, found it online. Works though. Primes?
+        // Ensure that each color component is within the 0-1 range. Some magic idk, found it online. Works though.
+        // Primes?
         red = (xMin * 31 + yMin * 17 + zMin * 13) % 256 / 255.0;
         green = (xMax * 7 + yMax * 3 + zMax * 5) % 256 / 255.0;
         blue = ((xMin + yMin + zMin + xMax + yMax + zMax) * 13) % 256 / 255.0;
@@ -167,7 +169,8 @@ public class RenderFrameBuilder {
         if (!textMap.isEmpty()) {
             for (Map.Entry<String, List<String>> entry : textMap.entrySet()) {
                 // Extract x, y, and z from the key
-                String[] coords = entry.getKey().split(",");
+                String[] coords = entry.getKey()
+                    .split(",");
                 double x = Double.parseDouble(coords[0]);
                 double y = Double.parseDouble(coords[1]);
                 double z = Double.parseDouble(coords[2]);

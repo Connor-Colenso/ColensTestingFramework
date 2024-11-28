@@ -1,7 +1,7 @@
 package com.gtnewhorizons.CTF;
 
+import java.util.List;
 
-import com.gtnewhorizons.CTF.tests.TestManager;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,8 +24,9 @@ import com.gtnewhorizons.CTF.conditionals.TestConditional;
 import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
 import com.gtnewhorizons.CTF.events.CTFWandEventHandler;
 import com.gtnewhorizons.CTF.items.RegisterItems;
-import com.gtnewhorizons.CTF.rendering.RenderCTFRegionInfo;
 import com.gtnewhorizons.CTF.rendering.RenderCTFFrames;
+import com.gtnewhorizons.CTF.rendering.RenderCTFRegionInfo;
+import com.gtnewhorizons.CTF.tests.TestManager;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
@@ -34,8 +35,6 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-
-import java.util.List;
 
 @Mod(
     modid = MyMod.MODID,
@@ -63,6 +62,7 @@ public class MyMod {
     public void init(FMLInitializationEvent event) {
 
         ForgeChunkManager.setForcedChunkLoadingCallback(this, new ForgeChunkManager.LoadingCallback() {
+
             @Override
             public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
                 System.out.println("ticketsLoaded called.");

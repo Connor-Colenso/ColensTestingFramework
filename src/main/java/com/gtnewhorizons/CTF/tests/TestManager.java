@@ -1,5 +1,20 @@
 package com.gtnewhorizons.CTF.tests;
 
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.DUPLICATE_TEST;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
+import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+
 import com.github.skjolber.packing.api.Container;
 import com.github.skjolber.packing.api.ContainerItem;
 import com.github.skjolber.packing.api.PackagerResult;
@@ -10,28 +25,14 @@ import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.MyMod;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
+
 import cpw.mods.fml.common.gameevent.TickEvent;
-import net.minecraft.init.Blocks;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.ChunkCoordIntPair;
-import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.DUPLICATE_TEST;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
-import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
 
 public class TestManager {
 
     private static final HashMap<Integer, AxisAlignedBB> dimensionIdToTestBounds = new HashMap<>();
 
     private static final int testAreaBufferZone = 3;
-
 
     public static World getWorldByDimensionId(int dimensionId) {
         MinecraftServer server = MinecraftServer.getServer();
@@ -61,22 +62,25 @@ public class TestManager {
                     ChunkCoordIntPair chunkCoord = new ChunkCoordIntPair(chunkX, chunkZ);
 
                     // Create or retrieve a Forge ticket
-                    ForgeChunkManager.Ticket ticket = ForgeChunkManager.requestTicket(MyMod.instance, dimension, ForgeChunkManager.Type.NORMAL);
+                    ForgeChunkManager.Ticket ticket = ForgeChunkManager
+                        .requestTicket(MyMod.instance, dimension, ForgeChunkManager.Type.NORMAL);
                     if (ticket != null) {
                         ForgeChunkManager.forceChunk(ticket, chunkCoord);
                         System.out.println("Forcing chunk at " + chunkX + ", " + chunkZ);
                     } else {
-                        throw new RuntimeException("Could not request chunk at " + chunkX + ", " + chunkZ + " to be loaded.");
+                        throw new RuntimeException(
+                            "Could not request chunk at " + chunkX + ", " + chunkZ + " to be loaded.");
                     }
                 }
             }
         }
     }
 
-
     public static void expandTestZone(int dimensionId) {
         // Expand 1 chunk in each positive direction.
-       dimensionIdToTestBounds.computeIfPresent(dimensionId, (k, testBounds) -> AxisAlignedBB.getBoundingBox(0, 0, 0, testBounds.maxX + 16, 255, testBounds.maxZ + 16));
+        dimensionIdToTestBounds.computeIfPresent(
+            dimensionId,
+            (k, testBounds) -> AxisAlignedBB.getBoundingBox(0, 0, 0, testBounds.maxX + 16, 255, testBounds.maxZ + 16));
     }
 
     public static void clearOutTestZones() {
@@ -96,7 +100,7 @@ public class TestManager {
             // Iterate over all blocks within the calculated boundaries and set them to air.
             for (int x = minX; x <= maxX; x++) {
                 for (int z = minZ; z <= maxZ; z++) {
-                    for (int y = 0; y < dimension.getHeight(); y++) {  // 256 in vanilla 1.7.10
+                    for (int y = 0; y < dimension.getHeight(); y++) { // 256 in vanilla 1.7.10
                         // Only replace non-air blocks, this seems wonky,
                         // but it actually stops us generating excess sections in chunks without much initialised.
                         if (!dimension.isAirBlock(x, y, z)) {
@@ -108,9 +112,8 @@ public class TestManager {
         }
     }
 
-
     public static void registerDimensionalUsage(int dimensionId) {
-        dimensionIdToTestBounds.putIfAbsent(dimensionId, AxisAlignedBB.getBoundingBox(0,0,0,16,255,16));
+        dimensionIdToTestBounds.putIfAbsent(dimensionId, AxisAlignedBB.getBoundingBox(0, 0, 0, 16, 255, 16));
     }
 
     public static HashMap<String, Test> uuidTestsMapping = new HashMap<>();
@@ -125,9 +128,11 @@ public class TestManager {
         for (JsonObject json : JsonUtils.loadAll()) {
             int duplicates = 1;
             if (json.has(TEST_CONFIG)) {
-                JsonObject testConfig = json.get(TEST_CONFIG).getAsJsonObject();
+                JsonObject testConfig = json.get(TEST_CONFIG)
+                    .getAsJsonObject();
                 if (testConfig.has(DUPLICATE_TEST)) {
-                    duplicates = testConfig.get(DUPLICATE_TEST).getAsInt();
+                    duplicates = testConfig.get(DUPLICATE_TEST)
+                        .getAsInt();
                 }
             }
 
@@ -136,18 +141,22 @@ public class TestManager {
 
                 TestManager.registerDimensionalUsage(test.getDimension());
 
-                testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>()).add(test);
+                testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>())
+                    .add(test);
                 uuidTestsMapping.put(test.uuid, test);
 
-                allTests.computeIfAbsent(test.getDimension(), k -> new ArrayList<>()).add(test.testBounds);
+                allTests.computeIfAbsent(test.getDimension(), k -> new ArrayList<>())
+                    .add(test.testBounds);
             }
         }
 
-        long startTimeForTestPacking = System.currentTimeMillis(); // Capture start time, use this to measure how long all this sorting took.
+        long startTimeForTestPacking = System.currentTimeMillis(); // Capture start time, use this to measure how long
+                                                                   // all this sorting took.
 
         for (int dimensionId : dimensionIdToTestBounds.keySet()) {
             // Define packager
-            PlainPackager packager = PlainPackager.newBuilder().build();
+            PlainPackager packager = PlainPackager.newBuilder()
+                .build();
             boolean success;
             List<StackPlacement> placements = null;
 
@@ -168,7 +177,9 @@ public class TestManager {
                 success = result.isSuccess();
 
                 if (success) {
-                    placements = result.get(0).getStack().getPlacements();
+                    placements = result.get(0)
+                        .getStack()
+                        .getPlacements();
                 } else {
                     // Expand width and depth for the next iteration
                     expandTestZone(dimensionId);
@@ -178,7 +189,9 @@ public class TestManager {
 
             // Process the successful result
             for (StackPlacement placement : placements) {
-                Test test = uuidTestsMapping.get(placement.getStackable().getId());
+                Test test = uuidTestsMapping.get(
+                    placement.getStackable()
+                        .getId());
                 test.setPlacement(placement);
             }
         }

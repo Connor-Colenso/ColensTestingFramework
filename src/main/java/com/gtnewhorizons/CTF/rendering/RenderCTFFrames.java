@@ -5,8 +5,9 @@ import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.tests.TestManager.uuidTestsMapping;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
-import com.gtnewhorizons.CTF.tests.Test;
-import com.gtnewhorizons.CTF.utils.rendering.RenderFrameBuilder;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
@@ -14,11 +15,11 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
+import com.gtnewhorizons.CTF.tests.Test;
+import com.gtnewhorizons.CTF.utils.rendering.RenderFrameBuilder;
+
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 // Client side only rendering.
 public class RenderCTFFrames {
@@ -39,7 +40,8 @@ public class RenderCTFFrames {
         // This is a horrible way of checking but right now, not much choice.
         List<AxisAlignedBB> allTestBounds = new ArrayList<>();
 
-        // Iterate over all maps, and render ones which the player is either looking at a block within, or the player is within.
+        // Iterate over all maps, and render ones which the player is either looking at a block within, or the player is
+        // within.
         for (Test test : uuidTestsMapping.values()) {
             // Ignore conflicts and all rendering from tests in other dimensions.
             if (test.getDimension() != player.dimension) continue;
@@ -51,8 +53,7 @@ public class RenderCTFFrames {
                 test.getBufferStartZ(),
                 test.getBufferEndX(),
                 test.getBufferEndY(),
-                test.getBufferEndZ()
-            );
+                test.getBufferEndZ());
 
             allTestBounds.add(testRenderFrameWithBuffer);
 
@@ -60,7 +61,8 @@ public class RenderCTFFrames {
             boolean doesPlayerIntersectTestBounds = player.boundingBox.intersectsWith(testRenderFrameWithBuffer);
 
             // Check if the precomputed ray trace block is inside the current test bounding box.
-            boolean playerLookingAtBlockInTestBounds = blockPlayerLookingAtVec != null && testRenderFrameWithBuffer.isVecInside(blockPlayerLookingAtVec);
+            boolean playerLookingAtBlockInTestBounds = blockPlayerLookingAtVec != null
+                && testRenderFrameWithBuffer.isVecInside(blockPlayerLookingAtVec);
 
             // Render the box if the player intersects or is looking at a block inside the test zone.
             if (doesPlayerIntersectTestBounds || playerLookingAtBlockInTestBounds || test.failed) {
@@ -71,39 +73,38 @@ public class RenderCTFFrames {
                 List<String> xText = new ArrayList<>();
                 xText.add("sX: " + (test.getEndStructureX() - test.getStartStructureX()));
                 xText.add("bX: " + (test.getBufferEndX() - test.getBufferStartX()));
-//                xText.add("pX: " + (test.sp.getAbsoluteEndX() - test.sp.getAbsoluteX()));
+                // xText.add("pX: " + (test.sp.getAbsoluteEndX() - test.sp.getAbsoluteX()));
 
                 List<String> yText = new ArrayList<>();
                 yText.add("sY: " + (test.getEndStructureY() - test.getStartStructureY()));
                 yText.add("bY: " + (test.getBufferEndY() - test.getBufferStartY()));
-//                yText.add("pY: " + (test.sp.getAbsoluteEndY() - test.sp.getAbsoluteY()));
+                // yText.add("pY: " + (test.sp.getAbsoluteEndY() - test.sp.getAbsoluteY()));
 
                 List<String> zText = new ArrayList<>();
                 zText.add("sZ: " + (test.getEndStructureZ() - test.getStartStructureZ()));
                 zText.add("bZ: " + (test.getBufferEndZ() - test.getBufferStartZ()));
-//                zText.add("pZ: " + (test.sp.getAbsoluteEndZ() - test.sp.getAbsoluteZ()));
+                // zText.add("pZ: " + (test.sp.getAbsoluteEndZ() - test.sp.getAbsoluteZ()));
 
                 // Actually render in world.
-                RenderFrameBuilder renderFrameBuilder = new RenderFrameBuilder()
-                    .setInterpolation(player, event)
+                RenderFrameBuilder renderFrameBuilder = new RenderFrameBuilder().setInterpolation(player, event)
                     .setFrame(testRenderFrameWithBuffer)
                     .setColourAccordingToCoords()
                     .addCentralText(test.relevantDebugInfo())
-                    .addText(xText,
+                    .addText(
+                        xText,
                         (test.getBufferEndX() + test.getBufferStartX()) / 2.0,
                         test.getBufferStartY(),
-                        test.getBufferStartZ()
-                    )
-                    .addText(yText,
+                        test.getBufferStartZ())
+                    .addText(
+                        yText,
                         test.getBufferStartX(),
                         (test.getBufferEndY() + test.getBufferStartY()) / 2.0,
-                        test.getBufferStartZ()
-                    )
-                    .addText(zText,
+                        test.getBufferStartZ())
+                    .addText(
+                        zText,
                         test.getBufferStartX(),
                         test.getBufferStartY(),
-                        (test.getBufferEndZ() + test.getBufferStartZ()) / 2.0
-                    );
+                        (test.getBufferEndZ() + test.getBufferStartZ()) / 2.0);
 
                 if (test.failed) {
                     renderFrameBuilder.setColour(1, 0, 0);
@@ -112,20 +113,19 @@ public class RenderCTFFrames {
                 renderFrameBuilder.render();
             }
 
-            // Horrific! But right now, it is the best I've got for detecting intersections for debugging. Sorry for those with weak CPUs :p
-            for(AxisAlignedBB bounds : allTestBounds) {
-                for(AxisAlignedBB bounds2 : allTestBounds) {
+            // Horrific! But right now, it is the best I've got for detecting intersections for debugging. Sorry for
+            // those with weak CPUs :p
+            for (AxisAlignedBB bounds : allTestBounds) {
+                for (AxisAlignedBB bounds2 : allTestBounds) {
                     if ((bounds2 != bounds) && bounds.intersectsWith(bounds2)) {
-                        (new RenderFrameBuilder())
-                            .setInterpolation(player, event)
+                        (new RenderFrameBuilder()).setInterpolation(player, event)
                             .setFrame(bounds)
-                            .setColour(1,0,0)
+                            .setColour(1, 0, 0)
                             .render();
 
-                        (new RenderFrameBuilder())
-                            .setInterpolation(player, event)
+                        (new RenderFrameBuilder()).setInterpolation(player, event)
                             .setFrame(bounds2)
-                            .setColour(1,0,0)
+                            .setColour(1, 0, 0)
                             .render();
                     }
                 }
@@ -150,11 +150,9 @@ public class RenderCTFFrames {
         double zMax = Math.max(firstPosition[2], secondPosition[2]) + 1.0;
 
         // Render the CTF wand frame.
-        (new RenderFrameBuilder())
-        .setInterpolation(player, event)
-        .setFrame(xMin, yMin, zMin, xMax, yMax, zMax)
-        .render();
+        (new RenderFrameBuilder()).setInterpolation(player, event)
+            .setFrame(xMin, yMin, zMin, xMax, yMax, zMax)
+            .render();
     }
-
 
 }

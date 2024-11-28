@@ -1,23 +1,23 @@
 package com.gtnewhorizons.CTF.tests;
 
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.BUFFER_ZONE_IN_BLOCKS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.DIMENSION;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.FORCE_SEPARATE_RUNNING;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.PRESERVE_VERTICAL;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.RUN_CONSOLE_COMMANDS;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import com.google.gson.JsonArray;
 import net.minecraft.world.WorldServer;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.BUFFER_ZONE_IN_BLOCKS;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.DIMENSION;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.FORCE_SEPARATE_RUNNING;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.PRESERVE_VERTICAL;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.RUN_CONSOLE_COMMANDS;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 
 public class TestSettings {
 
@@ -33,27 +33,35 @@ public class TestSettings {
     public TestSettings(JsonObject testConfig) {
 
         if (testConfig.has(GAMERULES)) {
-            addGameruleInfo(testConfig.get(GAMERULES).getAsJsonObject());
+            addGameruleInfo(
+                testConfig.get(GAMERULES)
+                    .getAsJsonObject());
         }
 
         if (testConfig.has(RUN_CONSOLE_COMMANDS)) {
-            addCommandsToRunInConsole(testConfig.get(RUN_CONSOLE_COMMANDS).getAsJsonArray());
+            addCommandsToRunInConsole(
+                testConfig.get(RUN_CONSOLE_COMMANDS)
+                    .getAsJsonArray());
         }
 
         if (testConfig.has(FORCE_SEPARATE_RUNNING)) {
-            forceSeparateRunning = testConfig.get(FORCE_SEPARATE_RUNNING).getAsBoolean();
+            forceSeparateRunning = testConfig.get(FORCE_SEPARATE_RUNNING)
+                .getAsBoolean();
         }
 
         if (testConfig.has(PRESERVE_VERTICAL)) {
-            preserveVertical = testConfig.get(PRESERVE_VERTICAL).getAsBoolean();
+            preserveVertical = testConfig.get(PRESERVE_VERTICAL)
+                .getAsBoolean();
         }
 
         if (testConfig.has(DIMENSION)) {
-            dimension = testConfig.get(DIMENSION).getAsInt();
+            dimension = testConfig.get(DIMENSION)
+                .getAsInt();
         }
 
         if (testConfig.has(BUFFER_ZONE_IN_BLOCKS)) {
-            bufferZoneInBlocks = testConfig.get(BUFFER_ZONE_IN_BLOCKS).getAsInt();
+            bufferZoneInBlocks = testConfig.get(BUFFER_ZONE_IN_BLOCKS)
+                .getAsInt();
         }
 
     }
@@ -98,8 +106,8 @@ public class TestSettings {
         if (this.forceSeparateRunning || that.forceSeparateRunning) return false;
 
         // Compare gameruleMap and runConsoleCommands content.
-        return Objects.equals(this.gameruleMap, that.gameruleMap) &&
-            Objects.equals(this.runConsoleCommands, that.runConsoleCommands);
+        return Objects.equals(this.gameruleMap, that.gameruleMap)
+            && Objects.equals(this.runConsoleCommands, that.runConsoleCommands);
     }
 
     @Override
@@ -107,7 +115,6 @@ public class TestSettings {
         // Hash computation includes all relevant fields.
         return Objects.hash(gameruleMap, runConsoleCommands, forceSeparateRunning);
     }
-
 
     public void runConsoleCommands() {
         // Idk figure this out.
