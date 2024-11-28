@@ -7,13 +7,16 @@ import com.github.skjolber.packing.api.StackPlacement;
 import com.github.skjolber.packing.api.StackableItem;
 import com.github.skjolber.packing.packer.plain.PlainPackager;
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.MyMod;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,10 +32,6 @@ public class TestManager {
 
     private static final int testAreaBufferZone = 3;
 
-    private static final int chunkMinX = 0;
-    private static final int chunkMinZ = 0;
-    public static int chunkMaxX = 1;
-    public static int chunkMaxZ = 1;
 
     public static World getWorldByDimensionId(int dimensionId) {
         MinecraftServer server = MinecraftServer.getServer();
@@ -40,22 +39,40 @@ public class TestManager {
     }
 
     public static void loadAllTestChunks() {
-
         // Iterate over every dimension.
         for (int dimensionId : dimensionIdToTestBounds.keySet()) {
             World dimension = getWorldByDimensionId(dimensionId);
+            if (dimension == null) {
+                System.err.println("Dimension with ID " + dimensionId + " is not loaded.");
+                continue;
+            }
 
-            // Iterate over all relevant chunks, and load them.
+            AxisAlignedBB testBounds = dimensionIdToTestBounds.get(dimensionId);
+
+            // Calculate chunk boundaries based on AxisAlignedBB.
+            int chunkMinX = (int) Math.floor(testBounds.minX) >> 4;
+            int chunkMaxX = (int) Math.floor(testBounds.maxX) >> 4;
+            int chunkMinZ = (int) Math.floor(testBounds.minZ) >> 4;
+            int chunkMaxZ = (int) Math.floor(testBounds.maxZ) >> 4;
+
+            // Iterate over all relevant chunks and load them if they aren't loaded.
             for (int chunkX = chunkMinX; chunkX <= chunkMaxX; chunkX++) {
                 for (int chunkZ = chunkMinZ; chunkZ <= chunkMaxZ; chunkZ++) {
-                    if (!dimension.getChunkProvider().chunkExists(chunkX, chunkZ)) {
-                        // Force load the chunk if it's not already loaded.
-                        dimension.getChunkProvider().loadChunk(chunkX, chunkZ);
+                    ChunkCoordIntPair chunkCoord = new ChunkCoordIntPair(chunkX, chunkZ);
+
+                    // Create or retrieve a Forge ticket
+                    ForgeChunkManager.Ticket ticket = ForgeChunkManager.requestTicket(MyMod.instance, dimension, ForgeChunkManager.Type.NORMAL);
+                    if (ticket != null) {
+                        ForgeChunkManager.forceChunk(ticket, chunkCoord);
+                        System.out.println("Forcing chunk at " + chunkX + ", " + chunkZ);
+                    } else {
+                        throw new RuntimeException("Could not request chunk at " + chunkX + ", " + chunkZ + " to be loaded.");
                     }
                 }
             }
         }
     }
+
 
     public static void expandTestZone(int dimensionId) {
         // Expand 1 chunk in each positive direction.
@@ -63,21 +80,37 @@ public class TestManager {
     }
 
     public static void clearOutTestZones() {
+        // Iterate over every dimension.
         for (int dimensionId : dimensionIdToTestBounds.keySet()) {
             World dimension = getWorldByDimensionId(dimensionId);
 
-            for (int x = -testAreaBufferZone; x < chunkMaxX * 16 + testAreaBufferZone; x++) {
-                for (int z = -testAreaBufferZone; z < chunkMaxX * 16 + testAreaBufferZone; z++) {
-                    for (int y = 0; y <= 256; y++) {
-                        dimension.setBlock(x, y, z, Blocks.air);
+            // Retrieve the test bounds for this dimension.
+            AxisAlignedBB testBounds = dimensionIdToTestBounds.get(dimensionId);
+
+            // Calculate the block boundaries, including the buffer zone.
+            int minX = (int) Math.floor(testBounds.minX) - testAreaBufferZone;
+            int maxX = (int) Math.floor(testBounds.maxX) + testAreaBufferZone;
+            int minZ = (int) Math.floor(testBounds.minZ) - testAreaBufferZone;
+            int maxZ = (int) Math.floor(testBounds.maxZ) + testAreaBufferZone;
+
+            // Iterate over all blocks within the calculated boundaries and set them to air.
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    for (int y = 0; y < dimension.getHeight(); y++) {  // 256 in vanilla 1.7.10
+                        // Only replace non-air blocks, this seems wonky,
+                        // but it actually stops us generating excess sections in chunks without much initialised.
+                        if (!dimension.isAirBlock(x, y, z)) {
+                            dimension.setBlock(x, y, z, Blocks.air);
+                        }
                     }
                 }
             }
         }
     }
 
+
     public static void registerDimensionalUsage(int dimensionId) {
-        dimensionIdToTestBounds.putIfAbsent(dimensionId, AxisAlignedBB.getBoundingBox(0,0,0,15,255,15));
+        dimensionIdToTestBounds.putIfAbsent(dimensionId, AxisAlignedBB.getBoundingBox(0,0,0,16,255,16));
     }
 
     public static HashMap<String, Test> uuidTestsMapping = new HashMap<>();
@@ -167,7 +200,6 @@ public class TestManager {
             .withMaxLoadWeight(Integer.MAX_VALUE)
             .build();
     }
-
 
     private static boolean firstTickOfTest;
 

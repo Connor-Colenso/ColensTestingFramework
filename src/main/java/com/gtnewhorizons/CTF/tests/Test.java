@@ -30,6 +30,7 @@ import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.procedures.RunTicks;
 import com.gtnewhorizons.CTF.utils.BlockTilePair;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
+import net.minecraft.util.EnumChatFormatting;
 
 public final class Test {
 
@@ -271,10 +272,9 @@ public final class Test {
 
         // Add test name and UUID for identification
         debugInfo.add("Test Name: " + getTestName());
-        debugInfo.add("UUID: " + uuid);
 
         // Add information about structure dimensions and buffer zone
-        debugInfo.add("Structure Dimensions: " + xStructureLength + " x " + yStructureLength + " x " + zStructureLength);
+        debugInfo.add("Structure Dimensions: (" + xStructureLength + "x, " + yStructureLength + "y, " + zStructureLength + "z).");
         debugInfo.add("Buffer Zone: " + testSettings.getBufferZoneInBlocks() );
 
         // Add the current position of the test in the world
@@ -285,14 +285,12 @@ public final class Test {
         // Add information about procedures
         debugInfo.add("Procedures Remaining: " + procedureList.size());
 
-        // Add information about test status and time
-        debugInfo.add("Failed: " + failed);
-        debugInfo.add("Ticks Taken: " + tickCounter);
-        debugInfo.add("Time Taken: " + (System.currentTimeMillis() - testStartTime) + " ms");
-
-        // Add the total number of tests and passed tests
-        debugInfo.add("Total Tests: " + totalTests);
-        debugInfo.add("Tests Passed: " + testsPassed);
+        // Add information about test status
+        if (failed) {
+            debugInfo.add(EnumChatFormatting.RED + "Test failed");
+        } else {
+            debugInfo.add(EnumChatFormatting.GREEN + "Test passed");
+        }
 
         // Add messages collected during the test
         debugInfo.add("Messages: ");

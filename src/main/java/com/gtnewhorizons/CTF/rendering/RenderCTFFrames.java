@@ -41,6 +41,9 @@ public class RenderCTFFrames {
 
         // Iterate over all maps, and render ones which the player is either looking at a block within, or the player is within.
         for (Test test : uuidTestsMapping.values()) {
+            // Ignore conflicts and all rendering from tests in other dimensions.
+            if (test.getDimension() != player.dimension) continue;
+
             // Define the bounding box for the test zone with buffer zone.
             AxisAlignedBB testRenderFrameWithBuffer = AxisAlignedBB.getBoundingBox(
                 test.getBufferStartX(),

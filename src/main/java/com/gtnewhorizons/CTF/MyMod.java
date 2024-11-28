@@ -2,6 +2,8 @@ package com.gtnewhorizons.CTF;
 
 
 import com.gtnewhorizons.CTF.tests.TestManager;
+import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
 import org.apache.logging.log4j.LogManager;
@@ -33,6 +35,8 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
+import java.util.List;
+
 @Mod(
     modid = MyMod.MODID,
     version = Tags.VERSION,
@@ -42,6 +46,9 @@ public class MyMod {
 
     public static final String MODID = "CTF";
     public static final Logger LOG = LogManager.getLogger(MODID);
+
+    @Mod.Instance(MODID)
+    public static MyMod instance;
 
     @SidedProxy(clientSide = "com.gtnewhorizons.CTF.ClientProxy", serverSide = "com.gtnewhorizons.CTF.CommonProxy")
     public static CommonProxy proxy;
@@ -54,6 +61,14 @@ public class MyMod {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
+
+        ForgeChunkManager.setForcedChunkLoadingCallback(this, new ForgeChunkManager.LoadingCallback() {
+            @Override
+            public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
+                System.out.println("ticketsLoaded called.");
+            }
+        });
+
         // Register the tick handler
         FMLCommonHandler.instance()
             .bus()
