@@ -2,8 +2,6 @@ package com.gtnewhorizons.CTF;
 
 import java.util.List;
 
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.utils.JsonUtils;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -11,6 +9,7 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.commands.CommandAddInstruction;
 import com.gtnewhorizons.CTF.commands.CommandCompleteTest;
 import com.gtnewhorizons.CTF.commands.CommandGetTileEntity;
@@ -29,6 +28,7 @@ import com.gtnewhorizons.CTF.items.RegisterItems;
 import com.gtnewhorizons.CTF.rendering.RenderCTFFrames;
 import com.gtnewhorizons.CTF.rendering.RenderCTFRegionInfo;
 import com.gtnewhorizons.CTF.tests.TestManager;
+import com.gtnewhorizons.CTF.utils.JsonUtils;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;

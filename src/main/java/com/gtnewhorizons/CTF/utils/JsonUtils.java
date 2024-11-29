@@ -61,8 +61,6 @@ public class JsonUtils {
     private static List<JsonObject> loadJsonsFromDir(File directory) {
         List<JsonObject> jsonList = new ArrayList<>();
 
-        if (!directory.isDirectory()) return jsonList;
-
         try (Stream<Path> paths = Files.walk(directory.toPath())) {
             paths.filter(Files::isRegularFile)
                 .filter(
