@@ -93,6 +93,7 @@ jobs:
           echo "eula=true" > run/eula.txt
           # Set a constant seed with a village at spawn
           echo -e "level-seed=-6202107849386030209\nonline-mode=true\n" > run/server.properties
+          sleep 100
           echo "stop" > run/stop.txt
           timeout 90 ./gradlew --build-cache --info --stacktrace runServer 2>&1 < run/stop.txt | tee -a server.log || true
 
