@@ -2,6 +2,7 @@ package com.gtnewhorizons.CTF;
 
 import java.util.List;
 
+import crazypants.enderio.Log;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -59,6 +60,7 @@ public class MyMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        Log.info("CTF Pre-Initialization " + System.getProperty("user.dir"));
         proxy.preInit(event);
         new MovePlayer(); // Moves the user to specific x y z coords.
     }
