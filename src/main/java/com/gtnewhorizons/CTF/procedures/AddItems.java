@@ -5,7 +5,6 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,6 +14,7 @@ import net.minecraft.world.World;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.MyMod;
 import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.tests.TestManager;
 import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
@@ -79,8 +79,11 @@ public class AddItems extends Procedure {
         TileEntity te = dimension
             .getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
-        if (te == null)
-            MyMod.LOG.info("Could not add item(s) at ({}, {}, {}) as tile entity was null.", test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
+        if (te == null) MyMod.LOG.info(
+            "Could not add item(s) at ({}, {}, {}) as tile entity was null.",
+            test.getStartStructureX() + x,
+            test.getStartStructureY() + y,
+            test.getStartStructureZ() + z);
 
         // Ensure the TileEntity is not null and is an instance of IInventory
         if (te instanceof IInventory inventory) {

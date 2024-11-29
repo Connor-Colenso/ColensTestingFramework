@@ -2,7 +2,6 @@ package com.gtnewhorizons.CTF.commands;
 
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
-import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -12,6 +11,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
+import com.gtnewhorizons.CTF.MyMod;
 import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 
 public class CommandGetTileEntity extends CommandBase {

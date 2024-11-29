@@ -1,8 +1,9 @@
 package com.gtnewhorizons.CTF.utils;
 
-import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
+
+import com.gtnewhorizons.CTF.MyMod;
 
 @SuppressWarnings("unused")
 public class PrintUtils {

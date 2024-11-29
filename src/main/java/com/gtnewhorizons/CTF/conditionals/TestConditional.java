@@ -1,10 +1,11 @@
 package com.gtnewhorizons.CTF.conditionals;
 
-import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+
+import com.gtnewhorizons.CTF.MyMod;
 
 public class TestConditional {
 
@@ -13,8 +14,10 @@ public class TestConditional {
     }
 
     public static boolean checkStructure(TileEntity tile, World world) {
-        MyMod.LOG.info("Ticks complete: {}", MinecraftServer.getServer()
-            .getTickCounter());
+        MyMod.LOG.info(
+            "Ticks complete: {}",
+            MinecraftServer.getServer()
+                .getTickCounter());
         if (tile == null) {
             MyMod.LOG.info("Tile is null");
             return false;

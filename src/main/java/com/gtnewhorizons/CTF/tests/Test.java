@@ -14,7 +14,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 
-import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.github.skjolber.packing.api.Box;
@@ -25,6 +24,7 @@ import com.github.skjolber.packing.api.Surface;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.MyMod;
 import com.gtnewhorizons.CTF.procedures.AddFluids;
 import com.gtnewhorizons.CTF.procedures.AddItems;
 import com.gtnewhorizons.CTF.procedures.CheckTile;
@@ -277,7 +277,6 @@ public final class Test {
         String message = String.format("Total tests passed: %d/%d (%.2f%%)", testsPassed, totalTests, percentage);
         MyMod.LOG.info(message); // Use your mod's logger
     }
-
 
     public void recordEndTime() {
         messageList.add("Time taken: " + (System.currentTimeMillis() - testStartTime) + "ms");

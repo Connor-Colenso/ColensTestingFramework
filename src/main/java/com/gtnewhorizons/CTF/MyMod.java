@@ -2,8 +2,6 @@ package com.gtnewhorizons.CTF;
 
 import java.util.List;
 
-import crazypants.enderio.Log;
-import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -38,6 +36,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import crazypants.enderio.Log;
 
 @Mod(
     modid = MyMod.MODID,
@@ -68,7 +67,8 @@ public class MyMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
-        ForgeChunkManager.setForcedChunkLoadingCallback(this, (tickets, world) -> System.out.println("ticketsLoaded called."));
+        ForgeChunkManager
+            .setForcedChunkLoadingCallback(this, (tickets, world) -> System.out.println("ticketsLoaded called."));
 
         // Register the tick handler
         FMLCommonHandler.instance()
