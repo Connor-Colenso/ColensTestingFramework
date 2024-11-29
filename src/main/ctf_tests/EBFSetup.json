@@ -2,7 +2,7 @@
   "testName": "EBFSetup",
   "testConfig" : {
     "dimension" : 0,
-    "duplicateTest" : 313,
+    "duplicateTest" : 95,
     "bufferZone" : "3",
     "preserveVertical" : "false",
     "forceSeparateRunning" : "false",
