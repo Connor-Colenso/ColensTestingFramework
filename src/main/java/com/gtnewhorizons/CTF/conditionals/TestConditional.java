@@ -1,5 +1,6 @@
 package com.gtnewhorizons.CTF.conditionals;
 
+import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
@@ -12,20 +13,19 @@ public class TestConditional {
     }
 
     public static boolean checkStructure(TileEntity tile, World world) {
-        System.out.println(
-            "Ticks complete: " + MinecraftServer.getServer()
-                .getTickCounter());
+        MyMod.LOG.info("Ticks complete: {}", MinecraftServer.getServer()
+            .getTickCounter());
         if (tile == null) {
-            System.out.println("Tile is null");
+            MyMod.LOG.info("Tile is null");
             return false;
         } else {
-            System.out.println("Tile is not null.");
+            MyMod.LOG.info("Tile is not null.");
 
             if (tile.isInvalid()) {
-                System.out.println("Still failing on an actual test!");
+                MyMod.LOG.info("Still failing on an actual test!");
                 return false;
             } else {
-                System.out.println("Not invalid!");
+                MyMod.LOG.info("Not invalid!");
                 return true;
             }
         }

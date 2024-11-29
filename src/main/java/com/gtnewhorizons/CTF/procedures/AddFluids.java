@@ -8,6 +8,7 @@ import static com.gtnewhorizons.CTF.utils.PrintUtils.RED;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -65,13 +66,7 @@ public class AddFluids extends Procedure {
             .getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
         if (tileEntity == null) {
-            System.out.println(
-                "Could not add fluid(s) at (" + (test.getStartStructureX() + x)
-                    + ", "
-                    + (test.getStartStructureY() + y)
-                    + ", "
-                    + (test.getStartStructureZ() + z)
-                    + ") as tile entity was null.");
+            MyMod.LOG.info("Could not add fluid(s) at ({}, {}, {}) as tile entity was null.", test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
             return;
         }
 

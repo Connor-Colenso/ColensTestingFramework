@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.client.Minecraft;
 
 import com.google.gson.Gson;
@@ -33,9 +34,9 @@ public class JsonUtils {
             File ctfConfigDir = new File(Minecraft.getMinecraft().mcDataDir, "config/CTF/testing");
             if (!ctfConfigDir.exists()) {
                 if (ctfConfigDir.mkdirs()) {
-                    System.out.println("Successfully saved CTF test.");
+                    MyMod.LOG.info("Successfully saved CTF test.");
                 } else {
-                    System.out.println("Failed to save CTF test, please report to author.");
+                    MyMod.LOG.info("Failed to save CTF test, please report to author.");
                 }
             }
 
@@ -48,11 +49,11 @@ public class JsonUtils {
             // Write the JSON content to the file with pretty printing (provided by Gson).
             try (FileWriter fileWriter = new FileWriter(outputFile)) {
                 fileWriter.write(gson.toJson(overallJson));
-                System.out.println("Json saved successfully to " + outputFile.getAbsolutePath());
+                MyMod.LOG.info("Json saved successfully to {}", outputFile.getAbsolutePath());
             }
 
         } catch (IOException e) {
-            System.err.println("Error writing Json to file: " + e.getMessage());
+            MyMod.LOG.info("Error writing Json to file: {}", e.getMessage());
         }
     }
 

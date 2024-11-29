@@ -1,5 +1,6 @@
 package com.gtnewhorizons.CTF.utils;
 
+import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
@@ -27,6 +28,6 @@ public class PrintUtils {
     }
 
     public static void printSeparator() {
-        System.out.println("------------------------------------------------------------------");
+        MyMod.LOG.info("------------------------------------------------------------------");
     }
 }

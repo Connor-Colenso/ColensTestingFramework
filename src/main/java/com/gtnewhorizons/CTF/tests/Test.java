@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 
+import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.github.skjolber.packing.api.Box;
@@ -67,8 +68,8 @@ public final class Test {
             testSettings = new TestSettings();
         }
 
-        processStructureInfo(json);
-        processProcedureInfo(json);
+        processStructureInfo();
+        processProcedureInfo();
 
         // This will handle the sorting of our tests into a compact format in world.
         StackableSurface stackableSurface = StackableSurface.newBuilder()
@@ -109,7 +110,7 @@ public final class Test {
 
     // Setup info.
 
-    private void processProcedureInfo(JsonObject json) {
+    private void processProcedureInfo() {
         // Get the "instructions" array from the JSON object
         JsonArray instructions = json.getAsJsonArray(INSTRUCTIONS);
 
@@ -132,7 +133,7 @@ public final class Test {
         }
     }
 
-    private void processStructureInfo(JsonObject json) {
+    private void processStructureInfo() {
         buildKeyMap();
         getSizes();
     }
@@ -230,10 +231,10 @@ public final class Test {
 
     public void printAllMessages() {
         PrintUtils.printSeparator();
-        System.out.println(GREEN + getTestName() + RESET);
+        MyMod.LOG.info(GREEN + "{}" + RESET, getTestName());
 
         for (String message : messageList) {
-            System.out.println(message);
+            MyMod.LOG.info(message);
         }
     }
 
@@ -273,8 +274,10 @@ public final class Test {
 
     public static void printTotalTestsPassedInfo() {
         double percentage = (double) testsPassed / totalTests * 100;
-        System.out.printf("Total tests passed: %d/%d (%.2f%%)%n", testsPassed, totalTests, percentage);
+        String message = String.format("Total tests passed: %d/%d (%.2f%%)", testsPassed, totalTests, percentage);
+        MyMod.LOG.info(message); // Use your mod's logger
     }
+
 
     public void recordEndTime() {
         messageList.add("Time taken: " + (System.currentTimeMillis() - testStartTime) + "ms");

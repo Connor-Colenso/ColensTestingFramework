@@ -2,6 +2,7 @@ package com.gtnewhorizons.CTF.commands;
 
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
+import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -60,10 +61,10 @@ public class CommandGetTileEntity extends CommandBase {
 
                     String encodedNBT = NBTConverter.encodeToString(tag);
 
-                    System.out.println("Encoded: " + encodedNBT);
+                    MyMod.LOG.info("Encoded: {}", encodedNBT);
                     notifyPlayer(player, "Encoded: " + encodedNBT);
 
-                    System.out.println("Metadata: " + tileEntity.blockMetadata);
+                    MyMod.LOG.info("Metadata: {}", tileEntity.blockMetadata);
                     notifyPlayer(player, "Metadata: " + tileEntity.blockMetadata);
                 } else {
                     notifyPlayer(player, "No TileEntity at the specified location.");

@@ -66,13 +66,7 @@ public class MyMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
 
-        ForgeChunkManager.setForcedChunkLoadingCallback(this, new ForgeChunkManager.LoadingCallback() {
-
-            @Override
-            public void ticketsLoaded(List<ForgeChunkManager.Ticket> tickets, World world) {
-                System.out.println("ticketsLoaded called.");
-            }
-        });
+        ForgeChunkManager.setForcedChunkLoadingCallback(this, (tickets, world) -> System.out.println("ticketsLoaded called."));
 
         // Register the tick handler
         FMLCommonHandler.instance()
