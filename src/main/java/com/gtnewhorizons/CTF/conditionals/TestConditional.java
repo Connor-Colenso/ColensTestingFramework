@@ -14,21 +14,21 @@ public class TestConditional {
     }
 
     public static boolean checkStructure(TileEntity tile, World world) {
-        MyMod.LOG.info(
+        MyMod.CTF_LOG.info(
             "Ticks complete: {}",
             MinecraftServer.getServer()
                 .getTickCounter());
         if (tile == null) {
-            MyMod.LOG.info("Tile is null");
+            MyMod.CTF_LOG.info("Tile is null");
             return false;
         } else {
-            MyMod.LOG.info("Tile is not null.");
+            MyMod.CTF_LOG.info("Tile is not null.");
 
             if (tile.isInvalid()) {
-                MyMod.LOG.info("Still failing on an actual test!");
+                MyMod.CTF_LOG.info("Still failing on an actual test!");
                 return false;
             } else {
-                MyMod.LOG.info("Not invalid!");
+                MyMod.CTF_LOG.info("Not invalid!");
                 return true;
             }
         }

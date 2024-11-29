@@ -66,7 +66,7 @@ public class AddFluids extends Procedure {
             .getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
         if (tileEntity == null) {
-            MyMod.LOG.info(
+            MyMod.CTF_LOG.info(
                 "Could not add fluid(s) at ({}, {}, {}) as tile entity was null.",
                 test.getStartStructureX() + x,
                 test.getStartStructureY() + y,

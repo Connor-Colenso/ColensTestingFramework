@@ -66,7 +66,7 @@ public class TestManager {
                         .requestTicket(MyMod.instance, dimension, ForgeChunkManager.Type.NORMAL);
                     if (ticket != null) {
                         ForgeChunkManager.forceChunk(ticket, chunkCoord);
-                        MyMod.LOG.info("Forcing chunk at {}, {}", chunkX, chunkZ);
+                        MyMod.CTF_LOG.info("Forcing chunk at {}, {}", chunkX, chunkZ);
                     } else {
                         throw new RuntimeException(
                             "Could not request chunk at " + chunkX + ", " + chunkZ + " to be loaded.");
@@ -198,7 +198,7 @@ public class TestManager {
 
         long duration = System.currentTimeMillis() - startTimeForTestPacking; // Calculate elapsed time
 
-        MyMod.LOG.info("Execution time for CTF test packing: {} ms", duration);
+        MyMod.CTF_LOG.info("Execution time for CTF test packing: {} ms", duration);
     }
 
     private static Container getDimensionTestContainer(int dimensionId) {

@@ -231,10 +231,10 @@ public final class Test {
 
     public void printAllMessages() {
         PrintUtils.printSeparator();
-        MyMod.LOG.info(GREEN + "{}" + RESET, getTestName());
+        MyMod.CTF_LOG.info(GREEN + "{}" + RESET, getTestName());
 
         for (String message : messageList) {
-            MyMod.LOG.info(message);
+            MyMod.CTF_LOG.info(message);
         }
     }
 
@@ -275,7 +275,7 @@ public final class Test {
     public static void printTotalTestsPassedInfo() {
         double percentage = (double) testsPassed / totalTests * 100;
         String message = String.format("Total tests passed: %d/%d (%.2f%%)", testsPassed, totalTests, percentage);
-        MyMod.LOG.info(message); // Use your mod's logger
+        MyMod.CTF_LOG.info(message); // Use your mod's logger
     }
 
     public void recordEndTime() {

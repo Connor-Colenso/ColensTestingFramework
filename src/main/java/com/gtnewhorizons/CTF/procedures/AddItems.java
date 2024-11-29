@@ -79,7 +79,7 @@ public class AddItems extends Procedure {
         TileEntity te = dimension
             .getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 
-        if (te == null) MyMod.LOG.info(
+        if (te == null) MyMod.CTF_LOG.info(
             "Could not add item(s) at ({}, {}, {}) as tile entity was null.",
             test.getStartStructureX() + x,
             test.getStartStructureY() + y,

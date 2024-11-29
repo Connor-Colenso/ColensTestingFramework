@@ -34,9 +34,9 @@ public class JsonUtils {
             File ctfConfigDir = new File(Minecraft.getMinecraft().mcDataDir, "config/CTF/testing");
             if (!ctfConfigDir.exists()) {
                 if (ctfConfigDir.mkdirs()) {
-                    MyMod.LOG.info("Successfully saved CTF test.");
+                    MyMod.CTF_LOG.info("Successfully saved CTF test.");
                 } else {
-                    MyMod.LOG.info("Failed to save CTF test, please report to author.");
+                    MyMod.CTF_LOG.info("Failed to save CTF test, please report to author.");
                 }
             }
 
@@ -49,11 +49,11 @@ public class JsonUtils {
             // Write the JSON content to the file with pretty printing (provided by Gson).
             try (FileWriter fileWriter = new FileWriter(outputFile)) {
                 fileWriter.write(gson.toJson(overallJson));
-                MyMod.LOG.info("Json saved successfully to {}", outputFile.getAbsolutePath());
+                MyMod.CTF_LOG.info("Json saved successfully to {}", outputFile.getAbsolutePath());
             }
 
         } catch (IOException e) {
-            MyMod.LOG.info("Error writing Json to file: {}", e.getMessage());
+            MyMod.CTF_LOG.info("Error writing Json to file: {}", e.getMessage());
         }
     }
 

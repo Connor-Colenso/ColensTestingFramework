@@ -29,6 +29,6 @@ public class PrintUtils {
     }
 
     public static void printSeparator() {
-        MyMod.LOG.info("------------------------------------------------------------------");
+        MyMod.CTF_LOG.info("------------------------------------------------------------------");
     }
 }

@@ -49,7 +49,7 @@ public class MyMod {
     public static final List<JsonObject> PRE_LOADED_TEST_JSONS = JsonUtils.loadAll();
 
     public static final String MODID = "CTF";
-    public static final Logger LOG = LogManager.getLogger(MODID);
+    public static final Logger CTF_LOG = LogManager.getLogger(MODID);
 
     @Mod.Instance(MODID)
     public static MyMod instance;
@@ -59,7 +59,7 @@ public class MyMod {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        Log.info("CTF Pre-Initialization " + System.getProperty("user.dir"));
+        CTF_LOG.info("CTF Pre-Initialization {}", System.getProperty("user.dir"));
         proxy.preInit(event);
         new MovePlayer(); // Moves the user to specific x y z coords.
     }

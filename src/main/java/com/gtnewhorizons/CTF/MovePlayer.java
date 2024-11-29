@@ -37,6 +37,6 @@ public class MovePlayer {
 
     private void teleportPlayer(EntityPlayer player, double x, double y, double z) {
         player.setPositionAndUpdate(x, y, z);
-        MyMod.LOG.info("Player teleported to coordinates: {}, {}, {}", x, y, z);
+        MyMod.CTF_LOG.info("Player teleported to coordinates: {}, {}, {}", x, y, z);
     }
 }

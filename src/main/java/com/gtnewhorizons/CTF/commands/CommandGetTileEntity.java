@@ -61,10 +61,10 @@ public class CommandGetTileEntity extends CommandBase {
 
                     String encodedNBT = NBTConverter.encodeToString(tag);
 
-                    MyMod.LOG.info("Encoded: {}", encodedNBT);
+                    MyMod.CTF_LOG.info("Encoded: {}", encodedNBT);
                     notifyPlayer(player, "Encoded: " + encodedNBT);
 
-                    MyMod.LOG.info("Metadata: {}", tileEntity.blockMetadata);
+                    MyMod.CTF_LOG.info("Metadata: {}", tileEntity.blockMetadata);
                     notifyPlayer(player, "Metadata: " + tileEntity.blockMetadata);
                 } else {
                     notifyPlayer(player, "No TileEntity at the specified location.");
