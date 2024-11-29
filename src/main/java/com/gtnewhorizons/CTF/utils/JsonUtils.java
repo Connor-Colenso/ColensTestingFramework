@@ -56,16 +56,11 @@ public class JsonUtils {
         }
     }
 
-    public static List<JsonObject> loadAll() {
-        final JsonParser jsonParser = new JsonParser();
-        List<JsonObject> jsonList = new ArrayList<>();
-        String directoryPath = "CTF/";
+    private static final JsonParser jsonParser = new JsonParser();
 
-        // Get the path to the directory where JSON files are located
-        File directory = new File(
-            Loader.instance()
-                .getConfigDir(),
-            directoryPath);
+    private static List<JsonObject> loadJsonsFromDir(File directory) {
+        List<JsonObject> jsonList = new ArrayList<>();
+
 
         try (Stream<Path> paths = Files.walk(directory.toPath())) {
             paths.filter(Files::isRegularFile)
@@ -83,8 +78,27 @@ public class JsonUtils {
                     }
                 });
         } catch (IOException e) {
-            throw new RuntimeException("Error accessing JSON files in directory: " + directoryPath, e);
+            throw new RuntimeException("Error accessing JSON files in directory: " + directory, e);
         }
+
+        return jsonList; // Return the list of JSON objects
+    }
+
+    public static List<JsonObject> loadAll() {
+        List<JsonObject> jsonList = new ArrayList<>();
+
+        String directoryPath = "CTF/";
+
+        // Get the path to the directory where JSON files are located
+        File ctfConfigDirectory = new File(
+            Loader.instance()
+                .getConfigDir(),
+            directoryPath);
+
+        File ctfIntegrationTestsDirectory = new File("../src/main/ctf_tests");
+
+        jsonList.addAll(loadJsonsFromDir(ctfConfigDirectory));
+        jsonList.addAll(loadJsonsFromDir(ctfIntegrationTestsDirectory));
 
         return jsonList; // Return the list of JSON objects
     }

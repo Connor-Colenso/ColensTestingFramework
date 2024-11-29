@@ -1,0 +1,168 @@
+{
+  "testName": "EBFSetup",
+  "testConfig" : {
+    "dimension" : 0,
+    "duplicateTest" : 313,
+    "bufferZone" : "3",
+    "preserveVertical" : "false",
+    "forceSeparateRunning" : "false",
+    "gamerules" : {
+      "doMobGriefing" : "false"
+    }
+  },
+  "structure": {
+    "build": [
+      [
+        "ABCD",
+        "AAEF",
+        "GHIJ"
+      ],
+      [
+        "KKKL",
+        "KLKL",
+        "KKKL"
+      ],
+      [
+        "KKKL",
+        "KLKL",
+        "KKKL"
+      ],
+      [
+        "AAAL",
+        "AMAL",
+        "AAAL"
+      ]
+    ],
+    "keys": {
+      "A": {
+        "displayName": "Heat Proof Machine Casing",
+        "block": "gregtech:gt.blockcasings",
+        "meta": 11
+      },
+      "B": {
+        "displayName": "Auto-Taping Maintenance Hatch",
+        "block": "gregtech:gt.blockmachines",
+        "meta": 3,
+        "tileEntity": {
+          "mappingForDefault": "BaseMetaTileEntity",
+          "encodedNBT": "AQAMbVdhc1NodXRkb3duAAQADG1TdG9yZWRTdGVhbQAAAAAAAAAACgAOc2h1dERvd25SZWFzb24IAANrZXkABG5vbmUBAAt3YXNDcml0aWNhbAAAAQAHbUFjdGl2ZQEDAANtSUQAADyJAQAJbVJlZHN0b25lAAEAD21PdXRwdXREaXNhYmxlZAAEAA1tU3RvcmVkRW5lcmd5AAAAAAAAAAADAApuYnRWZXJzaW9uHld8xgEACG1NdWZmbGVyAAEABm1Db2xvcgAHAA5tUmVkc3RvbmVTaWRlZAAAAAYPDw8PDw8CAAdtRmFjaW5nAAIBAA1tTWFjaGluZUJsb2NrCwgAAmlkABJCYXNlTWV0YVRpbGVFbnRpdHkKABVHVC5DcmFmdGluZ0NvbXBvbmVudHMAAQAJbVJvdGF0aW9uAAEACW1Xb3JrRGF0YQABAAxtTG9ja1VwZ3JhZGUACAAKbU93bmVyVXVpZAAkMzFjNDkxMGQtOWI2OS00NzI1LTg5NjktOWVkNTNhYzhhN2RjAQAMbVRleHR1cmVQYWdlAAEABm1Xb3JrcwABAA9tU3RlYW1Db252ZXJ0ZXIACAAKbU93bmVyTmFtZQAJRGV2ZWxvcGVyAQALbUxpZ2h0VmFsdWUAAQAObU90aGVyVXBncmFkZXMACAAQc2h1dERvd25SZWFzb25JRAANc2ltcGxlX3Jlc3VsdAEADm1JbnB1dERpc2FibGVkAAkACUludmVudG9yeQAAAAAAAA\u003d\u003d"
+        }
+      },
+      "C": {
+        "displayName": "LV Energy Hatch",
+        "block": "gregtech:gt.blockmachines",
+        "meta": 1,
+        "tileEntity": {
+          "mappingForDefault": "BaseMetaTileEntity",
+          "encodedNBT": "AQAMbVdhc1NodXRkb3duAAQADG1TdG9yZWRTdGVhbQAAAAAAAAAACgAOc2h1dERvd25SZWFzb24IAANrZXkABG5vbmUBAAt3YXNDcml0aWNhbAAAAQAHbUFjdGl2ZQADAANtSUQAAAApAQAJbVJlZHN0b25lAAEAD21PdXRwdXREaXNhYmxlZAAEAA1tU3RvcmVkRW5lcmd5AAAAAAAAAwADAApuYnRWZXJzaW9uHld8xgEACG1NdWZmbGVyAAEABm1Db2xvcgAHAA5tUmVkc3RvbmVTaWRlZAAAAAYPDw8PDw8CAAdtRmFjaW5nAAUBAA1tTWFjaGluZUJsb2NrCwgAAmlkABJCYXNlTWV0YVRpbGVFbnRpdHkKABVHVC5DcmFmdGluZ0NvbXBvbmVudHMAAQAJbVdvcmtEYXRhAAEADG1Mb2NrVXBncmFkZQAIAAptT3duZXJVdWlkACQzMWM0OTEwZC05YjY5LTQ3MjUtODk2OS05ZWQ1M2FjOGE3ZGMBAAxtVGV4dHVyZVBhZ2UAAQAGbVdvcmtzAAEAD21TdGVhbUNvbnZlcnRlcgAIAAptT3duZXJOYW1lAAlEZXZlbG9wZXIBAAttTGlnaHRWYWx1ZQABAA5tT3RoZXJVcGdyYWRlcwAIABBzaHV0RG93blJlYXNvbklEAA1zaW1wbGVfcmVzdWx0AQAObUlucHV0RGlzYWJsZWQACQAJSW52ZW50b3J5AAAAAAAA"
+        }
+      },
+      "D": {
+        "displayName": "Debug Power Generator",
+        "block": "gregtech:gt.blockmachines",
+        "meta": 3,
+        "tileEntity": {
+          "mappingForDefault": "BaseMetaTileEntity",
+          "encodedNBT": "AQAMbVdhc1NodXRkb3duAAQADG1TdG9yZWRTdGVhbQAAAAAAAAAACgAOc2h1dERvd25SZWFzb24IAANrZXkABG5vbmUBAAt3YXNDcml0aWNhbAAAAQAHbUFjdGl2ZQEDAANtSUQAADyKAQAJbVJlZHN0b25lAAEAD21PdXRwdXREaXNhYmxlZAAEAA1tU3RvcmVkRW5lcmd5AAAAAAAAAgADAApuYnRWZXJzaW9uHld8xgEACG1NdWZmbGVyAAEABmVMYXNlcgABAAZtQ29sb3IABwAObVJlZHN0b25lU2lkZWQAAAAGDw8PDw8PAgAHbUZhY2luZwAFCAACaWQAEkJhc2VNZXRhVGlsZUVudGl0eQoAFUdULkNyYWZ0aW5nQ29tcG9uZW50cwABAAltV29ya0RhdGEAAQAMbUxvY2tVcGdyYWRlAAgACm1Pd25lclV1aWQAJDMxYzQ5MTBkLTliNjktNDcyNS04OTY5LTllZDUzYWM4YTdkYwEABm1Xb3JrcwABAA9tU3RlYW1Db252ZXJ0ZXIACAAKbU93bmVyTmFtZQAJRGV2ZWxvcGVyAwAEZUVVVAAAACADAARlQU1QAAAABAEAC21MaWdodFZhbHVlAAEADm1PdGhlclVwZ3JhZGVzAAgAEHNodXREb3duUmVhc29uSUQADXNpbXBsZV9yZXN1bHQBAA5tSW5wdXREaXNhYmxlZAAJAAlJbnZlbnRvcnkAAAAAAAA\u003d"
+        }
+      },
+      "E": {
+        "displayName": "LV Energy Hatch",
+        "block": "gregtech:gt.blockmachines",
+        "meta": 1,
+        "tileEntity": {
+          "mappingForDefault": "BaseMetaTileEntity",
+          "encodedNBT": "AQAMbVdhc1NodXRkb3duAAQADG1TdG9yZWRTdGVhbQAAAAAAAAAACgAOc2h1dERvd25SZWFzb24IAANrZXkABG5vbmUBAAt3YXNDcml0aWNhbAAAAQAHbUFjdGl2ZQADAANtSUQAAAApAQAJbVJlZHN0b25lAAEAD21PdXRwdXREaXNhYmxlZAAEAA1tU3RvcmVkRW5lcmd5AAAAAAAAAwcDAApuYnRWZXJzaW9uHld8xgEACG1NdWZmbGVyAAEABm1Db2xvcgAHAA5tUmVkc3RvbmVTaWRlZAAAAAYPDw8PDw8CAAdtRmFjaW5nAAUBAA1tTWFjaGluZUJsb2NrCwgAAmlkABJCYXNlTWV0YVRpbGVFbnRpdHkKABVHVC5DcmFmdGluZ0NvbXBvbmVudHMAAQAJbVdvcmtEYXRhAAEADG1Mb2NrVXBncmFkZQAIAAptT3duZXJVdWlkACQzMWM0OTEwZC05YjY5LTQ3MjUtODk2OS05ZWQ1M2FjOGE3ZGMBAAxtVGV4dHVyZVBhZ2UAAQAGbVdvcmtzAAEAD21TdGVhbUNvbnZlcnRlcgAIAAptT3duZXJOYW1lAAlEZXZlbG9wZXIBAAttTGlnaHRWYWx1ZQABAA5tT3RoZXJVcGdyYWRlcwAIABBzaHV0RG93blJlYXNvbklEAA1zaW1wbGVfcmVzdWx0AQAObUlucHV0RGlzYWJsZWQACQAJSW52ZW50b3J5AAAAAAAA"
+        }
+      },
+      "F": {
+        "displayName": "4x Tin Cable",
+        "block": "gregtech:gt.blockmachines",
+        "meta": 9,
+        "tileEntity": {
+          "mappingForDefault": "BaseMetaPipeEntity",
+          "encodedNBT": "AQAMbUNvbm5lY3Rpb25zFAEABm1Db2xvcgAHAA5tUmVkc3RvbmVTaWRlZAAAAAYPDw8PDw8DAANtSUQAAATgAQAJbVJlZHN0b25lAAgAAmlkABJCYXNlTWV0YVBpcGVFbnRpdHkBAAZtV29ya3MACQAJSW52ZW50b3J5AAAAAAADAApuYnRWZXJzaW9uHld8xgA\u003d"
+        }
+      },
+      "G": {
+        "displayName": "Input Bus (LV)",
+        "block": "gregtech:gt.blockmachines",
+        "meta": 1,
+        "tileEntity": {
+          "mappingForDefault": "BaseMetaTileEntity",
+          "encodedNBT": "AQAMbVdhc1NodXRkb3duAAQADG1TdG9yZWRTdGVhbQAAAAAAAAAACgAOc2h1dERvd25SZWFzb24IAANrZXkABG5vbmUBAAt3YXNDcml0aWNhbAAAAQAHbUFjdGl2ZQADAANtSUQAAABHAQAJbVJlZHN0b25lAAEAD21PdXRwdXREaXNhYmxlZAAEAA1tU3RvcmVkRW5lcmd5AAAAAAAAAAADAApuYnRWZXJzaW9uHld8xgEAC2Rpc2FibGVTb3J0AAEACG1NdWZmbGVyAAEADWRpc2FibGVGaWx0ZXIBAQAGbUNvbG9yAAcADm1SZWRzdG9uZVNpZGVkAAAABg8PDw8PDwIAB21GYWNpbmcAAwEADW1NYWNoaW5lQmxvY2sLCAACaWQAEkJhc2VNZXRhVGlsZUVudGl0eQoAFUdULkNyYWZ0aW5nQ29tcG9uZW50cwABAAltV29ya0RhdGEAAQAMbUxvY2tVcGdyYWRlAAgACm1Pd25lclV1aWQAJDMxYzQ5MTBkLTliNjktNDcyNS04OTY5LTllZDUzYWM4YTdkYwEADG1UZXh0dXJlUGFnZQABAAZtV29ya3MAAQAPbVN0ZWFtQ29udmVydGVyAAgACm1Pd25lck5hbWUACURldmVsb3BlcggACXJlY2lwZU1hcAAWZ3QucmVjaXBlLmJsYXN0ZnVybmFjZQEADmRpc2FibGVMaW1pdGVkAQEAC21MaWdodFZhbHVlAAEADm1PdGhlclVwZ3JhZGVzAAgAEHNodXREb3duUmVhc29uSUQADXNpbXBsZV9yZXN1bHQBAA5tSW5wdXREaXNhYmxlZAAJAAlJbnZlbnRvcnkAAAAAAAA\u003d"
+        }
+      },
+      "H": {
+        "displayName": "Electric Blast Furnace",
+        "block": "gregtech:gt.blockmachines",
+        "meta": 2,
+        "tileEntity": {
+          "mappingForDefault": "BaseMetaTileEntity",
+          "encodedNBT": "AQAMbVdhc1NodXRkb3duAAQADG1TdG9yZWRTdGVhbQAAAAAAAAAAAQAHbVdyZW5jaAEEAARtRVV0AAAAAAAAAAABAA9tT3V0cHV0RGlzYWJsZWQABAAQbUxhc3RXb3JraW5nVGljawAAAAAAEF9iBAANbVN0b3JlZEVuZXJneQAAAAAAAAAAAwAKbmJ0VmVyc2lvbh5XfMYBAAhtTXVmZmxlcgABAAttU29mdEhhbW1lcgEBAAZtQ29sb3IAAQAIbUNyb3diYXIBBwAObVJlZHN0b25lU2lkZWQAAAAGDw8PDw8PCAACaWQAEkJhc2VNZXRhVGlsZUVudGl0eQMACG1SdW50aW1lAAACWAEADG1Mb2NrVXBncmFkZQABAA9pbnB1dFNlcGFyYXRpb24BBAANbVRvdGFsUnVuVGltZQAAAAAAIlFBCAALdm9pZGluZ01vZGUABG5vbmUBAA9tU3RlYW1Db252ZXJ0ZXIACAAKbU93bmVyTmFtZQAJRGV2ZWxvcGVyCAATY2hlY2tSZWNpcGVSZXN1bHRJRAANc2ltcGxlX3Jlc3VsdAgAEHNodXREb3duUmVhc29uSUQADXNpbXBsZV9yZXN1bHQBAA5tSW5wdXREaXNhYmxlZAAJAAlJbnZlbnRvcnkAAAAAAAoAEWNoZWNrUmVjaXBlUmVzdWx0AQAHc3VjY2VzcwABABJwZXJzaXN0c09uU2h1dGRvd24ACAADa2V5AAlub19yZWNpcGUAAQAFZUZsaXAACgAOc2h1dERvd25SZWFzb24IAANrZXkAFHN0cnVjdHVyZV9pbmNvbXBsZXRlAQALd2FzQ3JpdGljYWwAAAEAB21BY3RpdmUAAwADbUlEAAAD6AEACW1SZWRzdG9uZQADAAttRWZmaWNpZW5jeQAAAAABAAttSGFyZEhhbW1lcgEBAA5tU29sZGVyaW5nVG9vbAEDABNtRWZmaWNpZW5jeUluY3JlYXNlAAAAAAIAB21GYWNpbmcAAwEACWJhdGNoTW9kZQAKABVHVC5DcmFmdGluZ0NvbXBvbmVudHMAAwAKbVBvbGx1dGlvbgAAB9ABAAltV29ya0RhdGEACAAKbU93bmVyVXVpZAAkMzFjNDkxMGQtOWI2OS00NzI1LTg5NjktOWVkNTNhYzhhN2RjAQAGbVdvcmtzAAEADG1TY3Jld2RyaXZlcgEDAA1tUHJvZ3Jlc3N0aW1lAAAAAAEACWVSb3RhdGlvbgABAAttTGlnaHRWYWx1ZQABAA5tT3RoZXJVcGdyYWRlcwADAAF4AAAAGgMAAXkAAAAZAwABegAAABsDABBtTWF4UHJvZ3Jlc3N0aW1lAAAAAAA="
+        }
+      },
+      "I": {
+        "displayName": "Output Bus (LV)",
+        "block": "gregtech:gt.blockmachines",
+        "meta": 1,
+        "tileEntity": {
+          "mappingForDefault": "BaseMetaTileEntity",
+          "encodedNBT": "AQAMbVdhc1NodXRkb3duAAQADG1TdG9yZWRTdGVhbQAAAAAAAAAACgAOc2h1dERvd25SZWFzb24IAANrZXkABG5vbmUBAAt3YXNDcml0aWNhbAAAAQAHbUFjdGl2ZQADAANtSUQAAABRAQAJbVJlZHN0b25lAAEAD21PdXRwdXREaXNhYmxlZAAEAA1tU3RvcmVkRW5lcmd5AAAAAAAAAAADAApuYnRWZXJzaW9uHld8xgEACG1NdWZmbGVyAAEABm1Db2xvcgAHAA5tUmVkc3RvbmVTaWRlZAAAAAYPDw8PDw8CAAdtRmFjaW5nAAMBAA1tTWFjaGluZUJsb2NrCwgAAmlkABJCYXNlTWV0YVRpbGVFbnRpdHkKABVHVC5DcmFmdGluZ0NvbXBvbmVudHMAAQAJbVdvcmtEYXRhAAEADG1Mb2NrVXBncmFkZQAIAAptT3duZXJVdWlkACQzMWM0OTEwZC05YjY5LTQ3MjUtODk2OS05ZWQ1M2FjOGE3ZGMBAAxtVGV4dHVyZVBhZ2UAAQAGbVdvcmtzAAEAD21TdGVhbUNvbnZlcnRlcgAIAAptT3duZXJOYW1lAAlEZXZlbG9wZXIBAAttTGlnaHRWYWx1ZQABAA5tT3RoZXJVcGdyYWRlcwAIABBzaHV0RG93blJlYXNvbklEAA1zaW1wbGVfcmVzdWx0AQAObUlucHV0RGlzYWJsZWQACQAJSW52ZW50b3J5AAAAAAAA"
+        }
+      },
+      "J": {
+        "displayName": "Stone",
+        "block": "minecraft:stone",
+        "meta": 0
+      },
+      "K": {
+        "displayName": "Cupronickel Coil Block",
+        "block": "gregtech:gt.blockcasings5",
+        "meta": 0
+      },
+      "L": {
+        "displayName": "Air",
+        "block": "minecraft:air",
+        "meta": 0
+      },
+      "M": {
+        "displayName": "Muffler Hatch (LV)",
+        "block": "gregtech:gt.blockmachines",
+        "meta": 1,
+        "tileEntity": {
+          "mappingForDefault": "BaseMetaTileEntity",
+          "encodedNBT": "AQAMbVdhc1NodXRkb3duAAQADG1TdG9yZWRTdGVhbQAAAAAAAAAACgAOc2h1dERvd25SZWFzb24IAANrZXkABG5vbmUBAAt3YXNDcml0aWNhbAAAAQAHbUFjdGl2ZQADAANtSUQAAABbAQAJbVJlZHN0b25lAAEAD21PdXRwdXREaXNhYmxlZAAEAA1tU3RvcmVkRW5lcmd5AAAAAAAAAAADAApuYnRWZXJzaW9uHld8xgEACG1NdWZmbGVyAAEABm1Db2xvcgAHAA5tUmVkc3RvbmVTaWRlZAAAAAYPDw8PDw8CAAdtRmFjaW5nAAEBAA1tTWFjaGluZUJsb2NrCwgAAmlkABJCYXNlTWV0YVRpbGVFbnRpdHkKABVHVC5DcmFmdGluZ0NvbXBvbmVudHMAAQAJbVdvcmtEYXRhAAEADG1Mb2NrVXBncmFkZQAIAAptT3duZXJVdWlkACQzMWM0OTEwZC05YjY5LTQ3MjUtODk2OS05ZWQ1M2FjOGE3ZGMBAAxtVGV4dHVyZVBhZ2UAAQAGbVdvcmtzAAEAD21TdGVhbUNvbnZlcnRlcgAIAAptT3duZXJOYW1lAAlEZXZlbG9wZXIBAAttTGlnaHRWYWx1ZQABAA5tT3RoZXJVcGdyYWRlcwAIABBzaHV0RG93blJlYXNvbklEAA1zaW1wbGVfcmVzdWx0AQAObUlucHV0RGlzYWJsZWQACQAJSW52ZW50b3J5AAAAAAAA"
+        }
+      }
+    }
+  },
+  "instructions": [
+    {
+      "type": "addItems",
+      "optionalLabel": "Adds an item to the inventory of the block.",
+      "x": 0,
+      "y": 0,
+      "z": 2,
+      "items": [
+        {
+          "registryName": "bartworks:gt.bwMetaGenerateddust",
+          "stackSize": 1,
+          "metadata": 11037
+        }
+      ]
+    },
+    {
+      "type": "runTicks",
+      "duration": 1000
+    },
+    {
+      "type": "checkTile",
+      "optionalLabel": "OptionalIsSmelted",
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "funcRegistry": "ebfOutputCheck"
+    }
+  ]
+}

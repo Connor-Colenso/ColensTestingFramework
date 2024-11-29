@@ -1,5 +1,6 @@
 package com.gtnewhorizons.CTF.tests;
 
+import static com.gtnewhorizons.CTF.MyMod.PRE_LOADED_TEST_JSONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.DUPLICATE_TEST;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
 import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
@@ -125,7 +126,7 @@ public class TestManager {
         HashMap<Integer, List<StackableItem>> allTests = new HashMap<>();
 
         // Load tests from JSON and add them to the list
-        for (JsonObject json : JsonUtils.loadAll()) {
+        for (JsonObject json : PRE_LOADED_TEST_JSONS) {
             int duplicates = 1;
             if (json.has(TEST_CONFIG)) {
                 JsonObject testConfig = json.get(TEST_CONFIG)

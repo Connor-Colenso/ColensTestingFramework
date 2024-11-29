@@ -2,6 +2,8 @@ package com.gtnewhorizons.CTF;
 
 import java.util.List;
 
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.utils.JsonUtils;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -42,6 +44,9 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
     name = "ColensTestingFramework",
     acceptedMinecraftVersions = "[1.7.10]")
 public class MyMod {
+
+    // The only reason I do this, is because I want to load the jsons into memory asap so we can detect errors early.
+    public static final List<JsonObject> PRE_LOADED_TEST_JSONS = JsonUtils.loadAll();
 
     public static final String MODID = "CTF";
     public static final Logger LOG = LogManager.getLogger(MODID);
