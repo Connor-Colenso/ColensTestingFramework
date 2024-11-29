@@ -9,7 +9,9 @@ dependencies {
     api('org.junit.jupiter:junit-jupiter')
     api('org.junit.platform:junit-platform-launcher')
 
-    api 'com.fasterxml.jackson.core:jackson-core:2.15.0' // Use the latest version
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.15.0'
-    api 'com.fasterxml.jackson.core:jackson-annotations:2.15.0' // Use the latest version
+    def javafxVersion = '17.0.2'  // Ensure this matches your version
+    implementation "org.openjfx:javafx-controls:${javafxVersion}:mac"
+    implementation "org.openjfx:javafx-fxml:${javafxVersion}:mac"
+    implementation "org.openjfx:javafx-base:${javafxVersion}:mac"
+    implementation "org.openjfx:javafx-graphics:${javafxVersion}:mac"
 }
