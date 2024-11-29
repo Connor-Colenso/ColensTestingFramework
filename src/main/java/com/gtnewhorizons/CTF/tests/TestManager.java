@@ -24,7 +24,6 @@ import com.github.skjolber.packing.api.StackableItem;
 import com.github.skjolber.packing.packer.plain.PlainPackager;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.MyMod;
-import com.gtnewhorizons.CTF.utils.JsonUtils;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
 
 import cpw.mods.fml.common.gameevent.TickEvent;
