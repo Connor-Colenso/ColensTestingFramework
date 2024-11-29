@@ -61,6 +61,8 @@ public class JsonUtils {
     private static List<JsonObject> loadJsonsFromDir(File directory) {
         List<JsonObject> jsonList = new ArrayList<>();
 
+        if (!directory.isDirectory()) return jsonList;
+
         try (Stream<Path> paths = Files.walk(directory.toPath())) {
             paths.filter(Files::isRegularFile)
                 .filter(
@@ -96,8 +98,8 @@ public class JsonUtils {
 
         File ctfIntegrationTestsDirectory = new File("../src/main/ctf_tests");
 
-        jsonList.addAll(loadJsonsFromDir(ctfConfigDirectory));
         jsonList.addAll(loadJsonsFromDir(ctfIntegrationTestsDirectory));
+        jsonList.addAll(loadJsonsFromDir(ctfConfigDirectory));
 
         return jsonList; // Return the list of JSON objects
     }
