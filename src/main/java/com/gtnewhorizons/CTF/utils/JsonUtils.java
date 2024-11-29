@@ -99,9 +99,12 @@ public class JsonUtils {
 
         File ctfIntegrationTestsDirectory = new File("../src/main/ctf_tests");
 
+        System.out.println("Loading JSONs from: " + ctfIntegrationTestsDirectory.getAbsolutePath());
+
         jsonList.addAll(loadJsonsFromDir(ctfIntegrationTestsDirectory));
         jsonList.addAll(loadJsonsFromDir(ctfConfigDirectory));
 
+        System.out.println("CTF Total jsons obtained " + jsonList.size());
         return jsonList; // Return the list of JSON objects
     }
 
