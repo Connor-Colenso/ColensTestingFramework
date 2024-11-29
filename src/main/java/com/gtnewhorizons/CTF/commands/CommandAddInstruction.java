@@ -18,15 +18,6 @@ import com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction;
 
 public class CommandAddInstruction extends CommandBase {
 
-    private static final HashMap<String, String> instructionsMap = new HashMap<>();
-
-    static {
-        instructionsMap.put("runTicks X", "This instruction will run the test for X ticks.");
-        instructionsMap.put(
-            "checkTile name",
-            "To use this, you must register a function with the name label. It will then return a true/false confirming if this check passed or failed.");
-    }
-
     @Override
     public String getCommandName() {
         return "addinstruction";
