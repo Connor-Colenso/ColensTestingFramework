@@ -19,10 +19,10 @@ public class RegisterInstruction {
         }
     }
 
-    public static boolean execute(String name, EntityPlayerMP player, String[] args, JsonArray instructionArray) {
+    public static boolean addToInstructions(String name, EntityPlayerMP player, String[] args, JsonArray instructionArray) {
         InstructionHandler handler = instructions.get(name.toLowerCase());
         if (handler != null) {
-            handler.execute(player, args, instructionArray);
+            handler.addToInstructionArray(player, args, instructionArray);
             return true;
         } else {
             return false;

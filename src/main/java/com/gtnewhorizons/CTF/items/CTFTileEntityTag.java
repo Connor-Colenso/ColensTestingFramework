@@ -87,9 +87,6 @@ public class CTFTileEntityTag extends Item {
 
     private void setInstructionInTest(EntityPlayer player, int relX, int relY, int relZ, NBTTagCompound tagNBT) {
 
-        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(player);
-
-        JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
         JsonObject instruction = new JsonObject();
         instruction.addProperty("type", "checkTile");
 
@@ -110,7 +107,8 @@ public class CTFTileEntityTag extends Item {
             return;
         }
 
-        instructionsArray.add(instruction);
+        CurrentTestUnderConstruction.addInstruction(player, instruction);
+
     }
 
     @Override

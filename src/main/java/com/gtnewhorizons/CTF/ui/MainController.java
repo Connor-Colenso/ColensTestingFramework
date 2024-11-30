@@ -84,7 +84,7 @@ public class MainController {
     }
 
     // Call this method when the data is updated, to refresh the ListView
-    public static void refreshList() {
+    public static void refreshInstructionList() {
         updateListFromJson();
 
     }

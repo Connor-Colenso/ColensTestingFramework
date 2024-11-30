@@ -112,10 +112,8 @@ public class CTFAddFluidsTag extends Item {
         int relativeZ = z - Math.min(firstPosition[2], secondPosition[2]);
 
         JsonObject instruction = createInstructionJson(relativeX, relativeY, relativeZ, stack);
-        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(player);
-        JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
-        instructionsArray.add(instruction);
-
+        CurrentTestUnderConstruction.addInstruction(player, instruction);
+        
         notifyPlayer(
             player,
             EnumChatFormatting.GREEN + "Fluid instructions added for tank at ("

@@ -7,5 +7,5 @@ import com.google.gson.JsonArray;
 @FunctionalInterface
 public interface InstructionHandler {
 
-    void execute(EntityPlayerMP player, String[] args, JsonArray instructionArray);
+    void addToInstructionArray(EntityPlayerMP player, String[] args, JsonArray instructionArray);
 }

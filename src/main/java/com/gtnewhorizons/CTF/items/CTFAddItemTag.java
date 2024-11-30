@@ -106,11 +106,8 @@ public class CTFAddItemTag extends Item {
         int relativeY = y - Math.min(firstPosition[1], secondPosition[1]);
         int relativeZ = z - Math.min(firstPosition[2], secondPosition[2]);
 
-        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(player);
-
         JsonObject instruction = createInstructionJson(relativeX, relativeY, relativeZ, stack);
-        JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
-        instructionsArray.add(instruction);
+        CurrentTestUnderConstruction.addInstruction(player, instruction);
 
         notifyPlayer(
             player,
