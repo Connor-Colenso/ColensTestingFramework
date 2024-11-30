@@ -1,5 +1,6 @@
 package com.gtnewhorizons.CTF.procedures;
 
+import com.google.gson.JsonObject;
 import net.minecraft.server.MinecraftServer;
 
 import com.gtnewhorizons.CTF.tests.Test;
@@ -10,6 +11,11 @@ public abstract class Procedure {
     public int duration = 0;
     public String optionalLabel;
     protected boolean shouldPrintInfo = true;
+    protected JsonObject json;
+
+    Procedure(JsonObject json) {
+        this.json = json;
+    }
 
     public void handleEvent(Test test) {
         if (shouldPrintInfo) {
@@ -38,4 +44,31 @@ public abstract class Procedure {
 
     protected abstract void handleEventCustom(Test test);
 
+    public static Procedure buildProcedureFromJson(JsonObject instruction) {
+        // Determine the type of procedure.
+        String type = instruction.get("type")
+            .getAsString();
+
+        // Create the appropriate procedure based on the type.
+        switch (type) {
+            case "runTicks" -> {
+                return new RunTicks(instruction);
+            }
+            case "checkTile" -> {
+                return new CheckTile(instruction);
+            }
+            case "addItems" -> {
+                return new AddItems(instruction);
+            }
+            case "addFluids" -> {
+                return new AddFluids(instruction);
+            }
+        }
+
+        return null;
+    }
+
+    public JsonObject getJson() {
+        return json;
+    }
 }

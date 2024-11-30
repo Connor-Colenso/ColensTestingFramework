@@ -6,6 +6,8 @@ import com.gtnewhorizons.CTF.tests.Test;
 public class RunTicks extends Procedure {
 
     public RunTicks(JsonObject instruction) {
+        super(instruction);
+
         shouldPrintInfo = false;
 
         duration = instruction.get("duration")
@@ -15,5 +17,10 @@ public class RunTicks extends Procedure {
     @Override
     public void handleEventCustom(Test test) {
 
+    }
+
+    @Override
+    public String toString() {
+        return "Run for " + duration + " ticks";
     }
 }

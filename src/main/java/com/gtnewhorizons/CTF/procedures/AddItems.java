@@ -29,6 +29,7 @@ public class AddItems extends Procedure {
     public int z;
 
     public AddItems(JsonObject instruction) {
+        super(instruction);
 
         x = instruction.get("x")
             .getAsInt();
@@ -120,4 +121,14 @@ public class AddItems extends Procedure {
             inventory.markDirty();
         }
     }
+
+    @Override
+    public String toString() {
+        if (itemsToAdd.size() == 1) {
+            return "Add item " + itemsToAdd.get(0).getDisplayName();
+        } else {
+            return "Add items " + itemsToAdd.get(0).getDisplayName() + " & " + itemsToAdd.size() + " others." ;
+        }
+    }
+
 }

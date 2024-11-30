@@ -119,17 +119,7 @@ public final class Test {
             JsonObject instruction = instructions.get(i)
                 .getAsJsonObject();
 
-            // Determine the type of procedure
-            String type = instruction.get("type")
-                .getAsString();
-
-            // Create the appropriate procedure based on the type
-            switch (type) {
-                case "runTicks" -> procedureList.add(new RunTicks(instruction));
-                case "checkTile" -> procedureList.add(new CheckTile(instruction));
-                case "addItems" -> procedureList.add(new AddItems(instruction));
-                case "addFluids" -> procedureList.add(new AddFluids(instruction));
-            }
+            procedureList.add(Procedure.buildProcedureFromJson(instruction));
         }
     }
 

@@ -20,7 +20,7 @@ public class CheckTile extends Procedure {
     public int z;
 
     public CheckTile(JsonObject instruction) {
-        super();
+        super(instruction);
 
         if (instruction.has("optionalLabel")) {
             optionalLabel = instruction.get("optionalLabel")
@@ -61,5 +61,10 @@ public class CheckTile extends Procedure {
             test.addMessage(RED, "Test " + optionalLabel + " threw exception, which was caught by CTF.");
             test.addMessage(RED, exception.toString());
         }
+    }
+
+    @Override
+    public String toString() {
+        return "Execute check " + funcID;
     }
 }
