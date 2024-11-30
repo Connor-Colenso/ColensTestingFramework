@@ -40,14 +40,9 @@ public class RenderCTFRegionInfo {
 
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
 
-        renderTotalLoadedTestArea();
         renderRegionLabel(instructionsArray);
         renderTileEntityTagPoints(instructionsArray, minX, minY, minZ);
         renderAddItemPoints(instructionsArray, minX, minY, minZ);
-    }
-
-    private void renderTotalLoadedTestArea() {
-
     }
 
     private void renderAddItemPoints(JsonArray instructionsArray, double minX, double minY, double minZ) {
@@ -208,7 +203,6 @@ public class RenderCTFRegionInfo {
         textList.add(testName);
         textList.add("Total ticks: " + totalTicks);
 
-        // Render the floating text.
         renderFloatingText(textList, x, y, z);
     }
 
