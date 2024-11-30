@@ -9,6 +9,7 @@ import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.HashMap;
 
+import com.gtnewhorizons.CTF.ui.MainController;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -60,6 +61,7 @@ public class CommandAddInstruction extends CommandBase {
 
             if (execute(command, player, args, instructionArray)) {
                 notifyPlayer(player, "Success.");
+                MainController.refreshList();
             } else {
                 notifyPlayer(
                     player,
