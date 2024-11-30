@@ -1,6 +1,5 @@
 package com.gtnewhorizons.CTF.commands;
 
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction.execute;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
@@ -9,6 +8,8 @@ import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.HashMap;
 
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import com.gtnewhorizons.CTF.ui.MainController;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -39,7 +40,7 @@ public class CommandAddInstruction extends CommandBase {
                 return;
             }
 
-            if (isTestNotStarted()) {
+            if (isTestNotStarted(player)) {
                 notifyPlayer(
                     player,
                     "This cannot be used if no test has been initialised. Use /inittest with a valid region selected.");
@@ -54,7 +55,8 @@ public class CommandAddInstruction extends CommandBase {
                 return; // Exit after listing instructions
             }
 
-            JsonArray instructionArray = currentTest.getAsJsonArray(INSTRUCTIONS);
+            JsonObject jsonObject = CurrentTestUnderConstruction.getTestJson(player);
+            JsonArray instructionArray = jsonObject.get(INSTRUCTIONS).getAsJsonArray();
 
             // Process the first argument as a command (case-insensitive)
             String command = args[0].toLowerCase();

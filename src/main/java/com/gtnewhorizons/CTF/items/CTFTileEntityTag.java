@@ -1,6 +1,5 @@
 package com.gtnewhorizons.CTF.items;
 
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
@@ -10,6 +9,7 @@ import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.List;
 
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -34,7 +34,7 @@ public class CTFTileEntityTag extends Item {
         float hitX, float hitY, float hitZ) {
         if (world.isRemote) return false;
         if (!player.isSneaking()) return false;
-        if (isTestNotStarted()) {
+        if (isTestNotStarted(player)) {
             notifyPlayer(player, "There is no valid test in construction!");
             return false;
         }
@@ -86,6 +86,9 @@ public class CTFTileEntityTag extends Item {
     }
 
     private void setInstructionInTest(EntityPlayer player, int relX, int relY, int relZ, NBTTagCompound tagNBT) {
+
+        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(player);
+
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
         JsonObject instruction = new JsonObject();
         instruction.addProperty("type", "checkTile");

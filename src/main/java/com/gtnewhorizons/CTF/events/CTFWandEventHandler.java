@@ -1,8 +1,9 @@
 package com.gtnewhorizons.CTF.events;
 
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -26,6 +27,8 @@ public class CTFWandEventHandler {
         // Check if the player is holding the CTFWand
         if (itemStack != null && itemStack.getItem() instanceof CTFWand) {
             // Record the right-click action
+
+            JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(event.entityPlayer);
 
             if (currentTest != null) {
                 notifyPlayer(

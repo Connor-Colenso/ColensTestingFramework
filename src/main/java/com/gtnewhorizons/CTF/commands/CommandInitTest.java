@@ -5,43 +5,45 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
-import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommandSender;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class CommandInitTest extends CommandBase {
 
-    public static JsonObject currentTest;
-
     @Override
     public String getCommandName() {
-        return "inittest";
+        return "init_test";
     }
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return "inittest testname";
+        return "init_test <test_name> [template_name]";
     }
 
     @Override
-    public void processCommand(ICommandSender player, String[] args) {
+    public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
-            notifyPlayer(player, "Must provide a valid test name. You may not use spaces.");
+            notifyPlayer(sender, "Must provide a valid test name.");
             return;
         }
 
         if (isCTFWandRegionNotDefined()) {
-            notifyPlayer(player, "You have not selected a valid region using the CTF wand.");
+            notifyPlayer(sender, "You have not selected a valid region using the CTF wand.");
             return;
         }
 
-        currentTest = new JsonObject();
-        currentTest.addProperty(TEST_NAME, args[0]);
+        if (sender instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) sender;
 
-        // Structure is saved at the end.
-        currentTest.add(INSTRUCTIONS, new JsonArray());
+            JsonObject currentTest = new JsonObject();
+            currentTest.addProperty(TEST_NAME, args[0]);
+            currentTest.add(INSTRUCTIONS, new JsonArray());
+
+            CurrentTestUnderConstruction.updateTest(player.getUniqueID().toString(), currentTest);
+        }
     }
-
 }

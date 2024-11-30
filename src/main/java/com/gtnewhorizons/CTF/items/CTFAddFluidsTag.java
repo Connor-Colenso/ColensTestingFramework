@@ -1,6 +1,5 @@
 package com.gtnewhorizons.CTF.items;
 
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
@@ -13,6 +12,7 @@ import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.List;
 
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,7 +43,7 @@ public class CTFAddFluidsTag extends Item {
         float hitX, float hitY, float hitZ) {
         if (world.isRemote) return false;
         if (!player.isSneaking()) return false;
-        if (isTestNotStarted()) {
+        if (isTestNotStarted(player)) {
             notifyPlayer(player, EnumChatFormatting.RED + "There is no valid test in construction!");
             return false;
         }
@@ -112,6 +112,7 @@ public class CTFAddFluidsTag extends Item {
         int relativeZ = z - Math.min(firstPosition[2], secondPosition[2]);
 
         JsonObject instruction = createInstructionJson(relativeX, relativeY, relativeZ, stack);
+        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(player);
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
         instructionsArray.add(instruction);
 

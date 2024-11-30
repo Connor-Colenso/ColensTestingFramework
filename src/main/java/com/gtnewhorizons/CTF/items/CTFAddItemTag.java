@@ -1,6 +1,5 @@
 package com.gtnewhorizons.CTF.items;
 
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
@@ -11,6 +10,7 @@ import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.List;
 
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -41,7 +41,7 @@ public class CTFAddItemTag extends Item {
         float hitX, float hitY, float hitZ) {
         if (world.isRemote) return false;
         if (!player.isSneaking()) return false;
-        if (isTestNotStarted()) {
+        if (isTestNotStarted(player)) {
             notifyPlayer(player, EnumChatFormatting.RED + "There is no valid test in construction!");
             return false;
         }
@@ -105,6 +105,8 @@ public class CTFAddItemTag extends Item {
         int relativeX = x - Math.min(firstPosition[0], secondPosition[0]);
         int relativeY = y - Math.min(firstPosition[1], secondPosition[1]);
         int relativeZ = z - Math.min(firstPosition[2], secondPosition[2]);
+
+        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(player);
 
         JsonObject instruction = createInstructionJson(relativeX, relativeY, relativeZ, stack);
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);

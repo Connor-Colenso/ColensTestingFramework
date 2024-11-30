@@ -5,12 +5,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.procedures.Procedure;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
+import javafx.scene.input.KeyCode;
+import net.minecraft.client.Minecraft;
 
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
+
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 
 public class MainController {
@@ -42,10 +45,27 @@ public class MainController {
                 rawProcedureViewBox.setItems(t);
             }
         });
+
+        // Add key event handler to the ListView
+        procedureViewBox.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.DELETE || event.getCode() == KeyCode.BACK_SPACE) {
+                // Get the selected item
+                int selectedIndex = procedureViewBox.getSelectionModel().getSelectedIndex();
+
+                // Remove the selected item if any item is selected
+                if (selectedIndex != -1) {
+                    procedureViewBox.getItems().remove(selectedIndex);
+                }
+            }
+        });
     }
 
     // Method to update the ListView based on the currentTest JsonObject
     public static void updateListFromJson() {
+
+        String UUID = Minecraft.getMinecraft().thePlayer.getUniqueID().toString();
+        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(UUID);
+
         if (currentTest != null && currentTest.has(INSTRUCTIONS)) {
             JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
 

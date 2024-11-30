@@ -71,4 +71,8 @@ public abstract class Procedure {
     public JsonObject getJson() {
         return json;
     }
+
+    // This is how the procedure will render in the JavaFX UI ListView. Keep the text minimal!
+    @Override
+    public abstract String toString();
 }

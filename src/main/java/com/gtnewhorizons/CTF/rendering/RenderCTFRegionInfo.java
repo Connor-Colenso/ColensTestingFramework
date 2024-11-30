@@ -1,6 +1,5 @@
 package com.gtnewhorizons.CTF.rendering;
 
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
@@ -15,6 +14,8 @@ import static com.gtnewhorizons.CTF.utils.rendering.RegionRendering.renderFloati
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -32,15 +33,17 @@ public class RenderCTFRegionInfo {
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         if (isCTFWandRegionNotDefined()) return;
-        if (isTestNotStarted()) return;
+        if (isTestNotStarted(Minecraft.getMinecraft().thePlayer)) return;
 
         double minX = Math.min(firstPosition[0], secondPosition[0]);
         double minY = Math.min(firstPosition[1], secondPosition[1]);
         double minZ = Math.min(firstPosition[2], secondPosition[2]);
 
+        String playerUUID = Minecraft.getMinecraft().thePlayer.getUniqueID().toString();
+        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(playerUUID);
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
 
-        renderRegionLabel(instructionsArray);
+        renderRegionLabel(currentTest);
         renderTileEntityTagPoints(instructionsArray, minX, minY, minZ);
         renderAddItemPoints(instructionsArray, minX, minY, minZ);
     }
@@ -176,7 +179,7 @@ public class RenderCTFRegionInfo {
         }
     }
 
-    private static void renderRegionLabel(JsonArray instructionsArray) {
+    private static void renderRegionLabel(JsonObject currentTest) {
         // Calculate the center position for the text.
         double x = (firstPosition[0] + secondPosition[0]) / 2.0 + 0.5; // Center in x
         double y = Math.max(firstPosition[1], secondPosition[1]) + 1.5; // Slightly above
@@ -190,6 +193,8 @@ public class RenderCTFRegionInfo {
         }
 
         int totalTicks = 0;
+
+        final JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
 
         for (JsonElement jsonObject : instructionsArray) {
             JsonObject instruction = jsonObject.getAsJsonObject();

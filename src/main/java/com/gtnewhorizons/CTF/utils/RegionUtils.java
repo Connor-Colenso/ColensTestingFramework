@@ -1,9 +1,11 @@
 package com.gtnewhorizons.CTF.utils;
 
-import static com.gtnewhorizons.CTF.commands.CommandInitTest.currentTest;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 
 public class RegionUtils {
@@ -28,22 +30,10 @@ public class RegionUtils {
         return firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE;
     }
 
-    public static boolean isTestNotStarted() {
+    public static boolean isTestNotStarted(EntityPlayer player) {
+        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(player);
+
         return currentTest == null;
     }
 
-    /**
-     * Checks if the second AABB (inner) is fully contained within the first AABB (outer).
-     *
-     * @param outer The outer AxisAlignedBB.
-     * @param inner The inner AxisAlignedBB to check.
-     * @return true if the inner AABB is fully inside the outer AABB, including touching the edges.
-     */
-    public static boolean isFullyContained(AxisAlignedBB outer, AxisAlignedBB inner) {
-        return inner.minX >= outer.minX && inner.maxX <= outer.maxX
-            && inner.minY >= outer.minY
-            && inner.maxY <= outer.maxY
-            && inner.minZ >= outer.minZ
-            && inner.maxZ <= outer.maxZ;
-    }
 }
