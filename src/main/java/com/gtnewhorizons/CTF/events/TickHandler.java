@@ -1,5 +1,6 @@
-package com.gtnewhorizons.CTF;
+package com.gtnewhorizons.CTF.events;
 
+import com.gtnewhorizons.CTF.ui.MainController;
 import net.minecraft.server.MinecraftServer;
 
 import com.gtnewhorizons.CTF.tests.TestManager;
@@ -28,6 +29,14 @@ public class TickHandler {
         }
 
         TestManager.runTick(event);
+    }
+
+    @SubscribeEvent(priority = EventPriority.NORMAL)
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        // Ensure we run only during the END phase (after game logic updates)
+        if (event.phase == TickEvent.Phase.START) return;
+
+        MainController.runQueue();
     }
 
 }

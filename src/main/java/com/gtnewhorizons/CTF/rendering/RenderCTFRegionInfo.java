@@ -14,8 +14,10 @@ import static com.gtnewhorizons.CTF.utils.rendering.RegionRendering.renderFloati
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gtnewhorizons.CTF.items.CTFWand;
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -33,7 +35,8 @@ public class RenderCTFRegionInfo {
     @SubscribeEvent(priority = EventPriority.HIGHEST, receiveCanceled = true)
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         if (isCTFWandRegionNotDefined()) return;
-        if (isTestNotStarted(Minecraft.getMinecraft().thePlayer)) return;
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        if (isTestNotStarted(player)) return;
 
         double minX = Math.min(firstPosition[0], secondPosition[0]);
         double minY = Math.min(firstPosition[1], secondPosition[1]);
@@ -44,11 +47,19 @@ public class RenderCTFRegionInfo {
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
 
         renderRegionLabel(currentTest);
-        renderTileEntityTagPoints(instructionsArray, minX, minY, minZ);
-        renderAddItemPoints(instructionsArray, minX, minY, minZ);
+
+        ItemStack itemStack = player.getHeldItem();
+        if (itemStack != null) { // Check if itemStack is not null and not empty
+            Item item = itemStack.getItem();
+            if (item instanceof CTFWand) {
+                renderTileEntityTagPoints(instructionsArray, minX, minY, minZ);
+                renderInstructionsText(instructionsArray, minX, minY, minZ);
+            }
+        }
+
     }
 
-    private void renderAddItemPoints(JsonArray instructionsArray, double minX, double minY, double minZ) {
+    private void renderInstructionsText(JsonArray instructionsArray, double minX, double minY, double minZ) {
 
         for (int i = 0; i < instructionsArray.size(); i++) {
             JsonObject instruction = instructionsArray.get(i)

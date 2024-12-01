@@ -15,6 +15,9 @@ import javafx.scene.input.KeyCode;
 import net.minecraft.client.Minecraft;
 
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 
 public class MainController {
@@ -55,6 +58,7 @@ public class MainController {
                 // Remove the selected item if any item is selected
                 if (selectedIndex != -1) {
                     procedureViewBox.getItems().remove(selectedIndex);
+                    clientSideExecutionQueue.add(() -> CurrentTestUnderConstruction.removeInstruction(selectedIndex));
                 }
             }
         });
@@ -88,5 +92,16 @@ public class MainController {
 
         // Delay running of this code, it must run on the JavaFX thread.
         Platform.runLater(() -> updateListFromJson(currentTest));
+    }
+
+    private static final Queue<Runnable> clientSideExecutionQueue = new LinkedList<>();
+
+    public static void runQueue() {
+        while (!clientSideExecutionQueue.isEmpty()) {
+            Runnable task = clientSideExecutionQueue.poll(); // Retrieve and remove the head of the queue
+            if (task != null) {
+                task.run(); // Execute the task
+            }
+        }
     }
 }

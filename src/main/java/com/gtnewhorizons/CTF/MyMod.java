@@ -2,6 +2,7 @@ package com.gtnewhorizons.CTF;
 
 import java.util.List;
 
+import com.gtnewhorizons.CTF.events.TickHandler;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 

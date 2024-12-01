@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.ui.MainController;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.HashMap;
@@ -89,5 +90,27 @@ public class CurrentTestUnderConstruction {
         secondPosition[2] = Integer.MAX_VALUE;
 
         CurrentTestUnderConstruction.removeTest(player);
+    }
+
+    public static void removeInstruction(int selectedIndex) {
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        JsonArray instructions = getInstructions(player);
+
+        // Validate the index
+        if (selectedIndex < 0 || selectedIndex >= instructions.size()) {
+            throw new IllegalArgumentException("Selected index out of bounds. " + selectedIndex);
+        }
+
+        JsonArray updatedInstructions = new JsonArray(); // Create a new array
+
+        for (int i = 0; i < instructions.size(); i++) {
+            if (i != selectedIndex) { // Skip the item to remove
+                updatedInstructions.add(instructions.get(i)); // Copy all other items
+            }
+        }
+
+        // Replace the instructions array in the player's test JSON
+        JsonObject testJson = getTestJson(player);
+        testJson.add(INSTRUCTIONS, updatedInstructions); // Update with new array
     }
 }
