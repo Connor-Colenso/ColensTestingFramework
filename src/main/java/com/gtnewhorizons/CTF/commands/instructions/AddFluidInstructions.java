@@ -4,6 +4,7 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,7 +18,7 @@ import com.gtnewhorizons.CTF.items.RegisterItems;
 public class AddFluidInstructions {
 
     @SuppressWarnings("unused")
-    public static void add(EntityPlayerMP player, String[] args, JsonArray instructionArray) {
+    public static JsonObject createProcedure(EntityPlayerMP player, String[] args) {
         ItemStack heldItemStack = player.getHeldItem();
         notifyPlayer(
             player,
@@ -27,7 +28,7 @@ public class AddFluidInstructions {
         if (heldItemStack == null) {
             notifyPlayer(player, "Your hand was empty, adding an empty fluid tag item.");
             addEmptyFluidTagItem(player);
-            return;
+            return null;
         }
 
         // Check if the item implements IFluidContainerItem (i.e., is a fluid container)
@@ -72,13 +73,15 @@ public class AddFluidInstructions {
                     player,
                     "The fluid container either contains no fluid, or the FluidStack had 0mB present.");
                 addEmptyFluidTagItem(player);
-                return;
+                return null;
             }
 
         } else {
             // If item is not a fluid container, treat it as an invalid input
             notifyPlayer(player, "The held item is not a fluid container.");
         }
+
+        return null;
     }
 
     private static void addEmptyFluidTagItem(EntityPlayerMP player) {

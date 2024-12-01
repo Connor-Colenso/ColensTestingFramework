@@ -4,6 +4,8 @@ import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
 import java.util.HashMap;
 
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.google.gson.JsonArray;
@@ -19,10 +21,13 @@ public class RegisterInstruction {
         }
     }
 
-    public static boolean addToInstructions(String name, EntityPlayerMP player, String[] args, JsonArray instructionArray) {
+    public static boolean addToInstructions(String name, EntityPlayerMP player, String[] args) {
         InstructionHandler handler = instructions.get(name.toLowerCase());
         if (handler != null) {
-            handler.addToInstructionArray(player, args, instructionArray);
+            JsonObject procedure = handler.createInstruction(player, args);
+            if (procedure != null) {
+                CurrentTestUnderConstruction.addInstruction(player, procedure);
+            }
             return true;
         } else {
             return false;

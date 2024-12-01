@@ -3,11 +3,18 @@ package com.gtnewhorizons.CTF.tests;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.ui.MainController;
+import com.gtnewhorizons.CTF.utils.JsonUtils;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.HashMap;
 
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+import static com.gtnewhorizons.CTF.utils.Structure.captureStructureJson;
 
 public class CurrentTestUnderConstruction {
 
@@ -45,5 +52,41 @@ public class CurrentTestUnderConstruction {
     public static void removeTest(EntityPlayer player) {
 //        tests.remove(player.getUniqueID().toString());
         testJsons.remove(player.getUniqueID().toString());
+    }
+
+    public static boolean isTestNotStarted(EntityPlayer player) {
+        JsonObject currentTest = getTestJson(player);
+
+        return currentTest == null;
+    }
+
+    public static void completeTest(EntityPlayer player) {
+        // captureStructureJson will obtain it from the static coordinates set by the CTF Wand (though the event
+        // CTFWandEventHandler actually sets the coords).
+        // The region itself is drawn by RenderCTFWandFrame and the info in it by RenderCTFRegionInfo.
+        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(player);
+        currentTest.add(STRUCTURE, captureStructureJson());
+
+        // Save the test.
+        JsonUtils.saveJsonToFile(currentTest);
+        notifyPlayer(
+            player,
+            "Test completed and saved to config/CTF/testing/" + currentTest.get(TEST_NAME)
+                .getAsString() + ".json");
+
+        resetTest(player);
+    }
+
+    public static void resetTest(EntityPlayer player) {
+
+        firstPosition[0] = Integer.MAX_VALUE;
+        firstPosition[1] = Integer.MAX_VALUE;
+        firstPosition[2] = Integer.MAX_VALUE;
+
+        secondPosition[0] = Integer.MAX_VALUE;
+        secondPosition[1] = Integer.MAX_VALUE;
+        secondPosition[2] = Integer.MAX_VALUE;
+
+        CurrentTestUnderConstruction.removeTest(player);
     }
 }

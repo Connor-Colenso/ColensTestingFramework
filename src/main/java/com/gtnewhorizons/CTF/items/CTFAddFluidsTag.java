@@ -2,13 +2,12 @@ package com.gtnewhorizons.CTF.items;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_NAME;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.List;
 
@@ -113,7 +112,7 @@ public class CTFAddFluidsTag extends Item {
 
         JsonObject instruction = createInstructionJson(relativeX, relativeY, relativeZ, stack);
         CurrentTestUnderConstruction.addInstruction(player, instruction);
-        
+
         notifyPlayer(
             player,
             EnumChatFormatting.GREEN + "Fluid instructions added for tank at ("

@@ -78,10 +78,10 @@ public class MyMod {
         RegisterConditionals.conditionalRegister("func", TestConditional::isChestContainingStone);
         RegisterConditionals.conditionalRegister("checkStructure", TestConditional::checkStructure);
 
-        RegisterInstruction.register("addItems", AddItemInstructions::add);
-        RegisterInstruction.register("runTicks", RunTicksInstruction::add);
-        RegisterInstruction.register("checkTile", CheckTileInstructions::add);
-        RegisterInstruction.register("addFluids", AddFluidInstructions::add);
+        RegisterInstruction.register("addItems", AddItemInstructions::createProcedure);
+        RegisterInstruction.register("runTicks", RunTicksInstruction::createProcedure);
+        RegisterInstruction.register("checkTile", CheckTileInstructions::createProcedure);
+        RegisterInstruction.register("addFluids", AddFluidInstructions::createProcedure);
 
         if (event.getSide()
             .isClient()) {

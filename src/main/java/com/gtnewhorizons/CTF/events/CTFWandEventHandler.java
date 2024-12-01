@@ -28,9 +28,7 @@ public class CTFWandEventHandler {
         if (itemStack != null && itemStack.getItem() instanceof CTFWand) {
             // Record the right-click action
 
-            JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(event.entityPlayer);
-
-            if (currentTest != null) {
+            if (!CurrentTestUnderConstruction.isTestNotStarted(player)) {
                 notifyPlayer(
                     player,
                     "Test is already in progress. Complete it or reset the region to change the bounds.");

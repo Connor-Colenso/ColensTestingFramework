@@ -2,6 +2,7 @@ package com.gtnewhorizons.CTF.commands.instructions;
 
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
+import com.google.gson.JsonObject;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,12 +14,12 @@ import com.gtnewhorizons.CTF.items.RegisterItems;
 public class AddItemInstructions {
 
     @SuppressWarnings("unused")
-    public static void add(EntityPlayerMP player, String[] args, JsonArray instructionArray) {
+    public static JsonObject createProcedure(EntityPlayerMP player, String[] args) {
         ItemStack heldItemStack = player.getHeldItem();
 
         if (heldItemStack == null) {
             notifyPlayer(player, "You are not holding any item.");
-            return;
+            return null;
         }
 
         // Create a new ItemStack of CTFAddItemTag
@@ -43,5 +44,7 @@ public class AddItemInstructions {
         } else {
             notifyPlayer(player, "Inventory full. Could not save item.");
         }
+
+        return null;
     }
 }

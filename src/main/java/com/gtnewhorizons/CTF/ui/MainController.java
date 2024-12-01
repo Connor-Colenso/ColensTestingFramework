@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -31,7 +32,6 @@ public class MainController {
     public void initialize() {
         // Set the ListView's items to be the observable list
         procedureViewBox.setItems(listItems);
-        updateListFromJson();
 
         // Set up an event handler for selection
         procedureViewBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -85,7 +85,7 @@ public class MainController {
 
     // Call this method when the data is updated, to refresh the ListView
     public static void refreshInstructionList() {
-        updateListFromJson();
-
+        // Delay running of this code, it must run on the JavaFX thread.
+        Platform.runLater(MainController::updateListFromJson);
     }
 }

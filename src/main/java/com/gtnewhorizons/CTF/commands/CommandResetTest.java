@@ -3,8 +3,8 @@ package com.gtnewhorizons.CTF.commands;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.command.CommandBase;
@@ -29,22 +29,9 @@ public class CommandResetTest extends CommandBase {
             if (isTestNotStarted(entityPlayer)) {
                 notifyPlayer(player, "There is no test in construction to abort!");
             } else {
-                resetTest(entityPlayer);
+                CurrentTestUnderConstruction.resetTest(entityPlayer);
                 notifyPlayer(player, "Test in construction was aborted and not saved.");
             }
         }
-
-    }
-
-    public static void resetTest(EntityPlayer player) {
-        firstPosition[0] = Integer.MAX_VALUE;
-        firstPosition[1] = Integer.MAX_VALUE;
-        firstPosition[2] = Integer.MAX_VALUE;
-
-        secondPosition[0] = Integer.MAX_VALUE;
-        secondPosition[1] = Integer.MAX_VALUE;
-        secondPosition[2] = Integer.MAX_VALUE;
-
-        CurrentTestUnderConstruction.removeTest(player);
     }
 }

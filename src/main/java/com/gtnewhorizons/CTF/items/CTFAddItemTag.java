@@ -2,11 +2,10 @@ package com.gtnewhorizons.CTF.items;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.ENCODED_NBT;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.List;
 

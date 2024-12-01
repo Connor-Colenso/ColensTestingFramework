@@ -1,11 +1,11 @@
 package com.gtnewhorizons.CTF.commands.instructions;
 
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.procedures.Procedure;
 import net.minecraft.entity.player.EntityPlayerMP;
-
-import com.google.gson.JsonArray;
 
 @FunctionalInterface
 public interface InstructionHandler {
 
-    void addToInstructionArray(EntityPlayerMP player, String[] args, JsonArray instructionArray);
+    JsonObject createInstruction(EntityPlayerMP player, String[] args);
 }

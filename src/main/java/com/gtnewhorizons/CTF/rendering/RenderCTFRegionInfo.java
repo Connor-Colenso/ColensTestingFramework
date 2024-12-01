@@ -2,13 +2,13 @@ package com.gtnewhorizons.CTF.rendering;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_NAME;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.rendering.RegionRendering.renderFloatingText;
 
 import java.util.ArrayList;

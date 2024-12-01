@@ -1,9 +1,9 @@
 package com.gtnewhorizons.CTF.commands;
 
 import static com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction.addToInstructions;
+import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.command.CommandBase;
@@ -50,14 +50,10 @@ public class CommandAddInstruction extends CommandBase {
                 return; // Exit after listing instructions
             }
 
-            JsonArray instructionArray = CurrentTestUnderConstruction.getInstructions(player);
-
             // Process the first argument as a command (case-insensitive)
             String command = args[0].toLowerCase();
 
-            if (addToInstructions(command, player, args, instructionArray)) {
-                notifyPlayer(player, "Success.");
-            } else {
+            if (!addToInstructions(command, player, args)) {
                 notifyPlayer(
                     player,
                     "Unknown instruction " + command + ". Use 'addinstruction' to list valid instructions.");

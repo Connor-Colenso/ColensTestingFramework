@@ -2,15 +2,16 @@ package com.gtnewhorizons.CTF.commands.instructions;
 
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
+import com.gtnewhorizons.CTF.procedures.Procedure;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public class RunTicksInstruction {
 
     @SuppressWarnings("unused")
-    public static void add(EntityPlayerMP player, String[] args, JsonArray instructions) {
+    public static JsonObject    createProcedure(EntityPlayerMP player, String[] args) {
         if (args.length < 2) {
             notifyPlayer(player, "Usage: addinstruction runTicks X");
         } else {
@@ -26,12 +27,14 @@ public class RunTicksInstruction {
                 runTicks.addProperty("duration", duration); // Use the parsed integer
 
                 // This adds directly, since we have no item associated.
-                instructions.add(runTicks);
+                CurrentTestUnderConstruction.addInstruction(player, runTicks);
 
             } catch (NumberFormatException e) {
                 // Handle the case where ticks is not a valid integer.
                 notifyPlayer(player, "Invalid ticks: " + ticks);
             }
         }
+
+        return null;
     }
 }

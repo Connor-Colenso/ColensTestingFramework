@@ -30,10 +30,4 @@ public class RegionUtils {
         return firstPosition[0] == Integer.MAX_VALUE || secondPosition[0] == Integer.MAX_VALUE;
     }
 
-    public static boolean isTestNotStarted(EntityPlayer player) {
-        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(player);
-
-        return currentTest == null;
-    }
-
 }

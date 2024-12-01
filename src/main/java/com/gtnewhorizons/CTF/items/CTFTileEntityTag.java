@@ -2,10 +2,9 @@ package com.gtnewhorizons.CTF.items;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
-import static com.gtnewhorizons.CTF.utils.RegionUtils.isTestNotStarted;
 
 import java.util.List;
 
@@ -18,7 +17,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.utils.RegionUtils;
 
