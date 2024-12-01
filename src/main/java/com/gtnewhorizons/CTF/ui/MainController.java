@@ -61,10 +61,7 @@ public class MainController {
     }
 
     // Method to update the ListView based on the currentTest JsonObject
-    public static void updateListFromJson() {
-
-        String UUID = Minecraft.getMinecraft().thePlayer.getUniqueID().toString();
-        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(UUID);
+    public static void updateListFromJson(JsonObject currentTest) {
 
         if (currentTest != null && currentTest.has(INSTRUCTIONS)) {
             JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
@@ -83,9 +80,13 @@ public class MainController {
 
     }
 
-    // Call this method when the data is updated, to refresh the ListView
+    // This method is called from outside the JavaFX Thread.
     public static void refreshInstructionList() {
+
+        String UUID = Minecraft.getMinecraft().thePlayer.getUniqueID().toString();
+        JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(UUID);
+
         // Delay running of this code, it must run on the JavaFX thread.
-        Platform.runLater(MainController::updateListFromJson);
+        Platform.runLater(() -> updateListFromJson(currentTest));
     }
 }

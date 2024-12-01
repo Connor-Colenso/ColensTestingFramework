@@ -7,6 +7,7 @@ import com.gtnewhorizons.CTF.utils.JsonUtils;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
@@ -19,7 +20,7 @@ import static com.gtnewhorizons.CTF.utils.Structure.captureStructureJson;
 public class CurrentTestUnderConstruction {
 
 //    private static HashMap<String, Test> tests = new HashMap<>();
-    private static HashMap<String, JsonObject> testJsons = new HashMap<>();
+    private static ConcurrentHashMap<String, JsonObject> testJsons = new ConcurrentHashMap<>();
 
     public static void updateTest(String uuid, JsonObject testJson) {
         testJsons.put(uuid, testJson);
