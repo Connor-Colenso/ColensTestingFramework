@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
@@ -20,17 +21,11 @@ import static com.gtnewhorizons.CTF.utils.Structure.captureStructureJson;
 
 public class CurrentTestUnderConstruction {
 
-//    private static HashMap<String, Test> tests = new HashMap<>();
     private static ConcurrentHashMap<String, JsonObject> testJsons = new ConcurrentHashMap<>();
 
     public static void updateTest(String uuid, JsonObject testJson) {
         testJsons.put(uuid, testJson);
-//        tests.put(uuid, new Test(testJson));
     }
-
-//    public static Test getTest(String uuid) {
-//        return tests.get(uuid);
-//    }
 
     public static JsonObject getTestJson(String playerUUID) {
         return testJsons.getOrDefault(playerUUID, null);
@@ -112,5 +107,30 @@ public class CurrentTestUnderConstruction {
         // Replace the instructions array in the player's test JSON
         JsonObject testJson = getTestJson(player);
         testJson.add(INSTRUCTIONS, updatedInstructions); // Update with new array
+    }
+
+    public static void removeLastInstruction(EntityPlayer player) {
+
+        JsonObject currentTest = getTestJson(player);
+        JsonArray instructions = getInstructions(player);
+
+        if (instructions.size() > 0) {
+            JsonArray updatedInstructions = new JsonArray();
+
+            for (int i = 0; i < instructions.size(); i++) {
+                if (i != instructions.size() - 1) {
+                    updatedInstructions.add(instructions.get(i));
+                }
+            }
+            currentTest.add(INSTRUCTIONS, updatedInstructions);
+        }
+    }
+
+    private static JsonObject getTestConfig(EntityPlayer player) {
+        return getTestJson(player).getAsJsonObject(TEST_NAME);
+    }
+
+    private static JsonObject getGamerules(EntityPlayer player) {
+        return getTestConfig(player).getAsJsonObject(GAMERULES);
     }
 }

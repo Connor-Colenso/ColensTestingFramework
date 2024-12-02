@@ -2,6 +2,7 @@ package com.gtnewhorizons.CTF.commands;
 
 import static com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction.addToInstructions;
 import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
+import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.removeInstruction;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
@@ -52,6 +53,12 @@ public class CommandAddInstruction extends CommandBase {
 
             // Process the first argument as a command (case-insensitive)
             String command = args[0].toLowerCase();
+
+            if (command.equals("undo")) {
+                CurrentTestUnderConstruction.removeLastInstruction(player);
+                notifyPlayer(player, "Undo successful.");
+                return;
+            }
 
             if (!addToInstructions(command, player, args)) {
                 notifyPlayer(
