@@ -1,6 +1,9 @@
 package com.gtnewhorizons.CTF.commands;
 
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.ALL_GAMERULES_DEFAULT;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
@@ -11,6 +14,8 @@ import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+
+import java.util.Map;
 
 public class CommandInitTest extends CommandBase {
 
@@ -42,6 +47,15 @@ public class CommandInitTest extends CommandBase {
             JsonObject currentTest = new JsonObject();
             currentTest.addProperty(TEST_NAME, args[0]);
             currentTest.add(INSTRUCTIONS, new JsonArray());
+
+            JsonObject testConfig = new JsonObject();
+            JsonObject gamerules = new JsonObject();
+            for (Map.Entry<String, Boolean> pair : ALL_GAMERULES_DEFAULT.entrySet()) {
+                gamerules.addProperty(pair.getKey(), pair.getValue());
+            }
+
+            testConfig.add(GAMERULES, gamerules);
+            currentTest.add(TEST_CONFIG, testConfig);
 
             CurrentTestUnderConstruction.updateTest(player.getUniqueID().toString(), currentTest);
         }

@@ -1,5 +1,8 @@
 package com.gtnewhorizons.CTF.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CommonTestFields {
 
     public static final String INSTRUCTIONS = "instructions";
@@ -19,5 +22,20 @@ public class CommonTestFields {
     public static final String FLUID_AMOUNT = "Amount";
     public static final String FLUID_NAME = "FluidName";
     public static final String STORED_FLUIDS = "StoredFluids";
+
+    // All gamerules with default values.
+    public static final Map<String, Boolean> ALL_GAMERULES_DEFAULT = new HashMap<>();
+
+    static {
+        ALL_GAMERULES_DEFAULT.put("doFireTick", true);
+        ALL_GAMERULES_DEFAULT.put("mobGriefing", true);
+        ALL_GAMERULES_DEFAULT.put("keepInventory", false);
+        ALL_GAMERULES_DEFAULT.put("doMobSpawning", true);
+        ALL_GAMERULES_DEFAULT.put("doMobLoot", true);
+        ALL_GAMERULES_DEFAULT.put("doTileDrops", true);
+        ALL_GAMERULES_DEFAULT.put("commandBlockOutput", true);
+        ALL_GAMERULES_DEFAULT.put("naturalRegeneration", true);
+        ALL_GAMERULES_DEFAULT.put("doDaylightCycle", true);
+    }
 
 }

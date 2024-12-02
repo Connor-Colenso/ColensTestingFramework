@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
-import com.google.gson.JsonArray;
 import com.gtnewhorizons.CTF.items.RegisterItems;
 
 public class AddItemInstructions {

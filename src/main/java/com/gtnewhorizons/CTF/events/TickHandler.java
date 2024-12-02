@@ -1,5 +1,6 @@
 package com.gtnewhorizons.CTF.events;
 
+import com.gtnewhorizons.CTF.ui.ClientSideExecutor;
 import com.gtnewhorizons.CTF.ui.MainController;
 import net.minecraft.server.MinecraftServer;
 
@@ -36,7 +37,8 @@ public class TickHandler {
         // Ensure we run only during the END phase (after game logic updates)
         if (event.phase == TickEvent.Phase.START) return;
 
-        MainController.runQueue();
+        // Every client side tick, check if the UI has modified anything and implement that in our json.
+        ClientSideExecutor.runQueue();
     }
 
 }

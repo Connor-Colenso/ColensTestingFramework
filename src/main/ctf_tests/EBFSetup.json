@@ -7,7 +7,15 @@
     "preserveVertical" : "false",
     "forceSeparateRunning" : "false",
     "gamerules" : {
-      "doMobGriefing" : "false"
+      "commandBlockOutput" : "true",
+      "doDaylightCycle" : "true",
+      "doFireTick" : "true",
+      "doMobLoot" :  "true",
+      "doMobSpawning" : "true",
+      "doTileDrops" : "true",
+      "keepInventory" : "false",
+      "mobGriefing" : "true",
+      "naturalRegeneration" : "true"
     }
   },
   "structure": {
