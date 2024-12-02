@@ -109,7 +109,7 @@ public class CurrentTestUnderConstruction {
         testJson.add(INSTRUCTIONS, updatedInstructions); // Update with new array
     }
 
-    public static void removeLastInstruction(EntityPlayer player) {
+    public static boolean removeLastInstruction(EntityPlayer player) {
 
         JsonObject currentTest = getTestJson(player);
         JsonArray instructions = getInstructions(player);
@@ -123,6 +123,10 @@ public class CurrentTestUnderConstruction {
                 }
             }
             currentTest.add(INSTRUCTIONS, updatedInstructions);
+            return true;
+
+        } else {
+            return false;
         }
     }
 

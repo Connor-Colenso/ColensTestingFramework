@@ -55,8 +55,11 @@ public class CommandAddInstruction extends CommandBase {
             String command = args[0].toLowerCase();
 
             if (command.equals("undo")) {
-                CurrentTestUnderConstruction.removeLastInstruction(player);
-                notifyPlayer(player, "Undo successful.");
+                if (CurrentTestUnderConstruction.removeLastInstruction(player)) {
+                    notifyPlayer(player, "Undo successful.");
+                } else {
+                    notifyPlayer(player, "Could not undo, instruction list is empty.");
+                }
                 return;
             }
 
