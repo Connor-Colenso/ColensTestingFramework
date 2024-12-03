@@ -137,4 +137,9 @@ public class CurrentTestUnderConstruction {
     private static JsonObject getGamerules(EntityPlayer player) {
         return getTestConfig(player).getAsJsonObject(GAMERULES);
     }
+
+    public static void setGamerule(EntityPlayer player, String gamerule, boolean value) {
+        JsonObject jsonObject = getGamerules(player);
+        jsonObject.addProperty(gamerule, value);
+    }
 }

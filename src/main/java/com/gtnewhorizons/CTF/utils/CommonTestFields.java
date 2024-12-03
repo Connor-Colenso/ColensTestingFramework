@@ -25,6 +25,7 @@ public class CommonTestFields {
 
     // All gamerules with default values.
     public static final Map<String, Boolean> ALL_GAMERULES_DEFAULT = new HashMap<>();
+    public static final Map<String, String> ALL_GAMERULES_LOWER_CONVERTER = new HashMap<>();
 
     static {
         ALL_GAMERULES_DEFAULT.put("doFireTick", true);
@@ -36,6 +37,9 @@ public class CommonTestFields {
         ALL_GAMERULES_DEFAULT.put("commandBlockOutput", true);
         ALL_GAMERULES_DEFAULT.put("naturalRegeneration", true);
         ALL_GAMERULES_DEFAULT.put("doDaylightCycle", true);
-    }
 
+        for(Map.Entry<String, Boolean> entry : ALL_GAMERULES_DEFAULT.entrySet()) {
+            ALL_GAMERULES_LOWER_CONVERTER.put(entry.getKey().toLowerCase(), String.valueOf(entry.getKey()));
+        }
+    }
 }
