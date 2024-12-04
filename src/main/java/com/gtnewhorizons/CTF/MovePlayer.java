@@ -1,11 +1,14 @@
 package com.gtnewhorizons.CTF;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.world.World;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
+
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
 public class MovePlayer {
 
@@ -37,6 +40,19 @@ public class MovePlayer {
 
     private void teleportPlayer(EntityPlayer player, double x, double y, double z) {
         player.setPositionAndUpdate(x, y, z);
-        MyMod.CTF_LOG.info("Player teleported to coordinates: {}, {}, {}", x, y, z);
+        notifyPlayer(player, "You were teleported to " + x + ", " + y + ", " + z + " by CTF.");
+        MyMod.CTF_LOG.info("{} was teleported to coordinates: {}, {}, {} by CTF.", player.getDisplayName(), x, y, z);
+
+        setPlayerFlying(player);
+    }
+
+    private void setPlayerFlying(EntityPlayer player) {
+        PlayerCapabilities capabilities = player.capabilities;
+
+        // Set the player to the flying state immediately.
+        capabilities.isFlying = true;
+
+        // Synchronise the updated capabilities with the client
+        player.sendPlayerAbilities();
     }
 }
