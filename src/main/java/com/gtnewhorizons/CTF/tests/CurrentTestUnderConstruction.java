@@ -5,12 +5,17 @@ import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.Structure.captureStructureJson;
+import static net.minecraft.client.Minecraft.getMinecraft;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.cleanroommc.modularui.utils.math.functions.limit.Min;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -25,6 +30,10 @@ public class CurrentTestUnderConstruction {
 
     public static void updateTest(String uuid, JsonObject testJson) {
         testJsons.put(uuid, testJson);
+    }
+
+    public static void updateTest(EntityPlayer player, JsonObject testJson) {
+        updateTest(player.getUniqueID().toString(), testJson);
     }
 
     public static JsonObject getTestJson(String playerUUID) {
@@ -93,7 +102,7 @@ public class CurrentTestUnderConstruction {
     }
 
     public static void removeInstruction(int selectedIndex) {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = getMinecraft().thePlayer;
         JsonArray instructions = getInstructions(player);
 
         // Validate the index
@@ -136,7 +145,7 @@ public class CurrentTestUnderConstruction {
     }
 
     private static JsonObject getTestConfig(EntityPlayer player) {
-        return getTestJson(player).getAsJsonObject(TEST_NAME);
+        return getTestJson(player).getAsJsonObject(TEST_CONFIG);
     }
 
     private static JsonObject getGamerules(EntityPlayer player) {
@@ -146,5 +155,11 @@ public class CurrentTestUnderConstruction {
     public static void setGamerule(EntityPlayer player, String gamerule, boolean value) {
         JsonObject jsonObject = getGamerules(player);
         jsonObject.addProperty(gamerule, value);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void updateFromUI(JsonObject jsonObject) {
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        updateTest(player, jsonObject);
     }
 }

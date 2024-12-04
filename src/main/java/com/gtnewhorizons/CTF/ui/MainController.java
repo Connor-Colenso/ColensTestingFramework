@@ -11,6 +11,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
@@ -30,6 +31,8 @@ public class MainController {
 
     @FXML
     private StackPane TestConfigStackPane;
+    @FXML
+    private Label TestNameLabel;
     @FXML
     private ListView<String> TestConfigListView;
     @FXML
@@ -88,8 +91,13 @@ public class MainController {
                     setGraphic(null);
                 } else {
                     checkBox.setText(item);
+
+                    JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
+                    JsonObject gameRules = testConfig.get(GAMERULES).getAsJsonObject();
+                    checkBox.setSelected(gameRules.get(item).getAsBoolean());
+
                     setGraphic(checkBox);
-                    checkBox.setOnAction(event -> handleGameruleSelection());
+                    checkBox.setOnAction(event -> handleGameruleSelection(checkBox));
                 }
             }
         });
@@ -106,8 +114,13 @@ public class MainController {
         rawProcedureViewBox.setItems(procedureJsonList);
     }
 
-    private void handleGameruleSelection() {
-        System.out.println("Gamerule selected: " + gamerules.get(0));
+    private void handleGameruleSelection(CheckBox checkBox) {
+        System.out.println("Gamerule selected: " + checkBox.getText() + " was set to " + checkBox.isSelected());
+        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
+        JsonObject gameRules = testConfig.get(GAMERULES).getAsJsonObject();
+
+        gameRules.addProperty(checkBox.getText(), checkBox.isSelected());
+        ClientSideExecutor.add(() -> CurrentTestUnderConstruction.updateFromUI(deepCopyJson(currentTestInUI)));
     }
 
     private void removeSelectedProcedure() {
@@ -123,6 +136,8 @@ public class MainController {
     // Update ListView based on the currentTest JsonObject
     public static void updateListFromJson(JsonObject currentTest) {
         if (currentTest != null) {
+            currentTestInUI = currentTest;
+
             // Process instructions
             if (currentTest.has(INSTRUCTIONS)) {
                 JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
@@ -144,14 +159,14 @@ public class MainController {
                 // Iterate over all gamerules and add them to the list
                 for (Map.Entry<String, JsonElement> entry : gamerulesJson.entrySet()) {
                     gamerules.add(
-                        entry.getKey() + " : "
-                            + entry.getValue()
-                                .getAsBoolean());
+                        entry.getKey());
                 }
 
             }
         }
     }
+
+    private static JsonObject currentTestInUI;
 
     // Refresh instruction list from the current test JSON
     public static void refreshInstructionList() {

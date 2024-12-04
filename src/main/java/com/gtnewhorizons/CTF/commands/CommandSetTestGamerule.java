@@ -73,7 +73,7 @@ public class CommandSetTestGamerule extends CommandBase {
 
             // Set the gamerule for the current test
             CurrentTestUnderConstruction.setGamerule(player, ALL_GAMERULES_LOWER_CONVERTER.get(gamerule), value);
-            notifyPlayer(player, "Gamerule '" + gamerule + "' set to " + value + ".");
+            notifyPlayer(player, "Gamerule '" + ALL_GAMERULES_LOWER_CONVERTER.get(gamerule) + "' set to " + value + ".");
         }
     }
 
