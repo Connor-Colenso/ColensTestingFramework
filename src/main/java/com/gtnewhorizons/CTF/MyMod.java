@@ -2,7 +2,6 @@ package com.gtnewhorizons.CTF;
 
 import java.util.List;
 
-import com.gtnewhorizons.CTF.events.TickHandler;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -24,6 +23,7 @@ import com.gtnewhorizons.CTF.commands.instructions.RunTicksInstruction;
 import com.gtnewhorizons.CTF.conditionals.TestConditional;
 import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
 import com.gtnewhorizons.CTF.events.CTFWandEventHandler;
+import com.gtnewhorizons.CTF.events.TickHandler;
 import com.gtnewhorizons.CTF.items.RegisterItems;
 import com.gtnewhorizons.CTF.rendering.RenderCTFFrames;
 import com.gtnewhorizons.CTF.rendering.RenderCTFRegionInfo;

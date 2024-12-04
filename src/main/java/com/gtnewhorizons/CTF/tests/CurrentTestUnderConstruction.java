@@ -1,15 +1,5 @@
 package com.gtnewhorizons.CTF.tests;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.ui.MainController;
-import com.gtnewhorizons.CTF.utils.JsonUtils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-
-import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
-
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
@@ -18,6 +8,16 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.Structure.captureStructureJson;
+
+import java.util.concurrent.ConcurrentHashMap;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.ui.MainController;
+import com.gtnewhorizons.CTF.utils.JsonUtils;
 
 public class CurrentTestUnderConstruction {
 
@@ -32,11 +32,14 @@ public class CurrentTestUnderConstruction {
     }
 
     private static JsonObject getTestJson(EntityPlayer player) {
-        return getTestJson(player.getUniqueID().toString());
+        return getTestJson(
+            player.getUniqueID()
+                .toString());
     }
 
     public static void addInstruction(EntityPlayer player, JsonObject instruction) {
-        if (!instruction.has("type")) throw new RuntimeException("Invalid instruction was appended to the test in construction. " + instruction.toString());
+        if (!instruction.has("type")) throw new RuntimeException(
+            "Invalid instruction was appended to the test in construction. " + instruction.toString());
         getInstructions(player).add(instruction);
 
         MainController.refreshInstructionList();
@@ -47,8 +50,10 @@ public class CurrentTestUnderConstruction {
     }
 
     public static void removeTest(EntityPlayer player) {
-//        tests.remove(player.getUniqueID().toString());
-        testJsons.remove(player.getUniqueID().toString());
+        // tests.remove(player.getUniqueID().toString());
+        testJsons.remove(
+            player.getUniqueID()
+                .toString());
     }
 
     public static boolean isTestNotStarted(EntityPlayer player) {

@@ -1,5 +1,7 @@
 package com.gtnewhorizons.CTF;
 
+import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.world.World;
@@ -7,8 +9,6 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
-
-import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
 public class MovePlayer {
 

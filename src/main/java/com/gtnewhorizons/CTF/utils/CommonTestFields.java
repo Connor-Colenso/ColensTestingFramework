@@ -38,8 +38,11 @@ public class CommonTestFields {
         ALL_GAMERULES_DEFAULT.put("naturalRegeneration", true);
         ALL_GAMERULES_DEFAULT.put("doDaylightCycle", true);
 
-        for(Map.Entry<String, Boolean> entry : ALL_GAMERULES_DEFAULT.entrySet()) {
-            ALL_GAMERULES_LOWER_CONVERTER.put(entry.getKey().toLowerCase(), String.valueOf(entry.getKey()));
+        for (Map.Entry<String, Boolean> entry : ALL_GAMERULES_DEFAULT.entrySet()) {
+            ALL_GAMERULES_LOWER_CONVERTER.put(
+                entry.getKey()
+                    .toLowerCase(),
+                String.valueOf(entry.getKey()));
         }
     }
 }

@@ -1,10 +1,9 @@
 package com.gtnewhorizons.CTF.events;
 
-import com.gtnewhorizons.CTF.ui.ClientSideExecutor;
-import com.gtnewhorizons.CTF.ui.MainController;
 import net.minecraft.server.MinecraftServer;
 
 import com.gtnewhorizons.CTF.tests.TestManager;
+import com.gtnewhorizons.CTF.ui.ClientSideExecutor;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;

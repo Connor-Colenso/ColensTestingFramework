@@ -1,17 +1,19 @@
 package com.gtnewhorizons.CTF.commands;
 
 import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.ALL_GAMERULES_LOWER_CONVERTER;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.ALL_GAMERULES_DEFAULT;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.ALL_GAMERULES_LOWER_CONVERTER;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 public class CommandSetTestGamerule extends CommandBase {
 
@@ -83,7 +85,8 @@ public class CommandSetTestGamerule extends CommandBase {
             // Tab completion for gamerules
             String prefix = args[0].toLowerCase();
             for (String gamerule : ALL_GAMERULES_DEFAULT.keySet()) {
-                if (gamerule.toLowerCase().startsWith(prefix)) {
+                if (gamerule.toLowerCase()
+                    .startsWith(prefix)) {
                     completions.add(gamerule);
                 }
             }

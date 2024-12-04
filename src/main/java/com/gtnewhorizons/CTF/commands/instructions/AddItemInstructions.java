@@ -2,12 +2,12 @@ package com.gtnewhorizons.CTF.commands.instructions;
 
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
-import com.google.gson.JsonObject;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 
+import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.items.RegisterItems;
 
 public class AddItemInstructions {

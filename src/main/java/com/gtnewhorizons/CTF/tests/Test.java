@@ -25,11 +25,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.MyMod;
-import com.gtnewhorizons.CTF.procedures.AddFluids;
-import com.gtnewhorizons.CTF.procedures.AddItems;
-import com.gtnewhorizons.CTF.procedures.CheckTile;
 import com.gtnewhorizons.CTF.procedures.Procedure;
-import com.gtnewhorizons.CTF.procedures.RunTicks;
 import com.gtnewhorizons.CTF.utils.BlockTilePair;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
 

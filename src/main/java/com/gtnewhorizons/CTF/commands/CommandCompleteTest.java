@@ -3,11 +3,11 @@ package com.gtnewhorizons.CTF.commands;
 import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-
 import net.minecraft.entity.player.EntityPlayer;
+
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 public class CommandCompleteTest extends CommandBase {
 

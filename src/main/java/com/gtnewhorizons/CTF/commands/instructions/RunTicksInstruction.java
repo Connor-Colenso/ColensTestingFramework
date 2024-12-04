@@ -2,16 +2,15 @@ package com.gtnewhorizons.CTF.commands.instructions;
 
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
-import com.gtnewhorizons.CTF.procedures.Procedure;
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 public class RunTicksInstruction {
 
     @SuppressWarnings("unused")
-    public static JsonObject    createProcedure(EntityPlayerMP player, String[] args) {
+    public static JsonObject createProcedure(EntityPlayerMP player, String[] args) {
         if (args.length < 2) {
             notifyPlayer(player, "Usage: addinstruction runTicks X");
         } else {

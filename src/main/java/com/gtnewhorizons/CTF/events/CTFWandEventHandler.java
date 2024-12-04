@@ -2,13 +2,12 @@ package com.gtnewhorizons.CTF.events;
 
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 
 import com.gtnewhorizons.CTF.items.CTFWand;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 

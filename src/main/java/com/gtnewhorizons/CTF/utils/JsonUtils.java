@@ -112,7 +112,8 @@ public class JsonUtils {
         // Use Gson to convert the JsonObject to a JsonElement and then back to a JsonObject
         Gson gson = new Gson();
         String jsonString = gson.toJson(original); // Serialize to JSON string
-        return jsonParser.parse(jsonString).getAsJsonObject(); // Parse back to JsonObject
+        return jsonParser.parse(jsonString)
+            .getAsJsonObject(); // Parse back to JsonObject
     }
 
 }

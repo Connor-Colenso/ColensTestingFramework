@@ -106,9 +106,13 @@ public class AddFluids extends Procedure {
     @Override
     public String toString() {
         if (fluidsToAdd.size() == 1) {
-            return "Add fluids " + fluidsToAdd.get(0).getFluid().getName();
+            return "Add fluids " + fluidsToAdd.get(0)
+                .getFluid()
+                .getName();
         } else {
-            return "Add fluids " + fluidsToAdd.get(0).getFluid().getName() + " & " + fluidsToAdd.size() + " others.";
+            return "Add fluids " + fluidsToAdd.get(0)
+                .getFluid()
+                .getName() + " & " + fluidsToAdd.size() + " others.";
         }
     }
 }

@@ -3,11 +3,6 @@ package com.gtnewhorizons.CTF.utils;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-
 public class RegionUtils {
 
     public static boolean isOutsideRegion(int x, int y, int z) {

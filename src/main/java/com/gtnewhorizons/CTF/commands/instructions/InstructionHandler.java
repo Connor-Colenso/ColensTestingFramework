@@ -1,8 +1,8 @@
 package com.gtnewhorizons.CTF.commands.instructions;
 
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.procedures.Procedure;
 import net.minecraft.entity.player.EntityPlayerMP;
+
+import com.google.gson.JsonObject;
 
 @FunctionalInterface
 public interface InstructionHandler {

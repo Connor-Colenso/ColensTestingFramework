@@ -125,9 +125,11 @@ public class AddItems extends Procedure {
     @Override
     public String toString() {
         if (itemsToAdd.size() == 1) {
-            return "Add item " + itemsToAdd.get(0).getDisplayName();
+            return "Add item " + itemsToAdd.get(0)
+                .getDisplayName();
         } else {
-            return "Add items " + itemsToAdd.get(0).getDisplayName() + " & " + itemsToAdd.size() + " others." ;
+            return "Add items " + itemsToAdd.get(0)
+                .getDisplayName() + " & " + itemsToAdd.size() + " others.";
         }
     }
 

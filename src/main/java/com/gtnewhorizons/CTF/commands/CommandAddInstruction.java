@@ -2,17 +2,15 @@ package com.gtnewhorizons.CTF.commands;
 
 import static com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction.addToInstructions;
 import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.isTestNotStarted;
-import static com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction.removeInstruction;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.google.gson.JsonArray;
 import com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 public class CommandAddInstruction extends CommandBase {
 

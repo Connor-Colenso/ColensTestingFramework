@@ -4,11 +4,10 @@ import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
 import java.util.HashMap;
 
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayerMP;
 
-import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 public class RegisterInstruction {
 

@@ -4,7 +4,6 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.FLUID_AMOUNT;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.STORED_FLUIDS;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 
-import com.google.gson.JsonObject;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,7 +11,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
-import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.items.RegisterItems;
 
 public class AddFluidInstructions {

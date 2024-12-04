@@ -14,8 +14,6 @@ import static com.gtnewhorizons.CTF.utils.rendering.RegionRendering.renderFloati
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gtnewhorizons.CTF.items.CTFWand;
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -25,6 +23,8 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.items.CTFWand;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -42,7 +42,8 @@ public class RenderCTFRegionInfo {
         double minY = Math.min(firstPosition[1], secondPosition[1]);
         double minZ = Math.min(firstPosition[2], secondPosition[2]);
 
-        String playerUUID = Minecraft.getMinecraft().thePlayer.getUniqueID().toString();
+        String playerUUID = Minecraft.getMinecraft().thePlayer.getUniqueID()
+            .toString();
         JsonObject currentTest = CurrentTestUnderConstruction.getTestJson(playerUUID);
         JsonArray instructionsArray = currentTest.getAsJsonArray(INSTRUCTIONS);
 

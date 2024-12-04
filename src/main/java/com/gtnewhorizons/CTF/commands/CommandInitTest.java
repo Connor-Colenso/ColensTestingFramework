@@ -8,14 +8,15 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
+import java.util.Map;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
-import java.util.Map;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 public class CommandInitTest extends CommandBase {
 
@@ -57,7 +58,10 @@ public class CommandInitTest extends CommandBase {
             testConfig.add(GAMERULES, gamerules);
             currentTest.add(TEST_CONFIG, testConfig);
 
-            CurrentTestUnderConstruction.updateTest(player.getUniqueID().toString(), currentTest);
+            CurrentTestUnderConstruction.updateTest(
+                player.getUniqueID()
+                    .toString(),
+                currentTest);
         }
     }
 }

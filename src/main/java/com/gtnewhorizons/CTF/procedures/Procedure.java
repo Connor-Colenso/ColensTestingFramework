@@ -1,8 +1,8 @@
 package com.gtnewhorizons.CTF.procedures;
 
-import com.google.gson.JsonObject;
 import net.minecraft.server.MinecraftServer;
 
+import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
 

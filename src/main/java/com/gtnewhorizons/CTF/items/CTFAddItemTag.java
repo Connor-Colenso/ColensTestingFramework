@@ -9,7 +9,6 @@ import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
 import java.util.List;
 
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -22,6 +21,7 @@ import net.minecraft.world.World;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import com.gtnewhorizons.CTF.utils.RegionUtils;
 import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 
