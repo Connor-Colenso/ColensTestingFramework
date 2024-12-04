@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -18,6 +19,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
 import javafx.util.Callback;
@@ -37,9 +39,9 @@ public class MainController {
     static {
         TEST_CONFIG_TYPE.put("dimension", "textbox");           // Integer, treated as textbox input
         TEST_CONFIG_TYPE.put("bufferZoneInBlocks", "textbox");  // Integer, treated as textbox input
+        TEST_CONFIG_TYPE.put("duplicateTest", "textbox");       // Integer, treated as textbox input
         TEST_CONFIG_TYPE.put("preserveVertical", "bool");       // Boolean, string "false"
         TEST_CONFIG_TYPE.put("forceSeparateRunning", "bool");   // Boolean, string "false"
-        TEST_CONFIG_TYPE.put("duplicateTest", "textbox");       // Integer, treated as textbox input
     }
 
     @FXML
@@ -123,13 +125,13 @@ public class MainController {
 
     private void setupTestConfigListView() {
         TestConfigListView.setItems(testConfig);
-
         TestConfigListView.setCellFactory(new Callback<>() {
             @Override
             public ListCell<String> call(ListView<String> param) {
                 return new ListCell<>() {
                     private final CheckBox checkBox = new CheckBox();
                     private final TextField textField = new TextField();
+                    private final Label label = new Label(); // Create the label for the text box
 
                     @Override
                     protected void updateItem(String item, boolean empty) {
@@ -141,23 +143,30 @@ public class MainController {
                             String configType = TEST_CONFIG_TYPE.get(item);
                             JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
 
-                            // Set the content based on the config type
                             if ("bool".equals(configType)) {
                                 checkBox.setText(item);
                                 checkBox.setSelected(testConfig.get(item).getAsBoolean());
                                 setGraphic(checkBox);
-                                checkBox.setOnAction(event -> handleTestConfigSelection(checkBox, item));
+                                checkBox.setOnAction(event -> handleTestConfigCheckbox(checkBox));
                             } else if ("textbox".equals(configType)) {
+                                label.setText(item); // Set the label text
                                 textField.setText(testConfig.get(item).getAsString());
-                                textField.setPromptText("Enter a number");
-                                setGraphic(textField);
-                                textField.setOnAction(event -> handleTestConfigTextInput(textField, item));
                                 textField.setMaxWidth(40);
+
+                                // Create an HBox to contain the label and text field
+                                HBox hbox = new HBox(10, textField, label);
+                                hbox.setAlignment(Pos.CENTER_LEFT); // Center vertically, align left horizontally
+                                setGraphic(hbox);
+
+                                textField.setOnAction(event -> handleTestConfigTextInput(textField, item));
 
                                 // Ensure only numbers are inputted in the text field
                                 textField.textProperty().addListener((observable, oldValue, newValue) -> {
                                     if (!newValue.matches("\\d*")) {
                                         textField.setText(oldValue); // Reject non-numeric input
+                                    } else {
+                                        textField.setText(newValue);
+                                        currentTestInUI.get(TEST_CONFIG).getAsJsonObject().addProperty(item, newValue);
                                     }
                                 });
                             }
@@ -168,19 +177,18 @@ public class MainController {
         });
     }
 
+    private void handleTestConfigCheckbox(CheckBox checkBox) {
+        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
+
+        testConfig.addProperty(checkBox.getText(), checkBox.isSelected());
+        ClientSideExecutor.add(() -> CurrentTestUnderConstruction.updateFromUI(deepCopyJson(currentTestInUI)));
+    }
+
     private void handleTestConfigTextInput(TextField textField, String item) {
         JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
         JsonObject gameRules = testConfig.get(GAMERULES).getAsJsonObject();
 
         gameRules.addProperty(item, textField.getText());
-        ClientSideExecutor.add(() -> CurrentTestUnderConstruction.updateFromUI(deepCopyJson(currentTestInUI)));
-    }
-
-    private void handleTestConfigSelection(CheckBox checkBox, String item) {
-        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
-        JsonObject gameRules = testConfig.get(GAMERULES).getAsJsonObject();
-
-        gameRules.addProperty(checkBox.getText(), checkBox.isSelected());
         ClientSideExecutor.add(() -> CurrentTestUnderConstruction.updateFromUI(deepCopyJson(currentTestInUI)));
     }
 

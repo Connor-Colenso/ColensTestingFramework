@@ -2,7 +2,6 @@ package com.gtnewhorizons.CTF;
 
 import java.util.List;
 
-import com.gtnewhorizons.CTF.commands.CommandSetTestGamerule;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -106,7 +105,6 @@ public class MyMod {
     // register server commands in this event handler (Remove if not needed)
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
-        event.registerServerCommand(new CommandSetTestGamerule());
         event.registerServerCommand(new CommandGetTileEntity());
         event.registerServerCommand(new CommandLoadTest());
         event.registerServerCommand(new CommandInitTest());
