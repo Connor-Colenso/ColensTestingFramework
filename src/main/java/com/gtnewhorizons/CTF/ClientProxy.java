@@ -3,7 +3,7 @@ package com.gtnewhorizons.CTF;
 import com.gtnewhorizons.CTF.ui.MainApp;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import javafx.application.Application;
-import javafx.application.Platform;
+import net.minecraftforge.common.config.Configuration;
 
 import static javafx.application.Application.launch;
 
@@ -11,6 +11,8 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
+
+        processClientsideConfig(event);
 
         Thread fxThread = new Thread(() -> {
             // Launch JavaFX application directly within the thread
@@ -22,7 +24,16 @@ public class ClientProxy extends CommonProxy {
         fxThread.start();
     }
 
-    // Override CommonProxy methods here, if you want a different behaviour on the client (e.g. registering renders).
-    // Don't forget to call the super methods as well.
+    public static boolean enableTestBoundsCollisionVisualisation;
+
+    private void processClientsideConfig(FMLPreInitializationEvent event) {
+        Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+
+        // Load the configuration
+        config.load();
+
+        // Define a client-only setting
+        enableTestBoundsCollisionVisualisation = config.get("Debug", "enableTestBoundsCollisionVisualisation", false, "This is a very laggy feature when used with lots of tests as it checks if every test intersects every other test and renders them with red bounds if they do, so keep this default off unless you are specifically trying to diagnose an issue with CTF.").getBoolean();
+    }
 
 }

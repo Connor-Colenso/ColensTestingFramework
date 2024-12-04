@@ -1,5 +1,6 @@
 package com.gtnewhorizons.CTF.rendering;
 
+import static com.gtnewhorizons.CTF.ClientProxy.enableTestBoundsCollisionVisualisation;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.tests.TestManager.uuidTestsMapping;
@@ -116,18 +117,20 @@ public class RenderCTFFrames {
 
             // Horrific! But right now, it is the best I've got for detecting intersections for debugging. Sorry for
             // those with weak CPUs :p
-            for (AxisAlignedBB bounds : allTestBounds) {
-                for (AxisAlignedBB bounds2 : allTestBounds) {
-                    if ((bounds2 != bounds) && bounds.intersectsWith(bounds2)) {
-                        (new RenderFrameBuilder()).setInterpolation(player, event)
-                            .setFrame(bounds)
-                            .setColour(1, 0, 0)
-                            .render();
+            if (enableTestBoundsCollisionVisualisation) {
+                for (AxisAlignedBB bounds : allTestBounds) {
+                    for (AxisAlignedBB bounds2 : allTestBounds) {
+                        if ((bounds2 != bounds) && bounds.intersectsWith(bounds2)) {
+                            (new RenderFrameBuilder()).setInterpolation(player, event)
+                                .setFrame(bounds)
+                                .setColour(1, 0, 0)
+                                .render();
 
-                        (new RenderFrameBuilder()).setInterpolation(player, event)
-                            .setFrame(bounds2)
-                            .setColour(1, 0, 0)
-                            .render();
+                            (new RenderFrameBuilder()).setInterpolation(player, event)
+                                .setFrame(bounds2)
+                                .setColour(1, 0, 0)
+                                .render();
+                        }
                     }
                 }
             }
