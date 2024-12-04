@@ -101,17 +101,19 @@
                      </VBox.margin></Label>
                   <HBox alignment="CENTER" prefWidth="200.0" VBox.vgrow="NEVER">
                      <children>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Gamerules" HBox.hgrow="ALWAYS" />
-                      <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Test Settings" HBox.hgrow="ALWAYS">
+                        <Button fx:id="GamerulesButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Gamerules" HBox.hgrow="ALWAYS" />
+                      <Button fx:id="TestSettingsButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Test Settings" HBox.hgrow="ALWAYS">
                            <HBox.margin>
                               <Insets />
                            </HBox.margin></Button>
-                        <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Commands" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="CommandsButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Commands" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
                   <StackPane fx:id="TestConfigStackPane" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <ListView fx:id="Gamerules" />
+                        <ListView fx:id="TestConfigListView" />
+                        <ListView fx:id="GamerulesListView" />
+                        <ListView fx:id="CommandsListView" />
                      </children>
                   </StackPane>
                </children></VBox>

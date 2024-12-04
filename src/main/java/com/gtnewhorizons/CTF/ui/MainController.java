@@ -5,18 +5,22 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
 import static com.gtnewhorizons.CTF.utils.JsonUtils.deepCopyJson;
 
+import java.util.HashMap;
 import java.util.Map;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 
+import javafx.util.Callback;
 import net.minecraft.client.Minecraft;
 
 import com.google.gson.Gson;
@@ -29,6 +33,15 @@ import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 public class MainController {
 
+    private static final HashMap<String, String> TEST_CONFIG_TYPE = new HashMap<>();
+    static {
+        TEST_CONFIG_TYPE.put("dimension", "textbox");           // Integer, treated as textbox input
+        TEST_CONFIG_TYPE.put("bufferZoneInBlocks", "textbox");  // Integer, treated as textbox input
+        TEST_CONFIG_TYPE.put("preserveVertical", "bool");       // Boolean, string "false"
+        TEST_CONFIG_TYPE.put("forceSeparateRunning", "bool");   // Boolean, string "false"
+        TEST_CONFIG_TYPE.put("duplicateTest", "textbox");       // Integer, treated as textbox input
+    }
+
     @FXML
     private StackPane TestConfigStackPane;
     @FXML
@@ -36,19 +49,25 @@ public class MainController {
     @FXML
     private ListView<String> TestConfigListView;
     @FXML
-    private ListView<String> Gamerules;
+    private ListView<String> GamerulesListView;
     @FXML
-    private ListView<String> TestSettings;
-    @FXML
-    private ListView<String> Commands;
+    private ListView<String> CommandsListView;
     @FXML
     private ListView<Procedure> procedureViewBox;
     @FXML
     private ListView<String> rawProcedureViewBox;
 
+    @FXML
+    private Button GamerulesButton;
+    @FXML
+    private Button TestSettingsButton;
+    @FXML
+    private Button CommandsButton;
+
     // ObservableLists to hold data
     private static ObservableList<Procedure> listItems = FXCollections.observableArrayList();
     private static ObservableList<String> gamerules = FXCollections.observableArrayList();
+    private static ObservableList<String> testConfig = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -59,6 +78,8 @@ public class MainController {
         // Setup Gamerules ListView with checkboxes
         setupGamerulesListView();
 
+        // Setup test config ListView with various options.
+        setupTestConfigListView();
     }
 
     private void setupProcedureViewBoxEvents() {
@@ -77,10 +98,94 @@ public class MainController {
                 removeSelectedProcedure();
             }
         });
+
+        GamerulesButton.setOnAction(event -> {
+            GamerulesListView.setVisible(true);
+            CommandsListView.setVisible(false);
+            TestConfigListView.setVisible(false);
+        });
+
+        TestSettingsButton.setOnAction(event -> {
+            GamerulesListView.setVisible(false);
+            CommandsListView.setVisible(false);
+            TestConfigListView.setVisible(true);
+        });
+
+        CommandsButton.setOnAction(event -> {
+            GamerulesListView.setVisible(false);
+            CommandsListView.setVisible(true);
+            TestConfigListView.setVisible(false);
+        });
+
+
+    }
+
+
+    private void setupTestConfigListView() {
+        TestConfigListView.setItems(testConfig);
+
+        TestConfigListView.setCellFactory(new Callback<>() {
+            @Override
+            public ListCell<String> call(ListView<String> param) {
+                return new ListCell<>() {
+                    private final CheckBox checkBox = new CheckBox();
+                    private final TextField textField = new TextField();
+
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setGraphic(null);
+                        } else {
+                            // Get the type of the current test config item from the TEST_CONFIG_TYPE map
+                            String configType = TEST_CONFIG_TYPE.get(item);
+                            JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
+
+                            // Set the content based on the config type
+                            if ("bool".equals(configType)) {
+                                checkBox.setText(item);
+                                checkBox.setSelected(testConfig.get(item).getAsBoolean());
+                                setGraphic(checkBox);
+                                checkBox.setOnAction(event -> handleTestConfigSelection(checkBox, item));
+                            } else if ("textbox".equals(configType)) {
+                                textField.setText(testConfig.get(item).getAsString());
+                                textField.setPromptText("Enter a number");
+                                setGraphic(textField);
+                                textField.setOnAction(event -> handleTestConfigTextInput(textField, item));
+                                textField.setMaxWidth(40);
+
+                                // Ensure only numbers are inputted in the text field
+                                textField.textProperty().addListener((observable, oldValue, newValue) -> {
+                                    if (!newValue.matches("\\d*")) {
+                                        textField.setText(oldValue); // Reject non-numeric input
+                                    }
+                                });
+                            }
+                        }
+                    }
+                };
+            }
+        });
+    }
+
+    private void handleTestConfigTextInput(TextField textField, String item) {
+        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
+        JsonObject gameRules = testConfig.get(GAMERULES).getAsJsonObject();
+
+        gameRules.addProperty(item, textField.getText());
+        ClientSideExecutor.add(() -> CurrentTestUnderConstruction.updateFromUI(deepCopyJson(currentTestInUI)));
+    }
+
+    private void handleTestConfigSelection(CheckBox checkBox, String item) {
+        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
+        JsonObject gameRules = testConfig.get(GAMERULES).getAsJsonObject();
+
+        gameRules.addProperty(checkBox.getText(), checkBox.isSelected());
+        ClientSideExecutor.add(() -> CurrentTestUnderConstruction.updateFromUI(deepCopyJson(currentTestInUI)));
     }
 
     private void setupGamerulesListView() {
-        Gamerules.setCellFactory(param -> new ListCell<>() {
+        GamerulesListView.setCellFactory(param -> new ListCell<>() {
 
             private final CheckBox checkBox = new CheckBox();
 
@@ -102,7 +207,7 @@ public class MainController {
             }
         });
 
-        Gamerules.setItems(gamerules);
+        GamerulesListView.setItems(gamerules);
     }
 
     private void updateRawProcedureView(Procedure procedure) {
@@ -161,6 +266,9 @@ public class MainController {
                     gamerules.add(
                         entry.getKey());
                 }
+
+                testConfig.clear();
+                testConfig.addAll(TEST_CONFIG_TYPE.keySet());
 
             }
         }

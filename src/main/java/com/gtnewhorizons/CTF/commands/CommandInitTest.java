@@ -50,6 +50,15 @@ public class CommandInitTest extends CommandBase {
             currentTest.add(INSTRUCTIONS, new JsonArray());
 
             JsonObject testConfig = new JsonObject();
+
+            testConfig.addProperty("dimension", 0);
+            testConfig.addProperty("bufferZoneInBlocks", 1);
+            testConfig.addProperty("preserveVertical", false);
+            testConfig.addProperty("forceSeparateRunning", false);
+            testConfig.addProperty("duplicateTest", 1);
+
+
+
             JsonObject gamerules = new JsonObject();
             for (Map.Entry<String, Boolean> pair : ALL_GAMERULES_DEFAULT.entrySet()) {
                 gamerules.addProperty(pair.getKey(), pair.getValue());
