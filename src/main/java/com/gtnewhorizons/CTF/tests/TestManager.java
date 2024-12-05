@@ -140,10 +140,7 @@ public class TestManager {
                 Test test = new Test(json);
 
                 TestManager.registerDimensionalUsage(test.getDimension());
-
-                testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>())
-                    .add(test);
-                uuidTestsMapping.put(test.uuid, test);
+                addTest(test);
 
                 allTests.computeIfAbsent(test.getDimension(), k -> new ArrayList<>())
                     .add(test.testBounds);
@@ -274,5 +271,11 @@ public class TestManager {
             // Reset so we can build more tests.
             firstTickOfTest = false;
         }
+    }
+
+    public static void addTest(Test test) {
+        testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>())
+            .add(test);
+        uuidTestsMapping.put(test.uuid, test);
     }
 }

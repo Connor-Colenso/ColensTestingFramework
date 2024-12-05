@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.github.skjolber.packing.api.Box;
@@ -98,6 +100,10 @@ public final class Test {
         }
 
         totalTests++;
+    }
+
+    public TestSettings getSettings() {
+        return testSettings;
     }
 
     public JsonObject getStructure() {
@@ -282,11 +288,13 @@ public final class Test {
 
         // Add the current position of the test in the world
         debugInfo.add("Test Position: (" + structureStartX + ", " + structureStartY + ", " + structureStartZ + ")");
-        debugInfo
-            .add("Abs Position: (" + sp.getAbsoluteX() + ", " + sp.getAbsoluteY() + ", " + sp.getAbsoluteZ() + ")");
-        debugInfo.add(
-            "Abs End Position: (" + sp
-                .getAbsoluteEndX() + ", " + sp.getAbsoluteEndY() + ", " + sp.getAbsoluteEndZ() + ")");
+        if (sp != null) {
+            debugInfo
+                .add("Abs Position: (" + sp.getAbsoluteX() + ", " + sp.getAbsoluteY() + ", " + sp.getAbsoluteZ() + ")");
+            debugInfo.add(
+                "Abs End Position: (" + sp
+                    .getAbsoluteEndX() + ", " + sp.getAbsoluteEndY() + ", " + sp.getAbsoluteEndZ() + ")");
+        }
 
         // Add information about procedures
         debugInfo.add("Procedures Remaining: " + procedureList.size());
@@ -355,5 +363,12 @@ public final class Test {
 
     public int getDimension() {
         return testSettings.getDimension();
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void setManualPlacement(double x, double y, double z) {
+        structureStartX = (int) x;
+        structureStartY = (int) y;
+        structureStartZ = (int) z;
     }
 }

@@ -59,18 +59,9 @@
             <MenuItem mnemonicParsing="false" text="Save As…" />
           </items>
         </Menu>
-        <Menu mnemonicParsing="false" text="Edit">
+        <Menu mnemonicParsing="false" text="World">
           <items>
-            <MenuItem mnemonicParsing="false" text="Undo" />
-            <MenuItem mnemonicParsing="false" text="Redo" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Cut" />
-            <MenuItem mnemonicParsing="false" text="Copy" />
-            <MenuItem mnemonicParsing="false" text="Paste" />
-            <MenuItem mnemonicParsing="false" text="Delete" />
-            <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem mnemonicParsing="false" text="Select All" />
-            <MenuItem mnemonicParsing="false" text="Unselect All" />
+            <MenuItem fx:id="PrintTestMenuItem" mnemonicParsing="false" text="Print test" />
           </items>
         </Menu>
       </menus>
@@ -80,15 +71,10 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </Label>
-      <HBox alignment="CENTER" prefHeight="418.0" prefWidth="640.0" VBox.vgrow="ALWAYS">
+      <HBox alignment="CENTER" VBox.vgrow="ALWAYS">
          <children>
-            <VBox prefHeight="200.0" HBox.hgrow="ALWAYS" />
-            <VBox prefHeight="775.0" prefWidth="0.0" HBox.hgrow="ALWAYS">
+            <VBox HBox.hgrow="ALWAYS">
                <children>
-                  <Label fx:id="code_test1" text="Test Config">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin></Label>
                   <HBox alignment="CENTER" prefWidth="200.0" VBox.vgrow="NEVER">
                      <children>
                         <Button fx:id="GamerulesButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Gamerules" HBox.hgrow="ALWAYS" />
@@ -99,23 +85,27 @@
                         <Button fx:id="CommandsButton" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Commands" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <StackPane fx:id="TestConfigStackPane" prefHeight="150.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                  <StackPane VBox.vgrow="ALWAYS">
                      <children>
                         <ListView fx:id="TestConfigListView" />
                         <ListView fx:id="GamerulesListView" />
-                        <ListView fx:id="CommandsListView" />
+                        <ListView fx:id="CommandsListView">
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin>
+                        </ListView>
                      </children>
                   </StackPane>
                </children></VBox>
-            <VBox prefHeight="200.0" prefWidth="300.0">
+            <VBox HBox.hgrow="ALWAYS">
                <children>
                   <Label fx:id="code_test" text="Procedures">
                      <VBox.margin>
-                        <Insets left="5.0" right="5.0" top="5.0" />
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </VBox.margin></Label>
                   <ListView fx:id="procedureViewBox">
                      <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets />
                      </VBox.margin>
                   </ListView>
                   <Label text="Raw Procedure">
@@ -124,7 +114,7 @@
                      </VBox.margin></Label>
                   <ListView fx:id="rawProcedureViewBox">
                      <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                        <Insets />
                      </VBox.margin>
                   </ListView>
                </children>

@@ -1,7 +1,12 @@
 package com.gtnewhorizons.CTF.ui;
 
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.BUFFER_ZONE_IN_BLOCKS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.DIMENSION;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.DUPLICATE_TEST;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.FORCE_SEPARATE_RUNNING;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.PRESERVE_VERTICAL;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.JsonUtils.deepCopyJson;
@@ -11,12 +16,15 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gtnewhorizons.CTF.tests.Test;
+import com.gtnewhorizons.CTF.tests.TestManager;
 import cpw.mods.fml.common.Loader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -26,7 +34,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -40,23 +47,23 @@ import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class MainController {
 
     private static final HashMap<String, String> TEST_CONFIG_TYPE = new HashMap<>();
     static {
-        TEST_CONFIG_TYPE.put("dimension", "textbox");           // Integer, treated as textbox input
-        TEST_CONFIG_TYPE.put("bufferZoneInBlocks", "textbox");  // Integer, treated as textbox input
-        TEST_CONFIG_TYPE.put("duplicateTest", "textbox");       // Integer, treated as textbox input
-        TEST_CONFIG_TYPE.put("preserveVertical", "bool");       // Boolean, string "false"
-        TEST_CONFIG_TYPE.put("forceSeparateRunning", "bool");   // Boolean, string "false"
+        TEST_CONFIG_TYPE.put(DIMENSION, "textbox");           // Integer, treated as textbox input
+        TEST_CONFIG_TYPE.put(BUFFER_ZONE_IN_BLOCKS, "textbox");  // Integer, treated as textbox input
+        TEST_CONFIG_TYPE.put(DUPLICATE_TEST, "textbox");       // Integer, treated as textbox input
+        TEST_CONFIG_TYPE.put(PRESERVE_VERTICAL, "bool");       // Boolean, string "false"
+        TEST_CONFIG_TYPE.put(FORCE_SEPARATE_RUNNING, "bool");   // Boolean, string "false"
     }
 
     @FXML
     private MenuItem OpenMenuItem;
-
     @FXML
-    private StackPane TestConfigStackPane;
+    private MenuItem PrintTestMenuItem;
     @FXML
     private Label TestNameLabel;
     @FXML
@@ -78,9 +85,9 @@ public class MainController {
     private Button CommandsButton;
 
     // ObservableLists to hold data
-    private static ObservableList<Procedure> listItems = FXCollections.observableArrayList();
-    private static ObservableList<String> gamerules = FXCollections.observableArrayList();
-    private static ObservableList<String> testConfig = FXCollections.observableArrayList();
+    private static final ObservableList<Procedure> listItems = FXCollections.observableArrayList();
+    private static final ObservableList<String> gamerules = FXCollections.observableArrayList();
+    private static final ObservableList<String> testConfig = FXCollections.observableArrayList();
 
     private static MainController instance;
 
@@ -118,10 +125,32 @@ public class MainController {
 
             // Handle the selected file
             if (selectedFile != null) {
-                updateFromJson(loadJsonFromFile(selectedFile.toPath()));
+                try {
+                    updateFromJson(loadJsonFromFile(selectedFile.toPath()));
+                } catch (Exception exception) {
+                    // Create an alert with information type.
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error loading JSON");
+                    alert.setContentText("Test could not be loaded for an unknown reason, please see log.");
+                    exception.printStackTrace();
+
+                    // Show the alert
+                    alert.showAndWait();
+                }
             } else {
                 System.out.println("No file selected");
             }
+        });
+
+        PrintTestMenuItem.setOnAction(e -> {
+            ClientSideExecutor.add(() -> {
+                if (currentTestInUI == null) return;
+
+                Test test = new Test(currentTestInUI);
+                EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
+                test.setManualPlacement(entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ);
+                TestManager.addTest(test);
+            });
         });
     }
 
