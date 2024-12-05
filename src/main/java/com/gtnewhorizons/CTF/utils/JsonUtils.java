@@ -59,31 +59,36 @@ public class JsonUtils {
 
     private static final JsonParser jsonParser = new JsonParser();
 
+    // Method to load all JSONs from a directory
     private static List<JsonObject> loadJsonsFromDir(File directory) {
         List<JsonObject> jsonList = new ArrayList<>();
-
         if (!directory.isDirectory()) return jsonList;
 
         try (Stream<Path> paths = Files.walk(directory.toPath())) {
             paths.filter(Files::isRegularFile)
-                .filter(
-                    path -> path.toString()
-                        .endsWith(".json"))
+                .filter(path -> path.toString().endsWith(".json"))
                 .forEach(path -> {
-                    try (BufferedReader reader = Files.newBufferedReader(path)) {
-                        JsonObject jsonObject = jsonParser.parse(reader)
-                            .getAsJsonObject();
-                        jsonList.add(jsonObject); // Add the parsed JSON object to the list
-                    } catch (Exception e) {
-                        System.err.println("Error reading JSON file: " + path.getFileName());
-                        e.printStackTrace();
+                    JsonObject jsonObject = loadJsonFromFile(path);
+                    if (jsonObject != null) {
+                        jsonList.add(jsonObject);
                     }
                 });
         } catch (IOException e) {
             throw new RuntimeException("Error accessing JSON files in directory: " + directory, e);
         }
 
-        return jsonList; // Return the list of JSON objects
+        return jsonList;
+    }
+
+    // Method to load an individual JSON file and return the JsonObject
+    public static JsonObject loadJsonFromFile(Path path) {
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            return jsonParser.parse(reader).getAsJsonObject();
+        } catch (Exception e) {
+            System.err.println("Error reading JSON file: " + path.getFileName());
+            e.printStackTrace();
+            return null; // Return null in case of error
+        }
     }
 
     public static List<JsonObject> loadAll() {

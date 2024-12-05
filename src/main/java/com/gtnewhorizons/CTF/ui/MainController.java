@@ -3,10 +3,15 @@ package com.gtnewhorizons.CTF.ui;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.JsonUtils.deepCopyJson;
+import static com.gtnewhorizons.CTF.utils.JsonUtils.loadJsonFromFile;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import cpw.mods.fml.common.Loader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,13 +22,15 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
-import net.minecraft.client.Minecraft;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,6 +39,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
+import net.minecraft.client.Minecraft;
 
 public class MainController {
 
@@ -43,6 +51,9 @@ public class MainController {
         TEST_CONFIG_TYPE.put("preserveVertical", "bool");       // Boolean, string "false"
         TEST_CONFIG_TYPE.put("forceSeparateRunning", "bool");   // Boolean, string "false"
     }
+
+    @FXML
+    private MenuItem OpenMenuItem;
 
     @FXML
     private StackPane TestConfigStackPane;
@@ -71,8 +82,12 @@ public class MainController {
     private static ObservableList<String> gamerules = FXCollections.observableArrayList();
     private static ObservableList<String> testConfig = FXCollections.observableArrayList();
 
+    private static MainController instance;
+
     @FXML
     public void initialize() {
+        instance = this;
+
         // Initialize procedure view with item list
         procedureViewBox.setItems(listItems);
         setupProcedureViewBoxEvents();
@@ -82,6 +97,32 @@ public class MainController {
 
         // Setup test config ListView with various options.
         setupTestConfigListView();
+
+        // Setup menu items
+        setupMenuItems();
+    }
+
+    private void setupMenuItems() {
+        OpenMenuItem.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+
+            // Optional: Set filters for file types
+            fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Json Files", "*.json")
+            );
+
+            fileChooser.setInitialDirectory(Loader.instance().getConfigDir());
+
+            // Show the file chooser dialog
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+
+            // Handle the selected file
+            if (selectedFile != null) {
+                updateFromJson(loadJsonFromFile(selectedFile.toPath()));
+            } else {
+                System.out.println("No file selected");
+            }
+        });
     }
 
     private void setupProcedureViewBoxEvents() {
@@ -247,8 +288,11 @@ public class MainController {
     }
 
     // Update ListView based on the currentTest JsonObject
-    public static void updateListFromJson(JsonObject currentTest) {
+    public static void updateFromJson(JsonObject currentTest) {
         if (currentTest != null) {
+
+            instance.TestNameLabel.setText(currentTest.get(TEST_NAME).getAsString());
+
             currentTestInUI = currentTest;
 
             // Process instructions
@@ -286,10 +330,14 @@ public class MainController {
 
     // Refresh instruction list from the current test JSON
     public static void refreshInstructionList() {
-        String UUID = Minecraft.getMinecraft().thePlayer.getUniqueID()
-            .toString();
-        JsonObject currentTest = deepCopyJson(CurrentTestUnderConstruction.getTestJson(UUID));
+        JsonObject currentTest = deepCopyJson(CurrentTestUnderConstruction.getTestJson());
 
-        Platform.runLater(() -> updateListFromJson(currentTest));
+        Platform.runLater(() -> updateFromJson(currentTest));
+    }
+
+    private Stage primaryStage;
+
+    public void setPrimaryStage(Stage stage) {
+        this.primaryStage = stage;
     }
 }

@@ -10,18 +10,25 @@ import javafx.stage.Stage;
 public class MainApp extends Application {
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage primaryStage) {
         try {
             // Load the FXML file and set up the scene
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainLayout.fxml"));
             Parent root = loader.load();
 
+            // Set the primary scene
             Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("JavaFX FXML Example");
-            stage.show();
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Test Application");
+
+            // Get the controller and set the stage
+            MainController controller = loader.getController();
+            controller.setPrimaryStage(primaryStage);  // Pass the primary stage
+
+            // Show the stage
+            primaryStage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace();  // Log the error for debugging
         }
     }
 

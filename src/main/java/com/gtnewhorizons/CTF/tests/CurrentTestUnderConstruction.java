@@ -162,4 +162,11 @@ public class CurrentTestUnderConstruction {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         updateTest(player, jsonObject);
     }
+
+    @SideOnly(Side.CLIENT)
+    public static JsonObject getTestJson() {
+        EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
+
+        return getTestJson(entityPlayer);
+    }
 }
