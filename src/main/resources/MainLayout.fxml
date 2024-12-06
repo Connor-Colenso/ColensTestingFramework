@@ -52,7 +52,7 @@
           <items>
             <MenuItem mnemonicParsing="false" text="New" />
             <MenuItem fx:id="OpenMenuItem" mnemonicParsing="false" text="Open…" />
-            <Menu mnemonicParsing="false" text="Open Recent" />
+            <Menu fx:id="OpenRecentMenu" mnemonicParsing="false" text="Open Recent" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Close" />
             <MenuItem mnemonicParsing="false" text="Save" />
@@ -66,7 +66,7 @@
         </Menu>
       </menus>
     </MenuBar>
-      <Label fx:id="TestNameLabel" text="TestName">
+      <Label fx:id="TestNameLabel" text="No test selected">
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>

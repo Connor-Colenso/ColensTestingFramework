@@ -16,7 +16,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.tests.TestManager;
 import cpw.mods.fml.common.Loader;
 import javafx.application.Platform;
@@ -30,6 +29,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -46,8 +46,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
 
 public class MainController {
 
@@ -60,10 +58,18 @@ public class MainController {
         TEST_CONFIG_TYPE.put(FORCE_SEPARATE_RUNNING, "bool");   // Boolean, string "false"
     }
 
+    private static final int MAX_RECENT_FILES = 5; // Limit recent files
+    private final ObservableList<File> recentFiles = FXCollections.observableArrayList();
+
+
+    @FXML
+    private Menu OpenRecentMenu;
     @FXML
     private MenuItem OpenMenuItem;
     @FXML
     private MenuItem PrintTestMenuItem;
+
+
     @FXML
     private Label TestNameLabel;
     @FXML
@@ -91,6 +97,41 @@ public class MainController {
 
     private static MainController instance;
 
+    private void addRecentFile(File file) {
+        recentFiles.remove(file); // Remove if already in the list to update position
+        recentFiles.add(0, file); // Add to the top
+        if (recentFiles.size() > MAX_RECENT_FILES) {
+            recentFiles.remove(recentFiles.size() - 1); // Keep the list size limited
+        }
+        populateRecentFilesMenu(); // Refresh the menu
+    }
+
+    private void populateRecentFilesMenu() {
+        OpenRecentMenu.getItems().clear(); // Clear existing items
+        for (File file : recentFiles) {
+            MenuItem recentItem = new MenuItem(file.getName());
+            recentItem.setOnAction(e -> loadRecentFile(file));
+            OpenRecentMenu.getItems().add(recentItem);
+        }
+    }
+
+    private void loadRecentFile(File file) {
+        try {
+            updateFromJson(loadJsonFromFile(file.toPath()));
+        } catch (Exception exception) {
+            showAlert("Error loading JSON", "Failed to load the selected recent file.");
+            exception.printStackTrace();
+        }
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+
     @FXML
     public void initialize() {
         instance = this;
@@ -110,48 +151,28 @@ public class MainController {
     }
 
     private void setupMenuItems() {
+        // Existing OpenMenuItem setup
         OpenMenuItem.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Json Files", "*.json"));
+            fileChooser.setInitialDirectory(new File(Loader.instance().getConfigDir(), "/CTF/testing"));
 
-            // Optional: Set filters for file types
-            fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Json Files", "*.json")
-            );
-
-            fileChooser.setInitialDirectory(Loader.instance().getConfigDir());
-
-            // Show the file chooser dialog
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
-
-            // Handle the selected file
             if (selectedFile != null) {
                 try {
                     updateFromJson(loadJsonFromFile(selectedFile.toPath()));
+                    addRecentFile(selectedFile); // Add to recent files
                 } catch (Exception exception) {
-                    // Create an alert with information type.
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error loading JSON");
-                    alert.setContentText("Test could not be loaded for an unknown reason, please see log.");
+                    showAlert("Error loading JSON", "Test could not be loaded. Check the log for details.");
                     exception.printStackTrace();
-
-                    // Show the alert
-                    alert.showAndWait();
                 }
             } else {
                 System.out.println("No file selected");
             }
         });
 
-        PrintTestMenuItem.setOnAction(e -> {
-            ClientSideExecutor.add(() -> {
-                if (currentTestInUI == null) return;
-
-                Test test = new Test(currentTestInUI);
-                EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
-                test.setManualPlacement(entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ);
-                TestManager.addTest(test);
-            });
-        });
+        // Populate recent files menu
+        populateRecentFilesMenu();
     }
 
     private void setupProcedureViewBoxEvents() {

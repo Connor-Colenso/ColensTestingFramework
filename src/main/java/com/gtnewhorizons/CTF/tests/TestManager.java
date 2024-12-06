@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
@@ -277,5 +281,15 @@ public class TestManager {
         testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>())
             .add(test);
         uuidTestsMapping.put(test.uuid, test);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void addCustomTestFromUI(JsonObject currentTestInUI) {
+        // Todo proper packet handling so we aren't just straight up violating server/client bounds.
+        Test test = new Test(currentTestInUI);
+        EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
+        test.setManualPlacement(entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ);
+
+        addTest(test);
     }
 }
