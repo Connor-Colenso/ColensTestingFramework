@@ -9,6 +9,7 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.FORCE_SEPARATE_RUNNIN
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.PRESERVE_VERTICAL;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.JsonUtils.deepCopyJson;
@@ -19,8 +20,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.gtnewhorizon.structurelib.structure.StructureUtility;
+import com.gtnewhorizons.CTF.networking.CTFNetworkHandler;
+import com.gtnewhorizons.CTF.networking.JsonPacket;
+import com.gtnewhorizons.CTF.networking.TransmitJsonForBuild;
 import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.tests.TestManager;
+import com.gtnewhorizons.CTF.utils.JsonUtils;
 import com.gtnewhorizons.CTF.utils.Structure;
 import cpw.mods.fml.common.Loader;
 import javafx.application.Platform;
@@ -166,20 +171,23 @@ public class MainController {
             if (currentTestInUI == null) return;
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
-            Test test = new Test(currentTestInUI);
-            test.setManualPlacement(player.posX + 2, player.posY, player.posZ + 2);
+            int[] dimensions = JsonUtils.getStructureDimensions(currentTestInUI);
 
-            firstPosition[0] = test.getStartStructureX();
-            firstPosition[1] = test.getStartStructureY();
-            firstPosition[2] = test.getStartStructureZ();
 
-            secondPosition[0] = test.getEndStructureX() - 1;
-            secondPosition[1] = test.getEndStructureY() - 1;
-            secondPosition[2] = test.getEndStructureZ() - 1;
 
-            Structure.buildStructure(test);
+            firstPosition[0] = (int) (player.posX + 2);
+            firstPosition[1] = (int) (player.posY);
+            firstPosition[2] = (int) (player.posZ + 2);
 
-            CurrentTestUnderConstruction.updateTest(player.getUniqueID().toString(), currentTestInUI);
+            // Bit of a hack, since the player could move inbetween, but it's close enough for now.
+            secondPosition[0] = firstPosition[0] + dimensions[0] - 1;
+            secondPosition[1] = firstPosition[1] + dimensions[1] - 1;
+            secondPosition[2] = firstPosition[2] + dimensions[2] - 1;
+
+            TransmitJsonForBuild packet = new TransmitJsonForBuild(currentTestInUI);
+
+            // Send the packet to the server
+            CTFNetworkHandler.INSTANCE.sendToServer(packet);
         }));
     }
 

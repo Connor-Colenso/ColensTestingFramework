@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 
+import com.gtnewhorizons.CTF.utils.JsonUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.EnumChatFormatting;
@@ -131,31 +132,15 @@ public final class Test {
     }
 
     private void getSizes() {
-        // Get the "build" array from the structure JSON.
-        JsonArray build = getStructure().getAsJsonArray("build");
 
-        // Determine the yLength based on the number of layers (height)
-        yStructureLength = build.size();
+        // Get the structure dimensions (X, Y, Z)
+        int[] dimensions = JsonUtils.getStructureDimensions(json);
 
-        // Ensure the build array is not empty to prevent errors
-        if (yStructureLength == 0) {
-            return;
-        }
-
-        // Determine the zLength based on the number of rows in the first layer
-        JsonArray firstLayer = build.get(0)
-            .getAsJsonArray();
-        zStructureLength = firstLayer.size();
-
-        // Determine the xLength based on the length of the first row in the first layer
-        String firstRowData = firstLayer.get(0)
-            .getAsString();
-        xStructureLength = firstRowData.length();
-
-        if (xStructureLength == 0 || yStructureLength == 0 || zStructureLength == 0) {
-            throw new RuntimeException("Structure for test had no volume.");
-        }
+        xStructureLength = dimensions[0];
+        yStructureLength = dimensions[1];
+        zStructureLength = dimensions[2];
     }
+
 
     private void buildKeyMap() {
 

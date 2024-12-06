@@ -2,6 +2,7 @@ package com.gtnewhorizons.CTF;
 
 import java.util.List;
 
+import com.gtnewhorizons.CTF.networking.CTFNetworkHandler;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -62,6 +63,8 @@ public class MyMod {
         CTF_LOG.info("CTF Pre-Initialization {}", System.getProperty("user.dir"));
         proxy.preInit(event);
         new MovePlayer(); // Moves the user to specific x y z coords.
+
+        CTFNetworkHandler.init();
     }
 
     @Mod.EventHandler

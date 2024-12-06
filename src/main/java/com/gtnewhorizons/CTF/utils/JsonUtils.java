@@ -1,5 +1,7 @@
 package com.gtnewhorizons.CTF.utils;
 
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.BUILD;
+import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 
 import java.io.BufferedReader;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.google.gson.JsonArray;
 import net.minecraft.client.Minecraft;
 
 import com.google.gson.Gson;
@@ -23,6 +26,43 @@ import com.gtnewhorizons.CTF.MyMod;
 import cpw.mods.fml.common.Loader;
 
 public class JsonUtils {
+
+    // Method to get all sizes: X, Y, Z
+    public static int[] getStructureDimensions(JsonObject test) {
+
+        JsonArray build = test.getAsJsonObject(STRUCTURE).getAsJsonArray(BUILD);
+
+        int xLength = getXStructureLength(build);
+        int yLength = getYStructureLength(build);
+        int zLength = getZStructureLength(build);
+
+        if (xLength == 0 || yLength == 0 || zLength == 0) {
+            throw new RuntimeException("Structure for test had no volume.");
+        }
+
+        return new int[] {xLength, yLength, zLength};
+    }
+
+    // Method to get the Y-size (height)
+    public static int getYStructureLength(JsonArray build) {
+        return build.size();  // Number of layers in the structure
+    }
+
+    // Method to get the Z-size (rows per layer)
+    public static int getZStructureLength(JsonArray build) {
+        if (build.size() == 0) return 0;  // Empty structure case
+        JsonArray firstLayer = build.get(0).getAsJsonArray();
+        return firstLayer.size();  // Number of rows in the first layer
+    }
+
+    // Method to get the X-size (length of the first row)
+    public static int getXStructureLength(JsonArray build) {
+        if (build.size() == 0) return 0;  // Empty structure case
+        JsonArray firstLayer = build.get(0).getAsJsonArray();
+        if (firstLayer.size() == 0) return 0;  // Empty first row case
+        String firstRowData = firstLayer.get(0).getAsString();
+        return firstRowData.length();  // Length of the first row
+    }
 
     public static void saveJsonToFile(JsonObject overallJson) {
         // Create a pretty-printing Gson instance
@@ -57,7 +97,7 @@ public class JsonUtils {
         }
     }
 
-    private static final JsonParser jsonParser = new JsonParser();
+    public static final JsonParser jsonParser = new JsonParser();
 
     // Method to load all JSONs from a directory
     private static List<JsonObject> loadJsonsFromDir(File directory) {
