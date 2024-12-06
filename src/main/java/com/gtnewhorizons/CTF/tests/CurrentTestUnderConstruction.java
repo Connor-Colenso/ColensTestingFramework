@@ -13,7 +13,6 @@ import static net.minecraft.client.Minecraft.getMinecraft;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.cleanroommc.modularui.utils.math.functions.limit.Min;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -51,7 +50,7 @@ public class CurrentTestUnderConstruction {
             "Invalid instruction was appended to the test in construction. " + instruction.toString());
         getInstructions(player).add(instruction);
 
-        MainController.refreshInstructionList();
+        MainController.refreshUIWithJson();
     }
 
     public static JsonArray getInstructions(EntityPlayer player) {

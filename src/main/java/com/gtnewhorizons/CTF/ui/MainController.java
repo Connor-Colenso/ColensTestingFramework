@@ -16,7 +16,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.gtnewhorizons.CTF.tests.TestManager;
 import cpw.mods.fml.common.Loader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -68,7 +67,6 @@ public class MainController {
     private MenuItem OpenMenuItem;
     @FXML
     private MenuItem PrintTestMenuItem;
-
 
     @FXML
     private Label TestNameLabel;
@@ -379,7 +377,7 @@ public class MainController {
     private static JsonObject currentTestInUI;
 
     // Refresh instruction list from the current test JSON
-    public static void refreshInstructionList() {
+    public static void refreshUIWithJson() {
         JsonObject currentTest = deepCopyJson(CurrentTestUnderConstruction.getTestJson());
 
         Platform.runLater(() -> updateFromJson(currentTest));

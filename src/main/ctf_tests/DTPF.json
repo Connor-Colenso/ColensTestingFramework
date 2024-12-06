@@ -15,9 +15,7 @@
       "naturalRegeneration": true,
       "doMobLoot": true,
       "keepInventory": false,
-      "doDaylightCycle": true,
-      "preserveVertical": true,
-      "forceSeparateRunning": true
+      "doDaylightCycle": true
     }
   },
   "instructions": [
