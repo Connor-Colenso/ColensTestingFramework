@@ -177,7 +177,7 @@ public class MainController {
             secondPosition[1] = firstPosition[1] + dimensions[1] - 1;
             secondPosition[2] = firstPosition[2] + dimensions[2] - 1;
 
-            TransmitJsonForBuild packet = new TransmitJsonForBuild(currentTestInUI);
+            TransmitJsonForBuild packet = new TransmitJsonForBuild(currentTestInUI, firstPosition[0], firstPosition[1], firstPosition[2]);
 
             // Send the packet to the server
             CTFNetworkHandler.INSTANCE.sendToServer(packet);

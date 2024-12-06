@@ -2,6 +2,8 @@ package com.gtnewhorizons.CTF.networking;
 
 import static com.gtnewhorizons.CTF.MyMod.CTF_LOG;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.google.gson.JsonObject;
@@ -16,13 +18,36 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 
 public class TransmitJsonForBuild extends JsonPacket {
 
-    public TransmitJsonForBuild(JsonObject json) {
+    private int playerX;
+    private int playerY;
+    private int playerZ;
+
+    public TransmitJsonForBuild(JsonObject json, int x, int y, int z) {
         this.json = json;
+        this.playerX = x;
+        this.playerY = y;
+        this.playerZ = z;
     }
 
     // Do not delete, needed for server side reflection nonsense.
     public TransmitJsonForBuild() {
         super();
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        playerX = buf.readInt();
+        playerY = buf.readInt();
+        playerZ = buf.readInt();
+        super.fromBytes(buf);
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(playerX);
+        buf.writeInt(playerY);
+        buf.writeInt(playerZ);
+        super.toBytes(buf);
     }
 
     // Handler to process the packet when received
@@ -41,7 +66,9 @@ public class TransmitJsonForBuild extends JsonPacket {
 
             Test test = new Test(message.getJson());
 
-            test.setManualPlacement(player.posX + 2, player.posY, player.posZ + 2);
+            // We do this, because otherwise the players position will sometimes get out of sync by the time the packet is read by the server.
+            // This way we fix the printed structures position safely.
+            test.setManualPlacement(message.playerX, message.playerY, message.playerZ);
 
             Structure.buildStructure(test);
 
