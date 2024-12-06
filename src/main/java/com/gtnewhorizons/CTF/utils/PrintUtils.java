@@ -1,12 +1,12 @@
 package com.gtnewhorizons.CTF.utils;
 
+import java.util.HashMap;
+
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
-
-import com.gtnewhorizons.CTF.MyMod;
 import net.minecraft.util.EnumChatFormatting;
 
-import java.util.HashMap;
+import com.gtnewhorizons.CTF.MyMod;
 
 @SuppressWarnings("unused")
 public class PrintUtils {

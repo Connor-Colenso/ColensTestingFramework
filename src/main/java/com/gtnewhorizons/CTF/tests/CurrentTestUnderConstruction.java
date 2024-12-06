@@ -13,8 +13,6 @@ import static net.minecraft.client.Minecraft.getMinecraft;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 
@@ -22,6 +20,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.ui.MainController;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class CurrentTestUnderConstruction {
 
@@ -32,7 +33,10 @@ public class CurrentTestUnderConstruction {
     }
 
     public static void updateTest(EntityPlayer player, JsonObject testJson) {
-        updateTest(player.getUniqueID().toString(), testJson);
+        updateTest(
+            player.getUniqueID()
+                .toString(),
+            testJson);
     }
 
     public static JsonObject getTestJson(String playerUUID) {

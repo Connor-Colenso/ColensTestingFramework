@@ -57,8 +57,6 @@ public class CommandInitTest extends CommandBase {
             testConfig.addProperty("forceSeparateRunning", false);
             testConfig.addProperty("duplicateTest", 1);
 
-
-
             JsonObject gamerules = new JsonObject();
             for (Map.Entry<String, Boolean> pair : ALL_GAMERULES_DEFAULT.entrySet()) {
                 gamerules.addProperty(pair.getKey(), pair.getValue());

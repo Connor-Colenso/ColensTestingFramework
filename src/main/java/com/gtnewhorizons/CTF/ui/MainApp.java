@@ -23,12 +23,12 @@ public class MainApp extends Application {
 
             // Get the controller and set the stage
             MainController controller = loader.getController();
-            controller.setPrimaryStage(primaryStage);  // Pass the primary stage
+            controller.setPrimaryStage(primaryStage); // Pass the primary stage
 
             // Show the stage
             primaryStage.show();
         } catch (IOException e) {
-            e.printStackTrace();  // Log the error for debugging
+            e.printStackTrace(); // Log the error for debugging
         }
     }
 

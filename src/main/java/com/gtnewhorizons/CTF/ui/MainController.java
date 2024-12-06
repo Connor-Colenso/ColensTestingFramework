@@ -9,7 +9,6 @@ import static com.gtnewhorizons.CTF.utils.CommonTestFields.FORCE_SEPARATE_RUNNIN
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.GAMERULES;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.INSTRUCTIONS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.PRESERVE_VERTICAL;
-import static com.gtnewhorizons.CTF.utils.CommonTestFields.STRUCTURE;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_CONFIG;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.TEST_NAME;
 import static com.gtnewhorizons.CTF.utils.JsonUtils.deepCopyJson;
@@ -18,16 +17,6 @@ import static com.gtnewhorizons.CTF.utils.JsonUtils.loadJsonFromFile;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.gtnewhorizon.structurelib.structure.StructureUtility;
-import com.gtnewhorizons.CTF.networking.CTFNetworkHandler;
-import com.gtnewhorizons.CTF.networking.JsonPacket;
-import com.gtnewhorizons.CTF.networking.TransmitJsonForBuild;
-import com.gtnewhorizons.CTF.tests.Test;
-import com.gtnewhorizons.CTF.tests.TestManager;
-import com.gtnewhorizons.CTF.utils.JsonUtils;
-import com.gtnewhorizons.CTF.utils.Structure;
-import cpw.mods.fml.common.Loader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -44,35 +33,40 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.gtnewhorizons.CTF.networking.CTFNetworkHandler;
+import com.gtnewhorizons.CTF.networking.TransmitJsonForBuild;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import com.gtnewhorizons.CTF.tests.TestManager;
+import com.gtnewhorizons.CTF.utils.JsonUtils;
+
+import cpw.mods.fml.common.Loader;
 
 public class MainController {
 
     private static final HashMap<String, String> TEST_CONFIG_TYPE = new HashMap<>();
     static {
-        TEST_CONFIG_TYPE.put(DIMENSION, "textbox");           // Integer, treated as textbox input
-        TEST_CONFIG_TYPE.put(BUFFER_ZONE_IN_BLOCKS, "textbox");  // Integer, treated as textbox input
-        TEST_CONFIG_TYPE.put(DUPLICATE_TEST, "textbox");       // Integer, treated as textbox input
-        TEST_CONFIG_TYPE.put(PRESERVE_VERTICAL, "bool");       // Boolean, string "false"
-        TEST_CONFIG_TYPE.put(FORCE_SEPARATE_RUNNING, "bool");   // Boolean, string "false"
+        TEST_CONFIG_TYPE.put(DIMENSION, "textbox"); // Integer, treated as textbox input
+        TEST_CONFIG_TYPE.put(BUFFER_ZONE_IN_BLOCKS, "textbox"); // Integer, treated as textbox input
+        TEST_CONFIG_TYPE.put(DUPLICATE_TEST, "textbox"); // Integer, treated as textbox input
+        TEST_CONFIG_TYPE.put(PRESERVE_VERTICAL, "bool"); // Boolean, string "false"
+        TEST_CONFIG_TYPE.put(FORCE_SEPARATE_RUNNING, "bool"); // Boolean, string "false"
     }
 
     private static final int MAX_RECENT_FILES = 5; // Limit recent files
     private final ObservableList<File> recentFiles = FXCollections.observableArrayList();
-
 
     @FXML
     private Menu OpenRecentMenu;
@@ -120,11 +114,13 @@ public class MainController {
     }
 
     private void populateRecentFilesMenu() {
-        OpenRecentMenu.getItems().clear(); // Clear existing items
+        OpenRecentMenu.getItems()
+            .clear(); // Clear existing items
         for (File file : recentFiles) {
             MenuItem recentItem = new MenuItem(file.getName());
             recentItem.setOnAction(e -> loadRecentFile(file));
-            OpenRecentMenu.getItems().add(recentItem);
+            OpenRecentMenu.getItems()
+                .add(recentItem);
         }
     }
 
@@ -143,7 +139,6 @@ public class MainController {
         alert.setContentText(content);
         alert.showAndWait();
     }
-
 
     @FXML
     public void initialize() {
@@ -173,8 +168,6 @@ public class MainController {
 
             int[] dimensions = JsonUtils.getStructureDimensions(currentTestInUI);
 
-
-
             firstPosition[0] = (int) (player.posX + 2);
             firstPosition[1] = (int) (player.posY);
             firstPosition[2] = (int) (player.posZ + 2);
@@ -195,8 +188,13 @@ public class MainController {
         // Existing OpenMenuItem setup
         OpenMenuItem.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Json Files", "*.json"));
-            fileChooser.setInitialDirectory(new File(Loader.instance().getConfigDir(), "/CTF/testing"));
+            fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("Json Files", "*.json"));
+            fileChooser.setInitialDirectory(
+                new File(
+                    Loader.instance()
+                        .getConfigDir(),
+                    "/CTF/testing"));
 
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
             if (selectedFile != null) {
@@ -251,16 +249,16 @@ public class MainController {
             TestConfigListView.setVisible(false);
         });
 
-
     }
-
 
     private void setupTestConfigListView() {
         TestConfigListView.setItems(testConfig);
         TestConfigListView.setCellFactory(new Callback<>() {
+
             @Override
             public ListCell<String> call(ListView<String> param) {
                 return new ListCell<>() {
+
                     private final CheckBox checkBox = new CheckBox();
                     private final TextField textField = new TextField();
                     private final Label label = new Label(); // Create the label for the text box
@@ -273,16 +271,21 @@ public class MainController {
                         } else {
                             // Get the type of the current test config item from the TEST_CONFIG_TYPE map
                             String configType = TEST_CONFIG_TYPE.get(item);
-                            JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
+                            JsonObject testConfig = currentTestInUI.get(TEST_CONFIG)
+                                .getAsJsonObject();
 
                             if ("bool".equals(configType)) {
                                 checkBox.setText(item);
-                                checkBox.setSelected(testConfig.get(item).getAsBoolean());
+                                checkBox.setSelected(
+                                    testConfig.get(item)
+                                        .getAsBoolean());
                                 setGraphic(checkBox);
                                 checkBox.setOnAction(event -> handleTestConfigCheckbox(checkBox));
                             } else if ("textbox".equals(configType)) {
                                 label.setText(item); // Set the label text
-                                textField.setText(testConfig.get(item).getAsString());
+                                textField.setText(
+                                    testConfig.get(item)
+                                        .getAsString());
                                 textField.setMaxWidth(40);
 
                                 // Create an HBox to contain the label and text field
@@ -293,14 +296,17 @@ public class MainController {
                                 textField.setOnAction(event -> handleTestConfigTextInput(textField, item));
 
                                 // Ensure only numbers are inputted in the text field
-                                textField.textProperty().addListener((observable, oldValue, newValue) -> {
-                                    if (!newValue.matches("\\d*")) {
-                                        textField.setText(oldValue); // Reject non-numeric input
-                                    } else {
-                                        textField.setText(newValue);
-                                        currentTestInUI.get(TEST_CONFIG).getAsJsonObject().addProperty(item, newValue);
-                                    }
-                                });
+                                textField.textProperty()
+                                    .addListener((observable, oldValue, newValue) -> {
+                                        if (!newValue.matches("\\d*")) {
+                                            textField.setText(oldValue); // Reject non-numeric input
+                                        } else {
+                                            textField.setText(newValue);
+                                            currentTestInUI.get(TEST_CONFIG)
+                                                .getAsJsonObject()
+                                                .addProperty(item, newValue);
+                                        }
+                                    });
                             }
                         }
                     }
@@ -310,15 +316,18 @@ public class MainController {
     }
 
     private void handleTestConfigCheckbox(CheckBox checkBox) {
-        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
+        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG)
+            .getAsJsonObject();
 
         testConfig.addProperty(checkBox.getText(), checkBox.isSelected());
         ClientSideExecutor.add(() -> CurrentTestUnderConstruction.updateFromUI(deepCopyJson(currentTestInUI)));
     }
 
     private void handleTestConfigTextInput(TextField textField, String item) {
-        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
-        JsonObject gameRules = testConfig.get(GAMERULES).getAsJsonObject();
+        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG)
+            .getAsJsonObject();
+        JsonObject gameRules = testConfig.get(GAMERULES)
+            .getAsJsonObject();
 
         gameRules.addProperty(item, textField.getText());
         ClientSideExecutor.add(() -> CurrentTestUnderConstruction.updateFromUI(deepCopyJson(currentTestInUI)));
@@ -337,9 +346,13 @@ public class MainController {
                 } else {
                     checkBox.setText(item);
 
-                    JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
-                    JsonObject gameRules = testConfig.get(GAMERULES).getAsJsonObject();
-                    checkBox.setSelected(gameRules.get(item).getAsBoolean());
+                    JsonObject testConfig = currentTestInUI.get(TEST_CONFIG)
+                        .getAsJsonObject();
+                    JsonObject gameRules = testConfig.get(GAMERULES)
+                        .getAsJsonObject();
+                    checkBox.setSelected(
+                        gameRules.get(item)
+                            .getAsBoolean());
 
                     setGraphic(checkBox);
                     checkBox.setOnAction(event -> handleGameruleSelection(checkBox));
@@ -361,8 +374,10 @@ public class MainController {
 
     private void handleGameruleSelection(CheckBox checkBox) {
         System.out.println("Gamerule selected: " + checkBox.getText() + " was set to " + checkBox.isSelected());
-        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG).getAsJsonObject();
-        JsonObject gameRules = testConfig.get(GAMERULES).getAsJsonObject();
+        JsonObject testConfig = currentTestInUI.get(TEST_CONFIG)
+            .getAsJsonObject();
+        JsonObject gameRules = testConfig.get(GAMERULES)
+            .getAsJsonObject();
 
         gameRules.addProperty(checkBox.getText(), checkBox.isSelected());
         ClientSideExecutor.add(() -> CurrentTestUnderConstruction.updateFromUI(deepCopyJson(currentTestInUI)));
@@ -382,7 +397,9 @@ public class MainController {
     public static void updateFromJson(JsonObject currentTest) {
         if (currentTest != null) {
 
-            instance.TestNameLabel.setText(currentTest.get(TEST_NAME).getAsString());
+            instance.TestNameLabel.setText(
+                currentTest.get(TEST_NAME)
+                    .getAsString());
 
             currentTestInUI = currentTest;
 
@@ -406,8 +423,7 @@ public class MainController {
 
                 // Iterate over all gamerules and add them to the list
                 for (Map.Entry<String, JsonElement> entry : gamerulesJson.entrySet()) {
-                    gamerules.add(
-                        entry.getKey());
+                    gamerules.add(entry.getKey());
                 }
 
                 testConfig.clear();

@@ -14,9 +14,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.UUID;
 
-import com.gtnewhorizons.CTF.utils.JsonUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.github.skjolber.packing.api.Box;
@@ -30,7 +27,11 @@ import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.MyMod;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.utils.BlockTilePair;
+import com.gtnewhorizons.CTF.utils.JsonUtils;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public final class Test {
 
@@ -141,7 +142,6 @@ public final class Test {
         zStructureLength = dimensions[2];
     }
 
-
     private void buildKeyMap() {
 
         final JsonObject keys = getStructure().getAsJsonObject("keys");
@@ -245,13 +245,18 @@ public final class Test {
             testsPassed++;
         }
 
-        // This replaces all the console colour codes with minecraft readable ones, so the user can see correctly formatted info.
+        // This replaces all the console colour codes with minecraft readable ones, so the user can see correctly
+        // formatted info.
         for (int i = 0; i < messageList.size(); i++) {
             String message = messageList.get(i);
-            for (Map.Entry<String, EnumChatFormatting> entry : PrintUtils.CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.entrySet()) {
-                message = message.replace(entry.getKey(), entry.getValue().toString());
+            for (Map.Entry<String, EnumChatFormatting> entry : PrintUtils.CONSOLE_COLOUR_TO_MINECRAFT_COLOUR
+                .entrySet()) {
+                message = message.replace(
+                    entry.getKey(),
+                    entry.getValue()
+                        .toString());
             }
-            messageList.set(i, message);  // Update the modified message in the list
+            messageList.set(i, message); // Update the modified message in the list
         }
     }
 

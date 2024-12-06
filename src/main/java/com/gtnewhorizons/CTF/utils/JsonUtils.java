@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.google.gson.JsonArray;
 import net.minecraft.client.Minecraft;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.gtnewhorizons.CTF.MyMod;
@@ -30,7 +30,8 @@ public class JsonUtils {
     // Method to get all sizes: X, Y, Z
     public static int[] getStructureDimensions(JsonObject test) {
 
-        JsonArray build = test.getAsJsonObject(STRUCTURE).getAsJsonArray(BUILD);
+        JsonArray build = test.getAsJsonObject(STRUCTURE)
+            .getAsJsonArray(BUILD);
 
         int xLength = getXStructureLength(build);
         int yLength = getYStructureLength(build);
@@ -40,28 +41,31 @@ public class JsonUtils {
             throw new RuntimeException("Structure for test had no volume.");
         }
 
-        return new int[] {xLength, yLength, zLength};
+        return new int[] { xLength, yLength, zLength };
     }
 
     // Method to get the Y-size (height)
     public static int getYStructureLength(JsonArray build) {
-        return build.size();  // Number of layers in the structure
+        return build.size(); // Number of layers in the structure
     }
 
     // Method to get the Z-size (rows per layer)
     public static int getZStructureLength(JsonArray build) {
-        if (build.size() == 0) return 0;  // Empty structure case
-        JsonArray firstLayer = build.get(0).getAsJsonArray();
-        return firstLayer.size();  // Number of rows in the first layer
+        if (build.size() == 0) return 0; // Empty structure case
+        JsonArray firstLayer = build.get(0)
+            .getAsJsonArray();
+        return firstLayer.size(); // Number of rows in the first layer
     }
 
     // Method to get the X-size (length of the first row)
     public static int getXStructureLength(JsonArray build) {
-        if (build.size() == 0) return 0;  // Empty structure case
-        JsonArray firstLayer = build.get(0).getAsJsonArray();
-        if (firstLayer.size() == 0) return 0;  // Empty first row case
-        String firstRowData = firstLayer.get(0).getAsString();
-        return firstRowData.length();  // Length of the first row
+        if (build.size() == 0) return 0; // Empty structure case
+        JsonArray firstLayer = build.get(0)
+            .getAsJsonArray();
+        if (firstLayer.size() == 0) return 0; // Empty first row case
+        String firstRowData = firstLayer.get(0)
+            .getAsString();
+        return firstRowData.length(); // Length of the first row
     }
 
     public static void saveJsonToFile(JsonObject overallJson) {
@@ -106,7 +110,9 @@ public class JsonUtils {
 
         try (Stream<Path> paths = Files.walk(directory.toPath())) {
             paths.filter(Files::isRegularFile)
-                .filter(path -> path.toString().endsWith(".json"))
+                .filter(
+                    path -> path.toString()
+                        .endsWith(".json"))
                 .forEach(path -> {
                     JsonObject jsonObject = loadJsonFromFile(path);
                     if (jsonObject != null) {
@@ -123,7 +129,8 @@ public class JsonUtils {
     // Method to load an individual JSON file and return the JsonObject
     public static JsonObject loadJsonFromFile(Path path) {
         try (BufferedReader reader = Files.newBufferedReader(path)) {
-            return jsonParser.parse(reader).getAsJsonObject();
+            return jsonParser.parse(reader)
+                .getAsJsonObject();
         } catch (Exception e) {
             System.err.println("Error reading JSON file: " + path.getFileName());
             e.printStackTrace();

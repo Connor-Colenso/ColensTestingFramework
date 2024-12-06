@@ -1,18 +1,20 @@
 package com.gtnewhorizons.CTF.networking;
 
+import static com.gtnewhorizons.CTF.utils.JsonUtils.jsonParser;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
 import com.google.gson.JsonObject;
+
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.zip.GZIPOutputStream;
-import java.io.ByteArrayInputStream;
-import java.util.zip.GZIPInputStream;
-
-import static com.gtnewhorizons.CTF.utils.JsonUtils.jsonParser;
-
 public class JsonPacket implements IMessage {
+
     protected JsonObject json;
 
     // Constructor to create packet with a JsonObject
@@ -35,7 +37,8 @@ public class JsonPacket implements IMessage {
         String jsonString = decompressData(compressedData);
 
         // Parse the JSON string into a JsonObject
-        this.json = jsonParser.parse(jsonString).getAsJsonObject();
+        this.json = jsonParser.parse(jsonString)
+            .getAsJsonObject();
     }
 
     @Override
@@ -53,7 +56,7 @@ public class JsonPacket implements IMessage {
     private String decompressData(byte[] data) {
         // Decompress GZIP data into a string
         try (GZIPInputStream gzipInputStream = new GZIPInputStream(new ByteArrayInputStream(data));
-             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream()) {
 
             byte[] buffer = new byte[1024];
             int length;
@@ -70,7 +73,7 @@ public class JsonPacket implements IMessage {
     private byte[] compressData(String data) {
         // Compress the string data into a byte array using GZIP
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-             GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream)) {
+            GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream)) {
 
             gzipOutputStream.write(data.getBytes());
             gzipOutputStream.finish();
