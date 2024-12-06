@@ -1,5 +1,7 @@
 package com.gtnewhorizons.CTF.ui;
 
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
+import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.BUFFER_ZONE_IN_BLOCKS;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.DIMENSION;
 import static com.gtnewhorizons.CTF.utils.CommonTestFields.DUPLICATE_TEST;
@@ -16,6 +18,10 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gtnewhorizon.structurelib.structure.StructureUtility;
+import com.gtnewhorizons.CTF.tests.Test;
+import com.gtnewhorizons.CTF.tests.TestManager;
+import com.gtnewhorizons.CTF.utils.Structure;
 import cpw.mods.fml.common.Loader;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -45,6 +51,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class MainController {
 
@@ -65,6 +73,8 @@ public class MainController {
     private Menu OpenRecentMenu;
     @FXML
     private MenuItem OpenMenuItem;
+    @FXML
+    private MenuItem PrintTestAndRunMenuItem;
     @FXML
     private MenuItem PrintTestMenuItem;
 
@@ -146,6 +156,31 @@ public class MainController {
 
         // Setup menu items
         setupMenuItems();
+
+        PrintTestAndRunMenuItem.setOnAction(e -> ClientSideExecutor.add(() -> {
+            if (currentTestInUI == null) return;
+            TestManager.addCustomTestFromUI(currentTestInUI);
+        }));
+
+        PrintTestMenuItem.setOnAction(e -> ClientSideExecutor.add(() -> {
+            if (currentTestInUI == null) return;
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+
+            Test test = new Test(currentTestInUI);
+            test.setManualPlacement(player.posX, player.posY, player.posZ);
+
+            firstPosition[0] = test.getStartStructureX();
+            firstPosition[1] = test.getStartStructureY();
+            firstPosition[2] = test.getStartStructureZ();
+
+            secondPosition[0] = test.getEndStructureX();
+            secondPosition[1] = test.getEndStructureY();
+            secondPosition[2] = test.getEndStructureZ();
+
+            Structure.buildStructure(test);
+
+            CurrentTestUnderConstruction.updateTest(player.getUniqueID().toString(), currentTestInUI);
+        }));
     }
 
     private void setupMenuItems() {
