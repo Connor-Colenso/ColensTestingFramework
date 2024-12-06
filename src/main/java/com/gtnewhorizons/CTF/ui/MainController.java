@@ -167,15 +167,15 @@ public class MainController {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
             Test test = new Test(currentTestInUI);
-            test.setManualPlacement(player.posX, player.posY, player.posZ);
+            test.setManualPlacement(player.posX + 2, player.posY, player.posZ + 2);
 
             firstPosition[0] = test.getStartStructureX();
             firstPosition[1] = test.getStartStructureY();
             firstPosition[2] = test.getStartStructureZ();
 
-            secondPosition[0] = test.getEndStructureX();
-            secondPosition[1] = test.getEndStructureY();
-            secondPosition[2] = test.getEndStructureZ();
+            secondPosition[0] = test.getEndStructureX() - 1;
+            secondPosition[1] = test.getEndStructureY() - 1;
+            secondPosition[2] = test.getEndStructureZ() - 1;
 
             Structure.buildStructure(test);
 

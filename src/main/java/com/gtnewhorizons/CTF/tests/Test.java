@@ -243,10 +243,7 @@ public final class Test {
         structureStartX = placement.getAbsoluteX() + testSettings.getBufferZoneInBlocks();
         structureStartY = placement.getAbsoluteY() + testSettings.getBufferZoneInBlocks();
         structureStartZ = placement.getAbsoluteZ() + testSettings.getBufferZoneInBlocks();
-        sp = placement;
     }
-
-    public StackPlacement sp;
 
     long testStartTime = 0;
     int tickCounter = 1; // Set to one, because we skip the first tick when constructing the test in world.
@@ -261,6 +258,15 @@ public final class Test {
     public void handleFinalConclusion() {
         if (!failed) {
             testsPassed++;
+        }
+
+        // This replaces all the console colour codes with minecraft readable ones, so the user can see correctly formatted info.
+        for (int i = 0; i < messageList.size(); i++) {
+            String message = messageList.get(i);
+            for (Map.Entry<String, EnumChatFormatting> entry : PrintUtils.CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.entrySet()) {
+                message = message.replace(entry.getKey(), entry.getValue().toString());
+            }
+            messageList.set(i, message);  // Update the modified message in the list
         }
     }
 
@@ -286,16 +292,6 @@ public final class Test {
             "Structure Dimensions: (" + xStructureLength + "x, " + yStructureLength + "y, " + zStructureLength + "z).");
         debugInfo.add("Buffer Zone: " + testSettings.getBufferZoneInBlocks());
 
-        // Add the current position of the test in the world
-        debugInfo.add("Test Position: (" + structureStartX + ", " + structureStartY + ", " + structureStartZ + ")");
-        if (sp != null) {
-            debugInfo
-                .add("Abs Position: (" + sp.getAbsoluteX() + ", " + sp.getAbsoluteY() + ", " + sp.getAbsoluteZ() + ")");
-            debugInfo.add(
-                "Abs End Position: (" + sp
-                    .getAbsoluteEndX() + ", " + sp.getAbsoluteEndY() + ", " + sp.getAbsoluteEndZ() + ")");
-        }
-
         // Add information about procedures
         debugInfo.add("Procedures Remaining: " + procedureList.size());
 
@@ -308,15 +304,6 @@ public final class Test {
 
         // Add messages collected during the test
         debugInfo.add("Messages: ");
-        for (int i = 0; i < messageList.size(); i++) {
-            String message = messageList.get(i);
-            for (Map.Entry<String, EnumChatFormatting> entry : PrintUtils.CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.entrySet()) {
-                message = message.replace(entry.getKey(), entry.getValue().toString());
-            }
-            messageList.set(i, message);  // Update the modified message in the list
-        }
-
-
         debugInfo.addAll(messageList);
 
         return debugInfo;
