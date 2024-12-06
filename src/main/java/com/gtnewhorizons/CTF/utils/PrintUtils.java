@@ -4,6 +4,9 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
 import com.gtnewhorizons.CTF.MyMod;
+import net.minecraft.util.EnumChatFormatting;
+
+import java.util.HashMap;
 
 @SuppressWarnings("unused")
 public class PrintUtils {
@@ -19,6 +22,20 @@ public class PrintUtils {
     public static final String PURPLE = "\u001B[35m";
     public static final String CYAN = "\u001B[36m";
     public static final String WHITE = "\u001B[37m";
+
+    public static final HashMap<String, EnumChatFormatting> CONSOLE_COLOUR_TO_MINECRAFT_COLOUR = new HashMap<>();
+
+    static {
+        CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.put(BLACK, EnumChatFormatting.BLACK);
+        CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.put(RED, EnumChatFormatting.RED);
+        CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.put(GREEN, EnumChatFormatting.GREEN);
+        CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.put(YELLOW, EnumChatFormatting.YELLOW);
+        CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.put(BLUE, EnumChatFormatting.BLUE);
+        CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.put(PURPLE, EnumChatFormatting.DARK_RED);
+        CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.put(CYAN, EnumChatFormatting.DARK_GREEN);
+        CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.put(WHITE, EnumChatFormatting.WHITE);
+        CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.put(RESET, EnumChatFormatting.RESET);
+    }
 
     public static String colourConsole(final String colourCode, String string) {
         return colourCode + string + RESET;

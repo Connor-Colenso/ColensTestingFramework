@@ -308,6 +308,15 @@ public final class Test {
 
         // Add messages collected during the test
         debugInfo.add("Messages: ");
+        for (int i = 0; i < messageList.size(); i++) {
+            String message = messageList.get(i);
+            for (Map.Entry<String, EnumChatFormatting> entry : PrintUtils.CONSOLE_COLOUR_TO_MINECRAFT_COLOUR.entrySet()) {
+                message = message.replace(entry.getKey(), entry.getValue().toString());
+            }
+            messageList.set(i, message);  // Update the modified message in the list
+        }
+
+
         debugInfo.addAll(messageList);
 
         return debugInfo;
