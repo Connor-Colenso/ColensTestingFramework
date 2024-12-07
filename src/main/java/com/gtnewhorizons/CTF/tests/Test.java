@@ -351,7 +351,6 @@ public final class Test {
         return testSettings.getDimension();
     }
 
-    @SideOnly(Side.CLIENT)
     public void setManualPlacement(double x, double y, double z) {
         structureStartX = (int) x;
         structureStartY = (int) y;

@@ -178,6 +178,7 @@ public class MainController {
             secondPosition[2] = firstPosition[2] + dimensions[2] - 1;
 
             TransmitJsonForBuild packet = new TransmitJsonForBuild(currentTestInUI, firstPosition[0], firstPosition[1], firstPosition[2]);
+            CurrentTestUnderConstruction.updateTest(player, currentTestInUI);
 
             // Send the packet to the server
             CTFNetworkHandler.INSTANCE.sendToServer(packet);

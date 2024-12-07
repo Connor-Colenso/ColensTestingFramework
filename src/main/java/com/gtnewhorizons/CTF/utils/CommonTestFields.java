@@ -43,7 +43,7 @@ public class CommonTestFields {
             ALL_GAMERULES_LOWER_CONVERTER.put(
                 entry.getKey()
                     .toLowerCase(),
-                String.valueOf(entry.getKey()));
+                entry.getKey());
         }
     }
 }
