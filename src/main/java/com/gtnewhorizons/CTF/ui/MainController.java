@@ -185,20 +185,28 @@ public class MainController {
         }));
     }
 
+    // Todo: maybe add a way for this to persist between restarts? Not sure, don't want to confuse people.
+    private static File initialDirForOpenJson;
+
     private void setupMenuItems() {
+        if (initialDirForOpenJson == null) {
+            initialDirForOpenJson = new File(
+                Loader.instance()
+                    .getConfigDir(),
+                "/CTF/testing");
+        }
+
         // Existing OpenMenuItem setup
         OpenMenuItem.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("Json Files", "*.json"));
-            fileChooser.setInitialDirectory(
-                new File(
-                    Loader.instance()
-                        .getConfigDir(),
-                    "/CTF/testing"));
+            fileChooser.setInitialDirectory(initialDirForOpenJson);
 
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
+
             if (selectedFile != null) {
+                initialDirForOpenJson = selectedFile.getParentFile();
                 try {
                     updateFromJson(loadJsonFromFile(selectedFile.toPath()));
                     addRecentFile(selectedFile); // Add to recent files

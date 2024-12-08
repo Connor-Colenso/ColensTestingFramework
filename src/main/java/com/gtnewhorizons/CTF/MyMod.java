@@ -2,6 +2,7 @@ package com.gtnewhorizons.CTF;
 
 import java.util.List;
 
+import com.gtnewhorizons.CTF.events.ClientSideDisconnectFromWorld;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -91,6 +92,7 @@ public class MyMod {
             .isClient()) {
             MinecraftForge.EVENT_BUS.register(new RenderCTFFrames());
             MinecraftForge.EVENT_BUS.register(new RenderCTFRegionInfo());
+            MinecraftForge.EVENT_BUS.register(new ClientSideDisconnectFromWorld());
         }
         MinecraftForge.EVENT_BUS.register(new CTFWandEventHandler());
 

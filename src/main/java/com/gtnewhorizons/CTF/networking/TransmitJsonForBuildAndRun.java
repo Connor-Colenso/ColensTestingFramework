@@ -26,8 +26,6 @@ public class TransmitJsonForBuildAndRun extends JsonPacket {
                 return null; // No response needed.
             }
 
-            CurrentTestUnderConstruction.updateTest(player, message.getJson());
-
             return null; // No response needed.
         }
 

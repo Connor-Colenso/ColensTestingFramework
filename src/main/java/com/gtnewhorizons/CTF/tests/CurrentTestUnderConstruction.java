@@ -21,8 +21,6 @@ import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.ui.MainController;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class CurrentTestUnderConstruction {
 
@@ -160,13 +158,11 @@ public class CurrentTestUnderConstruction {
         jsonObject.addProperty(gamerule, value);
     }
 
-    @SideOnly(Side.CLIENT)
     public static void updateFromUI(JsonObject jsonObject) {
         EntityPlayer player = Minecraft.getMinecraft().thePlayer;
         updateTest(player, jsonObject);
     }
 
-    @SideOnly(Side.CLIENT)
     public static JsonObject getTestJson() {
         EntityPlayer entityPlayer = Minecraft.getMinecraft().thePlayer;
 

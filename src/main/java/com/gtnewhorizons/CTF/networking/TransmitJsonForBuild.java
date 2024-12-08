@@ -4,7 +4,6 @@ import static com.gtnewhorizons.CTF.MyMod.CTF_LOG;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 
 import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
@@ -56,7 +55,7 @@ public class TransmitJsonForBuild extends JsonPacket {
         @Override
         public IMessage onMessage(TransmitJsonForBuild message, MessageContext ctx) {
             // Get the player who sent the packet
-            EntityPlayerMP player = ctx.getServerHandler().playerEntity;
+            EntityPlayer player = ctx.getServerHandler().playerEntity;
 
             if (!ServerUtils.isPlayerOpped(player)) {
                 CTF_LOG
@@ -71,8 +70,6 @@ public class TransmitJsonForBuild extends JsonPacket {
             test.setManualPlacement(message.playerX, message.playerY, message.playerZ);
 
             Structure.buildStructure(test);
-
-            CurrentTestUnderConstruction.updateTest(player, message.getJson());
 
             return null; // No response needed.
         }
