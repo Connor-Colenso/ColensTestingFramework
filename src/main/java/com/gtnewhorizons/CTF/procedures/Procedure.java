@@ -29,13 +29,12 @@ public abstract class Procedure {
                         + " with optionalLabel "
                         + optionalLabel
                         + " processed in tick "
-                        + tickCounter
-                        + " on the server thread.");
+                        + tickCounter + ".");
             } else {
                 test.addMessage(
                     PrintUtils.BLUE,
                     "Procedure " + this.getClass()
-                        .getSimpleName() + " processed in tick " + tickCounter + " on the server thread.");
+                        .getSimpleName() + " processed in tick " + tickCounter + ".");
             }
         }
 

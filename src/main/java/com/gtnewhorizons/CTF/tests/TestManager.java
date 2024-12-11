@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.gtnewhorizons.CTF.networking.CTFNetworkHandler;
+import com.gtnewhorizons.CTF.networking.UpdateClientSideTestInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
@@ -247,6 +250,7 @@ public class TestManager {
             test.runProcedures();
         }
 
+        // Check to see if all tests in the current set are done.
         boolean hasCompletedAllCurrentTests = true;
         for (Test test : currentTests) {
             hasCompletedAllCurrentTests &= test.isDone();
@@ -260,6 +264,11 @@ public class TestManager {
                 test.recordEndTime();
                 test.printAllMessages();
                 test.handleFinalConclusion();
+
+                // When each test is done, update the client.
+                for (EntityPlayerMP entityPlayerMP : MinecraftServer.getServer().getConfigurationManager().playerEntityList) {
+                    CTFNetworkHandler.INSTANCE.sendTo(new UpdateClientSideTestInfo(test), entityPlayerMP);
+                }
             }
 
             // Remove this set of tests, so we can move onto the next set, if there is one.

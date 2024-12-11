@@ -16,7 +16,10 @@ public class ServerSideUpdateClientsWithTestsOnJoin {
         // Send a packet for each test to the player.
         if (event.player instanceof EntityPlayerMP player) {
             for (Test test : uuidTestsMapping.values()) {
-                CTFNetworkHandler.INSTANCE.sendTo(new UpdateClientSideTestInfo(test), player);
+                if (test.isDone()) {
+                    CTFNetworkHandler.INSTANCE.sendTo(new UpdateClientSideTestInfo(test), player);
+                }
+                // TestManager will send an update to the client when the test is done otherwise.
             }
         }
     }

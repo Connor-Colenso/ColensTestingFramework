@@ -119,9 +119,7 @@ public class MyMod {
         event.registerServerCommand(new CommandCompleteTest());
         event.registerServerCommand(new CommandResetTest());
 
-        if (event.getSide() == Side.SERVER) {
-            TestManager.registerTests();
-        }
+        TestManager.registerTests();
     }
 
 }
