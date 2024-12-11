@@ -30,14 +30,12 @@ import com.gtnewhorizons.CTF.utils.BlockTilePair;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
 import com.gtnewhorizons.CTF.utils.PrintUtils;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
-public final class Test {
+public final class Test implements IClientSyncTestInfo {
 
     private final TestSettings testSettings;
     private final List<String> messageList = new ArrayList<>();
-    public final String uuid = UUID.randomUUID()
+    private final String uuid = UUID.randomUUID()
         .toString();
 
     public final StackableItem testBounds;
@@ -46,11 +44,11 @@ public final class Test {
     private int structureStartY;
     private int structureStartZ;
 
-    private int xStructureLength;
-    private int yStructureLength;
-    private int zStructureLength;
+    private int structureLengthX;
+    private int structureLengthY;
+    private int structureLengthZ;
 
-    public boolean failed = false;
+    private boolean failed = false;
 
     public JsonObject json;
     public HashMap<String, BlockTilePair> keyMap = new HashMap<>();
@@ -80,9 +78,9 @@ public final class Test {
                 Box.newBuilder()
                     .withStackableSurface(stackableSurface)
                     .withSize(
-                        xStructureLength + testSettings.getBufferZoneInBlocks() * 2,
+                        structureLengthX + testSettings.getBufferZoneInBlocks() * 2,
                         255,
-                        zStructureLength + testSettings.getBufferZoneInBlocks() * 2)
+                        structureLengthZ + testSettings.getBufferZoneInBlocks() * 2)
                     .withWeight(1)
                     .withId(uuid)
                     .build(),
@@ -92,9 +90,9 @@ public final class Test {
                 Box.newBuilder()
                     .withStackableSurface(stackableSurface)
                     .withSize(
-                        xStructureLength + testSettings.getBufferZoneInBlocks() * 2,
-                        yStructureLength + testSettings.getBufferZoneInBlocks() * 2,
-                        zStructureLength + testSettings.getBufferZoneInBlocks() * 2)
+                        structureLengthX + testSettings.getBufferZoneInBlocks() * 2,
+                        structureLengthY + testSettings.getBufferZoneInBlocks() * 2,
+                        structureLengthZ + testSettings.getBufferZoneInBlocks() * 2)
                     .withWeight(1)
                     .withId(uuid)
                     .build(),
@@ -137,9 +135,9 @@ public final class Test {
         // Get the structure dimensions (X, Y, Z)
         int[] dimensions = JsonUtils.getStructureDimensions(json);
 
-        xStructureLength = dimensions[0];
-        yStructureLength = dimensions[1];
-        zStructureLength = dimensions[2];
+        structureLengthX = dimensions[0];
+        structureLengthY = dimensions[1];
+        structureLengthZ = dimensions[2];
     }
 
     private void buildKeyMap() {
@@ -263,7 +261,7 @@ public final class Test {
     public static void printTotalTestsPassedInfo() {
         double percentage = (double) testsPassed / totalTests * 100;
         String message = String.format("Total tests passed: %d/%d (%.2f%%)", testsPassed, totalTests, percentage);
-        MyMod.CTF_LOG.info(message); // Use your mod's logger
+        MyMod.CTF_LOG.info(message);
     }
 
     public void recordEndTime() {
@@ -279,7 +277,7 @@ public final class Test {
 
         // Add information about structure dimensions and buffer zone
         debugInfo.add(
-            "Structure Dimensions: (" + xStructureLength + "x, " + yStructureLength + "y, " + zStructureLength + "z).");
+            "Structure Dimensions: (" + structureLengthX + "x, " + structureLengthY + "y, " + structureLengthZ + "z).");
         debugInfo.add("Buffer Zone: " + testSettings.getBufferZoneInBlocks());
 
         // Add information about procedures
@@ -299,6 +297,16 @@ public final class Test {
         return debugInfo;
     }
 
+    @Override
+    public String getUUID() {
+        return uuid;
+    }
+
+    @Override
+    public boolean testFailed() {
+        return failed;
+    }
+
     public int getStartStructureX() {
         return structureStartX;
     }
@@ -312,15 +320,15 @@ public final class Test {
     }
 
     public int getEndStructureX() {
-        return structureStartX + xStructureLength;
+        return structureStartX + structureLengthX;
     }
 
     public int getEndStructureY() {
-        return structureStartY + yStructureLength;
+        return structureStartY + structureLengthY;
     }
 
     public int getEndStructureZ() {
-        return structureStartZ + zStructureLength;
+        return structureStartZ + structureLengthZ;
     }
 
     public int getBufferStartX() {
@@ -336,15 +344,15 @@ public final class Test {
     }
 
     public int getBufferEndX() {
-        return structureStartX + xStructureLength + testSettings.getBufferZoneInBlocks();
+        return structureStartX + structureLengthX + testSettings.getBufferZoneInBlocks();
     }
 
     public int getBufferEndY() {
-        return structureStartY + yStructureLength + testSettings.getBufferZoneInBlocks();
+        return structureStartY + structureLengthY + testSettings.getBufferZoneInBlocks();
     }
 
     public int getBufferEndZ() {
-        return structureStartZ + zStructureLength + testSettings.getBufferZoneInBlocks();
+        return structureStartZ + structureLengthZ + testSettings.getBufferZoneInBlocks();
     }
 
     public int getDimension() {
@@ -355,5 +363,9 @@ public final class Test {
         structureStartX = (int) x;
         structureStartY = (int) y;
         structureStartZ = (int) z;
+    }
+
+    public void didFail() {
+        failed = true;
     }
 }

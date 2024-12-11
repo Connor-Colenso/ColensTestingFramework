@@ -45,7 +45,7 @@ public class CheckTile extends Procedure {
 
         try {
             if (!f.checkCondition(te, dimension)) {
-                test.failed = true;
+                test.didFail();
 
                 if (optionalLabel != null) {
                     test.addMessage(RED, optionalLabel + " FAILED");
@@ -57,7 +57,7 @@ public class CheckTile extends Procedure {
                 test.addMessage(GREEN, optionalLabel + " PASSED");
             }
         } catch (Exception exception) {
-            test.failed = true;
+            test.didFail();
             test.addMessage(RED, "Test " + optionalLabel + " threw exception, which was caught by CTF.");
             test.addMessage(RED, exception.toString());
         }

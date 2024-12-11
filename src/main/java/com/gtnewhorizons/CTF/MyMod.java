@@ -3,6 +3,9 @@ package com.gtnewhorizons.CTF;
 import java.util.List;
 
 import com.gtnewhorizons.CTF.events.ClientSideDisconnectFromWorld;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.client.Minecraft;
+import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -103,7 +106,6 @@ public class MyMod {
     // postInit "Handle interaction with other mods, complete your setup based on this." (Remove if not needed)
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
-        TestManager.registerTests();
     }
 
     @Mod.EventHandler
@@ -116,6 +118,10 @@ public class MyMod {
         event.registerServerCommand(new CommandAddInstruction());
         event.registerServerCommand(new CommandCompleteTest());
         event.registerServerCommand(new CommandResetTest());
+
+        if (event.getSide() == Side.SERVER) {
+            TestManager.registerTests();
+        }
     }
 
 }

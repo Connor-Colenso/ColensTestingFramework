@@ -280,7 +280,7 @@ public class TestManager {
     public static void addTest(Test test) {
         testsMap.computeIfAbsent(test.getTestSettings(), k -> new ArrayList<>())
             .add(test);
-        uuidTestsMapping.put(test.uuid, test);
+        uuidTestsMapping.put(test.getUUID(), test);
     }
 
     @SideOnly(Side.CLIENT)

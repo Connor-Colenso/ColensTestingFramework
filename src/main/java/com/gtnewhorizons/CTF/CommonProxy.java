@@ -1,9 +1,14 @@
 package com.gtnewhorizons.CTF;
 
+import com.gtnewhorizons.CTF.events.ServerSideUpdateClientsWithTestsOnJoin;
+import com.gtnewhorizons.CTF.events.TickHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 
 public class CommonProxy {
 
@@ -11,6 +16,9 @@ public class CommonProxy {
     // GameRegistry." (Remove if not needed)
     public void preInit(FMLPreInitializationEvent event) {
         Config.synchronizeConfiguration(event.getSuggestedConfigurationFile());
+        FMLCommonHandler.instance()
+            .bus()
+            .register(new ServerSideUpdateClientsWithTestsOnJoin());
     }
 
     // load "Do your mod setup. Build whatever data structures you care about. Register recipes." (Remove if not needed)

@@ -5,6 +5,8 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.event.world.WorldEvent;
 
+import static com.gtnewhorizons.CTF.networking.UpdateClientSideTestInfo.renderTestMap;
+
 public class ClientSideDisconnectFromWorld {
 
     @SubscribeEvent
@@ -12,6 +14,7 @@ public class ClientSideDisconnectFromWorld {
         // Ensure this is only triggered client-side
         if (event.world.isRemote) {
             CurrentTestUnderConstruction.resetTest(Minecraft.getMinecraft().thePlayer);
+            renderTestMap.clear();
         }
     }
 }

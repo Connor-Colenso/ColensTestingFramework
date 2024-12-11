@@ -1,7 +1,9 @@
 package com.gtnewhorizons.CTF;
 
+import com.gtnewhorizons.CTF.events.ServerSideUpdateClientsWithTestsOnJoin;
 import javafx.application.Application;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
 import com.gtnewhorizons.CTF.ui.MainApp;

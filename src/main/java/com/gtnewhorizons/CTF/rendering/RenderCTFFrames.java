@@ -3,7 +3,7 @@ package com.gtnewhorizons.CTF.rendering;
 import static com.gtnewhorizons.CTF.ClientProxy.enableTestBoundsCollisionVisualisation;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
-import static com.gtnewhorizons.CTF.tests.TestManager.uuidTestsMapping;
+import static com.gtnewhorizons.CTF.networking.UpdateClientSideTestInfo.renderTestMap;
 import static com.gtnewhorizons.CTF.utils.RegionUtils.isCTFWandRegionNotDefined;
 
 import java.util.ArrayList;
@@ -16,7 +16,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 
-import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.utils.rendering.RenderFrameBuilder;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -43,7 +42,7 @@ public class RenderCTFFrames {
 
         // Iterate over all maps, and render ones which the player is either looking at a block within, or the player is
         // within.
-        for (Test test : uuidTestsMapping.values()) {
+        for (RenderTest test : renderTestMap.values()) {
             // Ignore conflicts and all rendering from tests in other dimensions.
             if (test.getDimension() != player.dimension) continue;
 
@@ -66,23 +65,23 @@ public class RenderCTFFrames {
                 && testRenderFrameWithBuffer.isVecInside(blockPlayerLookingAtVec);
 
             // Render the box if the player intersects or is looking at a block inside the test zone.
-            if (doesPlayerIntersectTestBounds || playerLookingAtBlockInTestBounds || test.failed) {
+            if (doesPlayerIntersectTestBounds || playerLookingAtBlockInTestBounds || test.testFailed) {
 
                 // s -> Structure X length.
                 // b -> Buffer zone x length.
 
                 List<String> xText = new ArrayList<>();
-                xText.add("sX: " + (test.getEndStructureX() - test.getStartStructureX()));
+//                xText.add("sX: " + (test.getEndStructureX() - test.getStartStructureX()));
                 xText.add("bX: " + (test.getBufferEndX() - test.getBufferStartX()));
                 // xText.add("pX: " + (test.sp.getAbsoluteEndX() - test.sp.getAbsoluteX()));
 
                 List<String> yText = new ArrayList<>();
-                yText.add("sY: " + (test.getEndStructureY() - test.getStartStructureY()));
+//                yText.add("sY: " + (test.getEndStructureY() - test.getStartStructureY()));
                 yText.add("bY: " + (test.getBufferEndY() - test.getBufferStartY()));
                 // yText.add("pY: " + (test.sp.getAbsoluteEndY() - test.sp.getAbsoluteY()));
 
                 List<String> zText = new ArrayList<>();
-                zText.add("sZ: " + (test.getEndStructureZ() - test.getStartStructureZ()));
+//                zText.add("sZ: " + (test.getEndStructureZ() - test.getStartStructureZ()));
                 zText.add("bZ: " + (test.getBufferEndZ() - test.getBufferStartZ()));
                 // zText.add("pZ: " + (test.sp.getAbsoluteEndZ() - test.sp.getAbsoluteZ()));
 
@@ -108,7 +107,7 @@ public class RenderCTFFrames {
                         (test.getBufferEndZ() + test.getBufferStartZ()) / 2.0);
 
                 // Override the colour to red, if it has failed.
-                if (test.failed) {
+                if (test.testFailed()) {
                     renderFrameBuilder.setColour(1, 0, 0);
                 }
 
