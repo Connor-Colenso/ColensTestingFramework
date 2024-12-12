@@ -7,6 +7,7 @@ import static com.gtnewhorizons.CTF.utils.Structure.buildStructure;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import com.gtnewhorizons.CTF.networking.CTFNetworkHandler;
@@ -19,6 +20,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeChunkManager;
 
 import com.github.skjolber.packing.api.Container;
@@ -39,7 +41,7 @@ public class TestManager {
 
     private static final HashMap<Integer, AxisAlignedBB> dimensionIdToTestBounds = new HashMap<>();
 
-    private static final int testAreaBufferZone = 3;
+    private static final int TEST_AREA_BUFFER_ZONE = 3;
 
     public static World getWorldByDimensionId(int dimensionId) {
         MinecraftServer server = MinecraftServer.getServer();
@@ -51,7 +53,7 @@ public class TestManager {
         for (int dimensionId : dimensionIdToTestBounds.keySet()) {
             World dimension = getWorldByDimensionId(dimensionId);
             if (dimension == null) {
-                System.err.println("Dimension with ID " + dimensionId + " is not loaded.");
+                MyMod.CTF_LOG.error("Dimension with ID {} is not loaded.", dimensionId);
                 continue;
             }
 
@@ -73,7 +75,6 @@ public class TestManager {
                         .requestTicket(MyMod.instance, dimension, ForgeChunkManager.Type.NORMAL);
                     if (ticket != null) {
                         ForgeChunkManager.forceChunk(ticket, chunkCoord);
-                        MyMod.CTF_LOG.info("Forcing chunk at {}, {}", chunkX, chunkZ);
                     } else {
                         throw new RuntimeException(
                             "Could not request chunk at " + chunkX + ", " + chunkZ + " to be loaded.");
@@ -99,10 +100,10 @@ public class TestManager {
             AxisAlignedBB testBounds = dimensionIdToTestBounds.get(dimensionId);
 
             // Calculate the block boundaries, including the buffer zone.
-            int minX = (int) Math.floor(testBounds.minX) - testAreaBufferZone;
-            int maxX = (int) Math.floor(testBounds.maxX) + testAreaBufferZone;
-            int minZ = (int) Math.floor(testBounds.minZ) - testAreaBufferZone;
-            int maxZ = (int) Math.floor(testBounds.maxZ) + testAreaBufferZone;
+            int minX = (int) Math.floor(testBounds.minX) - TEST_AREA_BUFFER_ZONE;
+            int maxX = (int) Math.floor(testBounds.maxX) + TEST_AREA_BUFFER_ZONE;
+            int minZ = (int) Math.floor(testBounds.minZ) - TEST_AREA_BUFFER_ZONE;
+            int maxZ = (int) Math.floor(testBounds.maxZ) + TEST_AREA_BUFFER_ZONE;
 
             // Iterate over all blocks within the calculated boundaries and set them to air.
             for (int x = minX; x <= maxX; x++) {
@@ -146,10 +147,10 @@ public class TestManager {
             for (int i = 0; i < duplicates; i++) {
                 Test test = new Test(json);
 
-                TestManager.registerDimensionalUsage(test.getDimension());
+                TestManager.registerDimensionalUsage(test.getDimensionID());
                 addTest(test);
 
-                allTests.computeIfAbsent(test.getDimension(), k -> new ArrayList<>())
+                allTests.computeIfAbsent(test.getDimensionID(), k -> new ArrayList<>())
                     .add(test.testBounds);
             }
         }
@@ -218,7 +219,7 @@ public class TestManager {
             .build();
     }
 
-    private static boolean firstTickOfTest;
+    private static boolean firstTickOfTestSet;
 
     public static boolean AllTestsDone() {
         return testsMap.isEmpty();
@@ -234,14 +235,23 @@ public class TestManager {
         ArrayList<Test> currentTests = testsMap.get(currentSettings);
 
         // Build the test, if we are in the first tick of their run time.
-        if (!firstTickOfTest) {
+        if (!firstTickOfTestSet) {
+            HashSet<Integer> dimensionIds = new HashSet<>();
 
             for (Test test : currentTests) {
                 test.startTimer();
                 buildStructure(test);
+
+                dimensionIds.add(test.getDimensionID());
             }
 
-            firstTickOfTest = true;
+            // Iterate over each dimension and
+            for (int dimensionId : dimensionIds) {
+                WorldServer worldServer = MinecraftServer.getServer().worldServerForDimension(dimensionId);
+                currentSettings.initGameRules(worldServer);
+            }
+
+            firstTickOfTestSet = true;
             return;
         }
 
@@ -282,7 +292,7 @@ public class TestManager {
             }
 
             // Reset so we can build more tests.
-            firstTickOfTest = false;
+            firstTickOfTestSet = false;
         }
     }
 

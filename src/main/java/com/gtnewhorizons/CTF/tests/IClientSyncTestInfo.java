@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface IClientSyncTestInfo {
 
-    int getDimension();
+    int getDimensionID();
     int getBufferStartX();
     int getBufferStartY();
     int getBufferStartZ();

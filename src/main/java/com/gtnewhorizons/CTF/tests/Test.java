@@ -355,7 +355,7 @@ public final class Test implements IClientSyncTestInfo {
         return structureStartZ + structureLengthZ + testSettings.getBufferZoneInBlocks();
     }
 
-    public int getDimension() {
+    public int getDimensionID() {
         return testSettings.getDimension();
     }
 

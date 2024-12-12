@@ -34,7 +34,7 @@ public class UpdateClientSideTestInfo implements IMessage {
         this.bufferStartX = test.getBufferStartX();
         this.bufferStartY = test.getBufferStartY();
         this.bufferStartZ = test.getBufferStartZ();
-        this.dimension = test.getDimension();
+        this.dimension = test.getDimensionID();
         this.forceRender = false; // Default value
         this.textToDraw = test.relevantDebugInfo();
         this.uuid = test.getUUID();

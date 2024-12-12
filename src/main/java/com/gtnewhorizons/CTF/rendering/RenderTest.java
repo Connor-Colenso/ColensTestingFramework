@@ -31,7 +31,7 @@ public class RenderTest implements IClientSyncTestInfo {
     }
 
     @Override
-    public int getDimension() {
+    public int getDimensionID() {
         return dimension;
     }
 

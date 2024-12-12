@@ -76,7 +76,7 @@ public class AddItems extends Procedure {
     public void handleEventCustom(Test test) {
 
         // Retrieve the WorldServer instance and TileEntity at specified coordinates
-        World dimension = TestManager.getWorldByDimensionId(test.getDimension());
+        World dimension = TestManager.getWorldByDimensionId(test.getDimensionID());
         TileEntity te = dimension
             .getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 

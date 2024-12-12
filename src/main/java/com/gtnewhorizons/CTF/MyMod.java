@@ -3,9 +3,6 @@ package com.gtnewhorizons.CTF;
 import java.util.List;
 
 import com.gtnewhorizons.CTF.events.ClientSideDisconnectFromWorld;
-import cpw.mods.fml.relauncher.Side;
-import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -17,7 +14,6 @@ import com.gtnewhorizons.CTF.commands.CommandAddInstruction;
 import com.gtnewhorizons.CTF.commands.CommandCompleteTest;
 import com.gtnewhorizons.CTF.commands.CommandGetTileEntity;
 import com.gtnewhorizons.CTF.commands.CommandInitTest;
-import com.gtnewhorizons.CTF.commands.CommandLoadTest;
 import com.gtnewhorizons.CTF.commands.CommandResetTest;
 import com.gtnewhorizons.CTF.commands.instructions.AddFluidInstructions;
 import com.gtnewhorizons.CTF.commands.instructions.AddItemInstructions;
@@ -113,7 +109,6 @@ public class MyMod {
     public void serverStarting(FMLServerStartingEvent event) {
         proxy.serverStarting(event);
         event.registerServerCommand(new CommandGetTileEntity());
-        event.registerServerCommand(new CommandLoadTest());
         event.registerServerCommand(new CommandInitTest());
         event.registerServerCommand(new CommandAddInstruction());
         event.registerServerCommand(new CommandCompleteTest());

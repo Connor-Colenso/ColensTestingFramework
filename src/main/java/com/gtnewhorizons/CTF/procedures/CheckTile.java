@@ -39,7 +39,7 @@ public class CheckTile extends Procedure {
 
     public void handleEventCustom(Test test) {
         ConditionalFunction f = RegisterConditionals.getFunc(funcID);
-        World dimension = TestManager.getWorldByDimensionId(test.getDimension());
+        World dimension = TestManager.getWorldByDimensionId(test.getDimensionID());
         TileEntity te = dimension
             .getTileEntity(test.getStartStructureX() + x, test.getStartStructureY() + y, test.getStartStructureZ() + z);
 

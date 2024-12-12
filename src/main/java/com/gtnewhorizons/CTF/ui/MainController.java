@@ -17,6 +17,8 @@ import static com.gtnewhorizons.CTF.utils.JsonUtils.loadJsonFromFile;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.gtnewhorizons.CTF.networking.TransmitJsonForBuildAndRun;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -159,7 +161,23 @@ public class MainController {
 
         PrintTestAndRunMenuItem.setOnAction(e -> ClientSideExecutor.add(() -> {
             if (currentTestInUI == null) return;
-            TestManager.addCustomTestFromUI(currentTestInUI);
+            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+
+            int[] dimensions = JsonUtils.getStructureDimensions(currentTestInUI);
+
+            firstPosition[0] = (int) (player.posX + 2);
+            firstPosition[1] = (int) (player.posY);
+            firstPosition[2] = (int) (player.posZ + 2);
+
+            // Bit of a hack, since the player could move inbetween, but it's close enough for now.
+            secondPosition[0] = firstPosition[0] + dimensions[0] - 1;
+            secondPosition[1] = firstPosition[1] + dimensions[1] - 1;
+            secondPosition[2] = firstPosition[2] + dimensions[2] - 1;
+
+            TransmitJsonForBuildAndRun packet = new TransmitJsonForBuildAndRun(currentTestInUI, firstPosition[0], firstPosition[1], firstPosition[2]);
+
+            // Send the packet to the server
+            CTFNetworkHandler.INSTANCE.sendToServer(packet);
         }));
 
         PrintTestMenuItem.setOnAction(e -> ClientSideExecutor.add(() -> {

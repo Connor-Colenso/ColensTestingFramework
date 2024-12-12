@@ -10,6 +10,7 @@ public class CTFNetworkHandler {
 
     public static void init() {
         INSTANCE.registerMessage(TransmitJsonForBuild.Handler.class, TransmitJsonForBuild.class, 0, Side.SERVER);
-        INSTANCE.registerMessage(UpdateClientSideTestInfo.Handler.class, UpdateClientSideTestInfo.class, 1, Side.CLIENT);
+        INSTANCE.registerMessage(TransmitJsonForBuildAndRun.Handler.class, TransmitJsonForBuildAndRun.class, 1, Side.SERVER);
+        INSTANCE.registerMessage(UpdateClientSideTestInfo.Handler.class, UpdateClientSideTestInfo.class, 2, Side.CLIENT);
     }
 }

@@ -119,7 +119,7 @@ public class Structure {
 
     public static void buildStructure(Test test) {
 
-        final World world = TestManager.getWorldByDimensionId(test.getDimension());
+        final World world = TestManager.getWorldByDimensionId(test.getDimensionID());
 
         JsonArray build = test.getStructure()
             .getAsJsonArray("build");

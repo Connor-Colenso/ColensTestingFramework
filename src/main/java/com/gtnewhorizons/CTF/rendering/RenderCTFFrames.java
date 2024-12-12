@@ -44,7 +44,7 @@ public class RenderCTFFrames {
         // within.
         for (RenderTest test : renderTestMap.values()) {
             // Ignore conflicts and all rendering from tests in other dimensions.
-            if (test.getDimension() != player.dimension) continue;
+            if (test.getDimensionID() != player.dimension) continue;
 
             // Define the bounding box for the test zone with buffer zone.
             AxisAlignedBB testRenderFrameWithBuffer = AxisAlignedBB.getBoundingBox(
