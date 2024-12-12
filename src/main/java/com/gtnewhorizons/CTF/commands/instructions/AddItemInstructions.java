@@ -21,8 +21,8 @@ public class AddItemInstructions {
             return null;
         }
 
-        // Create a new ItemStack of CTFAddItemTag
-        ItemStack itemStack = new ItemStack(RegisterItems.CTFAddItemTag);
+        // Create a new ItemStack of CTFAddItemsTag
+        ItemStack itemStack = new ItemStack(RegisterItems.CTFAddItemsTag);
 
         // Create an NBT Tag Compound for saving the held item
         NBTTagCompound nbtData = new NBTTagCompound();

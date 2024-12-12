@@ -27,10 +27,10 @@ import com.gtnewhorizons.CTF.utils.nbt.NBTConverter;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class CTFAddItemTag extends Item {
+public class CTFAddItemsTag extends Item {
 
-    CTFAddItemTag() {
-        this.setUnlocalizedName("CTFAddItemTag");
+    CTFAddItemsTag() {
+        this.setUnlocalizedName("CTFAddItemsTag");
         this.setTextureName("minecraft:diamond");
         this.setMaxStackSize(1);
     }
