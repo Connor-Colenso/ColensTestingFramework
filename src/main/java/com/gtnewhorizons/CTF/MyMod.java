@@ -51,6 +51,7 @@ public class MyMod {
 
     public static final String MODID = "CTF";
     public static final Logger CTF_LOG = LogManager.getLogger(MODID);
+    public static final int BACKPACK_GUI_ID = 1;
 
     @Mod.Instance(MODID)
     public static MyMod instance;

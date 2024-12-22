@@ -18,7 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.ui.MainController;
+import com.gtnewhorizons.CTF.ui.javafx.MainController;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
 
 

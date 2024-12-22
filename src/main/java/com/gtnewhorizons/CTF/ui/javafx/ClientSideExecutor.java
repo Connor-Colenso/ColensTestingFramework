@@ -1,4 +1,4 @@
-package com.gtnewhorizons.CTF.ui;
+package com.gtnewhorizons.CTF.ui.javafx;
 
 import java.util.LinkedList;
 import java.util.Queue;

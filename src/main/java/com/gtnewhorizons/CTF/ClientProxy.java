@@ -1,12 +1,10 @@
 package com.gtnewhorizons.CTF;
 
-import com.gtnewhorizons.CTF.events.ServerSideUpdateClientsWithTestsOnJoin;
 import javafx.application.Application;
 
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
-import com.gtnewhorizons.CTF.ui.MainApp;
+import com.gtnewhorizons.CTF.ui.javafx.MainApp;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 

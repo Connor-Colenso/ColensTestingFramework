@@ -1,4 +1,4 @@
-package com.gtnewhorizons.CTF.ui;
+package com.gtnewhorizons.CTF.ui.javafx;
 
 import java.io.IOException;
 import javafx.application.Application;

@@ -1,4 +1,4 @@
-package com.gtnewhorizons.CTF.ui;
+package com.gtnewhorizons.CTF.ui.javafx;
 
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.firstPosition;
 import static com.gtnewhorizons.CTF.events.CTFWandEventHandler.secondPosition;
@@ -51,7 +51,6 @@ import com.gtnewhorizons.CTF.networking.CTFNetworkHandler;
 import com.gtnewhorizons.CTF.networking.TransmitJsonForBuild;
 import com.gtnewhorizons.CTF.procedures.Procedure;
 import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
-import com.gtnewhorizons.CTF.tests.TestManager;
 import com.gtnewhorizons.CTF.utils.JsonUtils;
 
 import cpw.mods.fml.common.Loader;
