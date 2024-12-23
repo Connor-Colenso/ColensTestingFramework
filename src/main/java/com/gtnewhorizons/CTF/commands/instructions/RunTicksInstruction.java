@@ -9,8 +9,7 @@ import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
 
 public class RunTicksInstruction {
 
-    @SuppressWarnings("unused")
-    public static JsonObject createProcedure(EntityPlayerMP player, String[] args) {
+    public static void createProcedure(EntityPlayerMP player, String[] args) {
         if (args.length < 2) {
             notifyPlayer(player, "Usage: addinstruction runTicks X");
         } else {
@@ -34,6 +33,6 @@ public class RunTicksInstruction {
             }
         }
 
-        return null;
+        return;
     }
 }

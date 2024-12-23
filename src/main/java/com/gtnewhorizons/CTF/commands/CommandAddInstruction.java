@@ -46,7 +46,7 @@ public class CommandAddInstruction extends CommandBase {
                 // Print out the list of instructions and their descriptions
                 notifyPlayer(player, "Valid instructions are:");
                 RegisterInstruction.informPlayerOfOptions(player);
-                return; // Exit after listing instructions
+                return; // Exit after listing instructions.
             }
 
             // Process the first argument as a command (case-insensitive)

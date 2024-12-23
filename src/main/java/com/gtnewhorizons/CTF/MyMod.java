@@ -20,8 +20,8 @@ import com.gtnewhorizons.CTF.commands.instructions.AddItemInstructions;
 import com.gtnewhorizons.CTF.commands.instructions.CheckTileInstructions;
 import com.gtnewhorizons.CTF.commands.instructions.RegisterInstruction;
 import com.gtnewhorizons.CTF.commands.instructions.RunTicksInstruction;
-import com.gtnewhorizons.CTF.conditionals.TestConditional;
-import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
+import com.gtnewhorizons.CTF.instructions.TestInstructions;
+import com.gtnewhorizons.CTF.instructions.registry.RegisterConditionals;
 import com.gtnewhorizons.CTF.events.CTFWandEventHandler;
 import com.gtnewhorizons.CTF.events.TickHandler;
 import com.gtnewhorizons.CTF.items.RegisterItems;
@@ -79,9 +79,9 @@ public class MyMod {
             .bus()
             .register(new TickHandler());
 
-        RegisterConditionals.conditionalRegister("ebfOutputCheck", TestConditional::isChestContainingStone);
-        RegisterConditionals.conditionalRegister("func", TestConditional::isChestContainingStone);
-        RegisterConditionals.conditionalRegister("checkStructure", TestConditional::checkStructure);
+        RegisterConditionals.conditionalRegister("ebfOutputCheck", TestInstructions::isChestContainingStone);
+        RegisterConditionals.conditionalRegister("func", TestInstructions::isChestContainingStone);
+        RegisterConditionals.conditionalRegister("checkStructure", TestInstructions::checkStructure);
 
         RegisterInstruction.register("addItems", AddItemInstructions::createProcedure);
         RegisterInstruction.register("runTicks", RunTicksInstruction::createProcedure);

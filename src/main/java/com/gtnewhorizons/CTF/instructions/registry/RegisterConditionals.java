@@ -1,4 +1,4 @@
-package com.gtnewhorizons.CTF.conditionals.registry;
+package com.gtnewhorizons.CTF.instructions.registry;
 
 import java.util.HashMap;
 

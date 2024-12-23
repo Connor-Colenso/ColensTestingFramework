@@ -12,13 +12,12 @@ import com.gtnewhorizons.CTF.items.RegisterItems;
 
 public class AddItemInstructions {
 
-    @SuppressWarnings("unused")
-    public static JsonObject createProcedure(EntityPlayerMP player, String[] args) {
+    public static void createProcedure(EntityPlayerMP player, String[] args) {
         ItemStack heldItemStack = player.getHeldItem();
 
         if (heldItemStack == null) {
             notifyPlayer(player, "You are not holding any item.");
-            return null;
+            return;
         }
 
         // Create a new ItemStack of CTFAddItemsTag
@@ -44,6 +43,6 @@ public class AddItemInstructions {
             notifyPlayer(player, "Inventory full. Could not save item.");
         }
 
-        return null;
+        return;
     }
 }

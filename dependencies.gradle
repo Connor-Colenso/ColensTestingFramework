@@ -10,8 +10,8 @@ dependencies {
     api('org.junit.platform:junit-platform-launcher')
 
     def javafxVersion = '17.0.2'  // Ensure this matches your version
-    implementation "org.openjfx:javafx-controls:${javafxVersion}:win"
-    implementation "org.openjfx:javafx-fxml:${javafxVersion}:win"
-    implementation "org.openjfx:javafx-base:${javafxVersion}:win"
-    implementation "org.openjfx:javafx-graphics:${javafxVersion}:win"
+    implementation "org.openjfx:javafx-controls:${javafxVersion}:mac"
+    implementation "org.openjfx:javafx-fxml:${javafxVersion}:mac"
+    implementation "org.openjfx:javafx-base:${javafxVersion}:mac"
+    implementation "org.openjfx:javafx-graphics:${javafxVersion}:mac"
 }

@@ -11,13 +11,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidContainerItem;
 
-import com.google.gson.JsonObject;
 import com.gtnewhorizons.CTF.items.RegisterItems;
 
 public class AddFluidInstructions {
 
-    @SuppressWarnings("unused")
-    public static JsonObject createProcedure(EntityPlayerMP player, String[] args) {
+    public static void createProcedure(EntityPlayerMP player, String[] args) {
         ItemStack heldItemStack = player.getHeldItem();
         notifyPlayer(
             player,
@@ -27,7 +25,7 @@ public class AddFluidInstructions {
         if (heldItemStack == null) {
             notifyPlayer(player, "Your hand was empty, adding an empty fluid tag item.");
             addEmptyFluidTagItem(player);
-            return null;
+            return;
         }
 
         // Check if the item implements IFluidContainerItem (i.e., is a fluid container)
@@ -72,7 +70,7 @@ public class AddFluidInstructions {
                     player,
                     "The fluid container either contains no fluid, or the FluidStack had 0mB present.");
                 addEmptyFluidTagItem(player);
-                return null;
+                return;
             }
 
         } else {
@@ -80,7 +78,7 @@ public class AddFluidInstructions {
             notifyPlayer(player, "The held item is not a fluid container.");
         }
 
-        return null;
+        return;
     }
 
     private static void addEmptyFluidTagItem(EntityPlayerMP player) {

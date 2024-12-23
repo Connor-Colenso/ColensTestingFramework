@@ -7,8 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.conditionals.registry.ConditionalFunction;
-import com.gtnewhorizons.CTF.conditionals.registry.RegisterConditionals;
+import com.gtnewhorizons.CTF.instructions.registry.ConditionalFunction;
+import com.gtnewhorizons.CTF.instructions.registry.RegisterConditionals;
 import com.gtnewhorizons.CTF.tests.Test;
 import com.gtnewhorizons.CTF.tests.TestManager;
 

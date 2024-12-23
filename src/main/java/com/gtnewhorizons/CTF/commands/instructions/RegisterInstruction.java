@@ -5,9 +5,7 @@ import static com.gtnewhorizons.CTF.utils.PrintUtils.notifyPlayer;
 import java.util.HashMap;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-
-import com.google.gson.JsonObject;
-import com.gtnewhorizons.CTF.tests.CurrentTestUnderConstruction;
+import net.minecraft.item.Item;
 
 public class RegisterInstruction {
 
@@ -23,17 +21,13 @@ public class RegisterInstruction {
     public static boolean addToInstructions(String name, EntityPlayerMP player, String[] args) {
         InstructionHandler handler = instructions.get(name.toLowerCase());
         if (handler != null) {
-            JsonObject procedure = handler.createInstruction(player, args);
-            if (procedure != null) {
-                CurrentTestUnderConstruction.addInstruction(player, procedure);
-            }
+            handler.createAndAddInstruction(player, args);
             return true;
         } else {
             return false;
         }
     }
 
-    // Needs description really...
     public static void informPlayerOfOptions(EntityPlayerMP player) {
         for (String instruction : instructions.keySet()) {
             notifyPlayer(player, instruction);

@@ -1,4 +1,4 @@
-package com.gtnewhorizons.CTF.conditionals;
+package com.gtnewhorizons.CTF.instructions;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.server.MinecraftServer;
@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 
 import com.gtnewhorizons.CTF.MyMod;
 
-public class TestConditional {
+public class TestInstructions {
 
     public static boolean isChestContainingStone(TileEntity tile, World world) {
         return ((IInventory) tile).getStackInSlot(0).stackSize == 1;

@@ -12,7 +12,7 @@ import com.gtnewhorizons.CTF.items.RegisterItems;
 public class CheckTileInstructions {
 
     @SuppressWarnings("unused")
-    public static JsonObject createProcedure(EntityPlayerMP player, String[] args) {
+    public static void createProcedure(EntityPlayerMP player, String[] args) {
 
         // Create an ItemStack for the CTFTileEntityTag
         ItemStack stick = new ItemStack(RegisterItems.CTFTileEntityTag, 1); // 1 tile entity tag
@@ -26,7 +26,7 @@ public class CheckTileInstructions {
             tagCompound.setString("funcRegistry", funcRegistry); // Set funcRegistry in the NBT
         } else {
             notifyPlayer(player, "Usage: /command funcRegistry [optionalLabel]");
-            return null; // Exit if funcRegistry is missing
+            return; // Exit if funcRegistry is missing
         }
 
         // Check if optionalLabel is provided
@@ -40,7 +40,7 @@ public class CheckTileInstructions {
         // Give the stick to the player
         if (!player.inventory.addItemStackToInventory(stick)) {
             notifyPlayer(player, "Inventory full. Could not issue tile entity tag.");
-            return null; // Exit the method if the item couldn't be added
+            return; // Exit the method if the item couldn't be added
         }
 
         // Notify the player that they received the item
@@ -48,6 +48,6 @@ public class CheckTileInstructions {
             player,
             "You have been given a tile entity tag. Please select the block you wish to associate with this test.");
 
-        return null;
+        return;
     }
 }
